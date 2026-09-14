@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 import shlex
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 
 
 def remote_datetime(value):
@@ -22,7 +22,7 @@ class OduscaleConnection(models.Model):
     server_id = fields.Many2one("oduscale.server", required=True, ondelete="restrict", check_company=True)
     company_id = fields.Many2one(related="server_id.company_id", store=True)
     state = fields.Selection([("draft", "Draft"), ("active", "Active"), ("revoked", "Revoked")],
-                             default="draft", readonly=True, tracking=True)
+                             default="draft", readonly=True, tracking=True, copy=False)
     remote_user_id = fields.Char(readonly=True, copy=False)
     remote_user_name = fields.Char(readonly=True, copy=False)
     device_ids = fields.One2many("oduscale.device", "connection_id")
@@ -38,7 +38,8 @@ class OduscaleConnection(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if any(self._managed_fields.intersection(vals) for vals in vals_list):
+        if (any(self._managed_fields.intersection(vals) for vals in vals_list)
+                or any("default_" + name in self.env.context for name in self._managed_fields)):
             raise UserError(_("VPN state is managed by Headscale actions."))
         return super().create(vals_list)
 
@@ -63,6 +64,8 @@ class OduscaleConnection(models.Model):
 
     def _lock(self):
         # Serialize enrollment/revocation so two browser requests cannot race.
+        if not self:
+            return
         self.env.cr.execute("SELECT id FROM oduscale_connection WHERE id IN %s FOR UPDATE", [tuple(self.ids)])
         self.invalidate_recordset()
 
