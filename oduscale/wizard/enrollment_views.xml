@@ -1,0 +1,19 @@
+<odoo>
+    <record id="enrollment_form" model="ir.ui.view">
+        <field name="name">oduscale.enrollment.form</field>
+        <field name="model">oduscale.enrollment</field>
+        <field name="arch" type="xml">
+            <form string="Connect a device">
+                <div class="alert alert-warning" role="alert">This command contains a secret. Share it securely with this employee only. The key can enroll one device and expires at the time below.</div>
+                <group>
+                    <field name="connection_id"/>
+                    <field name="expiration"/>
+                </group>
+                <p>Install the Tailscale client on the employee device, then run this command in an administrator terminal:</p>
+                <field name="command" readonly="1"/>
+                <p>After connecting, open the VPN Odoo URL from the access record and sign in with the employee's Odoo account.</p>
+                <footer><button string="Close" special="cancel" class="btn-primary"/></footer>
+            </form>
+        </field>
+    </record>
+</odoo>

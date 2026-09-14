@@ -1,0 +1,113 @@
+<odoo>
+    <record id="connection_list" model="ir.ui.view">
+        <field name="name">oduscale.connection.list</field>
+        <field name="model">oduscale.connection</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'revoked'" decoration-success="state == 'active'">
+                <field name="employee_id"/>
+                <field name="server_id"/>
+                <field name="state" widget="badge"/>
+                <field name="last_sync"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="connection_form" model="ir.ui.view">
+        <field name="name">oduscale.connection.form</field>
+        <field name="model">oduscale.connection</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Grant access" class="btn-primary" invisible="state == 'active'"/>
+                    <button name="action_enroll" type="object" string="Connect a device" class="btn-primary" invisible="state != 'active'"/>
+                    <button name="action_sync" type="object" string="Synchronize" invisible="not remote_user_id"/>
+                    <button name="action_revoke" type="object" string="Revoke all access" invisible="state != 'active'" confirm="Expire all enrollment keys and remove all devices for this employee?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,revoked"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="remote_user_id"/>
+                            <field name="server_id" readonly="remote_user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="odoo_url" widget="url"/>
+                        </group>
+                        <group>
+                            <field name="remote_user_id"/>
+                            <field name="remote_user_name"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Devices">
+                            <field name="device_ids" readonly="1">
+                                <list create="0" delete="0" decoration-muted="not present">
+                                    <field name="name"/>
+                                    <field name="ip_addresses"/>
+                                    <field name="online"/>
+                                    <field name="present"/>
+                                    <field name="last_seen"/>
+                                    <field name="expiry" optional="hide"/>
+                                    <button name="action_revoke" type="object" string="Revoke" icon="fa-ban" invisible="not present" confirm="Remove this device from Headscale?"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Enrollment history">
+                            <field name="key_ids" readonly="1">
+                                <list create="0" delete="0">
+                                    <field name="remote_id" string="Key ID"/>
+                                    <field name="create_date"/>
+                                    <field name="expiration"/>
+                                    <field name="used"/>
+                                    <field name="revoked"/>
+                                    <button name="action_revoke" type="object" string="Expire" icon="fa-ban" invisible="revoked"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="connection_search" model="ir.ui.view">
+        <field name="name">oduscale.connection.search</field>
+        <field name="model">oduscale.connection</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="server_id"/>
+                <filter name="active_access" string="Active" domain="[('state', '=', 'active')]"/>
+                <filter name="revoked_access" string="Revoked" domain="[('state', '=', 'revoked')]"/>
+                <group><filter name="server_group" string="Server" context="{'group_by': 'server_id'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="connection_action" model="ir.actions.act_window">
+        <field name="name">Employee Access</field>
+        <field name="res_model">oduscale.connection</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">Connect employees to Odoo through Headscale</p><p>Create employee access, grant it, then issue a single-use key for each device.</p></field>
+    </record>
+    <record id="device_list" model="ir.ui.view">
+        <field name="name">oduscale.device.list</field>
+        <field name="model">oduscale.device</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-muted="not present">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="connection_id"/>
+                <field name="ip_addresses"/>
+                <field name="online"/>
+                <field name="present"/>
+                <field name="last_seen"/>
+                <button name="action_revoke" type="object" string="Revoke" icon="fa-ban" invisible="not present" confirm="Remove this device from Headscale?"/>
+            </list>
+        </field>
+    </record>
+    <record id="device_action" model="ir.actions.act_window">
+        <field name="name">Devices</field>
+        <field name="res_model">oduscale.device</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>
