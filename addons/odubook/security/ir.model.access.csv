@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odubook_change_read_user,odubook.change.read user,model_odubook_change_read,base.group_user,1,1,1,0
+access_odubook_manual_user,odubook.manual user,model_odubook_manual,base.group_user,1,0,0,0
+access_odubook_manual_admin,odubook.manual admin,model_odubook_manual,base.group_system,1,1,1,1
+access_odubook_manual_file_user,odubook.manual.file user,model_odubook_manual_file,base.group_user,1,0,0,0
+access_odubook_manual_file_admin,odubook.manual.file admin,model_odubook_manual_file,base.group_system,1,1,1,1

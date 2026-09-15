@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_odumcp_approval_list" model="ir.ui.view">
+        <field name="name">odumcp.approval.list</field>
+        <field name="model">odumcp.approval</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-warning="state == 'pending'" decoration-success="state == 'executed'" decoration-danger="state in ('rejected', 'failed', 'expired')">
+                <header>
+                    <button name="action_mass_approve" type="object" string="Approve Selected" groups="odumcp.group_mcp_manager"/>
+                    <button name="action_mass_reject" type="object" string="Reject Selected" groups="odumcp.group_mcp_manager"/>
+                    <button name="action_mass_delete_expired" type="object" string="Delete Selected Expired" groups="odumcp.group_mcp_manager"/>
+                </header>
+                <field name="create_date"/>
+                <field name="request_ref"/>
+                <field name="idempotency_key" optional="hide"/>
+                <field name="request_uid" optional="hide"/>
+                <field name="request_key" optional="hide"/>
+                <field name="state"/>
+                <field name="risk_level"/>
+                <field name="summary"/>
+                <field name="user_id"/>
+                <field name="model_name"/>
+                <field name="target_count"/>
+                <field name="expires_at"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odumcp_approval_form" model="ir.ui.view">
+        <field name="name">odumcp.approval.form</field>
+        <field name="model">odumcp.approval</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" confirm="Approve this exact change plan?" groups="odumcp.group_mcp_manager" invisible="state != 'pending'"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-secondary" confirm="Reject this change plan?" groups="odumcp.group_mcp_manager" invisible="state not in ('pending', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,approved,executing,executed,rejected,expired,failed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="summary"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="request_uid"/>
+                            <field name="request_ref"/>
+                            <field name="profile_id"/>
+                            <field name="user_id"/>
+                            <field name="action"/>
+                            <field name="model_name"/>
+                        </group>
+                        <group>
+                            <field name="risk_level"/>
+                            <field name="target_count"/>
+                            <field name="expires_at"/>
+                            <field name="approved_by"/>
+                            <field name="approved_at"/>
+                            <field name="executed_at"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Redacted Diff">
+                            <field name="diff_yaml" nolabel="1"/>
+                            <field name="diff_json" widget="text" nolabel="1" groups="base.group_no_one"/>
+                        </page>
+                        <page string="Result">
+                            <field name="result_yaml" nolabel="1"/>
+                            <field name="result_json" widget="text" nolabel="1" groups="base.group_no_one"/>
+                            <field name="error_message"/>
+                        </page>
+                        <page string="Integrity" groups="odumcp.group_mcp_manager">
+                            <group>
+                                <field name="payload_hash"/>
+                                <field name="idempotency_key"/>
+                            </group>
+                            <field name="payload_yaml" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_odumcp_approval_mass_form" model="ir.ui.view">
+        <field name="name">odumcp.approval.mass.form</field>
+        <field name="model">odumcp.approval.mass</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="mode" invisible="1"/>
+                <group>
+                    <field name="eligible_count"/>
+                    <field name="skipped_count" invisible="skipped_count == 0"/>
+                </group>
+                <div class="alert alert-warning" role="alert" invisible="skipped_count == 0">
+                    Skipped records are not in a state suitable for this action
+                    and will be left unchanged.
+                </div>
+                <field name="approval_ids" nolabel="1" readonly="1">
+                    <list>
+                        <field name="create_date"/>
+                        <field name="request_ref"/>
+                        <field name="summary"/>
+                        <field name="state"/>
+                        <field name="risk_level"/>
+                        <field name="user_id"/>
+                        <field name="expires_at"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_confirm" type="object" string="Approve Selected" class="btn-primary" invisible="mode != 'approve'"/>
+                    <button name="action_confirm" type="object" string="Reject Selected" class="btn-danger" invisible="mode != 'reject'"/>
+                    <button name="action_confirm" type="object" string="Delete Selected" class="btn-danger" invisible="mode != 'delete'"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_odumcp_approval_search" model="ir.ui.view">
+        <field name="name">odumcp.approval.search</field>
+        <field name="model">odumcp.approval</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="request_ref"/>
+                <field name="request_uid"/>
+                <field name="idempotency_key"/>
+                <field name="summary"/>
+                <field name="user_id"/>
+                <field name="model_name"/>
+                <filter name="pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                <filter name="failed" string="Failed" domain="[('state', '=', 'failed')]"/>
+                <group name="groupby">
+                    <filter name="group_request" string="Request" context="{'group_by': 'request_ref'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_risk" string="Risk" context="{'group_by': 'risk_level'}"/>
+                    <filter name="group_model" string="Model" context="{'group_by': 'model_name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_odumcp_approvals" model="ir.actions.act_window">
+        <field name="name">Approval Inbox</field>
+        <field name="res_model">odumcp.approval</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_odumcp_approval_search"/>
+        <field name="context">{'search_default_pending': 1, 'search_default_group_request': 1}</field>
+    </record>
+</odoo>

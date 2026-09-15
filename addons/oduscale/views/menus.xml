@@ -1,0 +1,6 @@
+<odoo>
+    <menuitem id="menu_root" name="Oduscale" sequence="25" groups="oduscale.group_manager"/>
+    <menuitem id="menu_connections" name="Employee Access" parent="menu_root" action="connection_action" sequence="10"/>
+    <menuitem id="menu_devices" name="Devices" parent="menu_root" action="device_action" sequence="20"/>
+    <menuitem id="menu_servers" name="Headscale Servers" parent="menu_root" action="server_action" sequence="30"/>
+</odoo>

@@ -1,0 +1,577 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* odubook
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"PO-Revision-Date: 2026-08-13 00:00+0000\n"
+"Last-Translator: VelesAgro\n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#, python-format
+msgid "%s entries in total"
+msgstr "%s записей всего"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#, python-format
+msgid "%s unread"
+msgstr "%s непрочитанных"
+
+#. module: odubook
+#: model:ir.model.constraint,message:odubook.constraint_odubook_change_read_odubook_change_read_uniq
+msgid "A change entry can be marked as read only once per user."
+msgstr ""
+"Запись летописи может быть отмечена прочитанной только один раз для "
+"пользователя."
+
+#. module: odubook
+#: code:addons/odubook/models/manual.py:0
+msgid "A manual language must be a short code such as “en”."
+msgstr "Язык пособия задаётся коротким кодом, например «en»."
+
+#. module: odubook
+#: model:ir.model.constraint,message:odubook.constraint_odubook_manual_file_odubook_manual_file_lang_uniq
+msgid "A manual may carry only one file per language."
+msgstr "У пособия может быть только один файл на язык."
+
+#. module: odubook
+#: code:addons/odubook/models/manual.py:0
+#, python-format
+msgid "A manual may not be larger than %s MB."
+msgstr "Пособие не может быть больше %s МБ."
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual__active
+msgid "Active"
+msgstr "Активно"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Add a document"
+msgstr "Добавить документ"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.js:0
+#, python-format
+msgid "Add this section to the PDF selection"
+msgstr "Добавить этот раздел в набор для PDF"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Add to shelf"
+msgstr "Добавить на полку"
+
+#. module: odubook
+#: model:ir.actions.client,name:odubook.action_odubook_admin
+#: model:ir.ui.menu,name:odubook.menu_odubook_admin
+msgid "Admin Guide"
+msgstr "Руководство администратора"
+
+#. module: odubook
+#: code:addons/odubook/models/odubook.py:0
+msgid "Administrator access is required to read the Admin Book."
+msgstr "Для чтения руководства администратора требуются права администратора."
+
+#. module: odubook
+#: model:ir.ui.menu,name:odubook.menu_odubook_root
+msgid "Book"
+msgstr "Документация"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "By date"
+msgstr "По датам"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "By module"
+msgstr "По модулям"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "By module & date"
+msgstr "По модулю и дате"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Cancel"
+msgstr "Отмена"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Change archive"
+msgstr "Архив изменений"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__change_date
+msgid "Change Date"
+msgstr "Дата изменения"
+
+#. module: odubook
+#: model:ir.actions.client,name:odubook.action_odubook_changes
+#: model:ir.ui.menu,name:odubook.menu_odubook_changes
+msgid "Changes"
+msgstr "Изменения"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Chart"
+msgstr "График"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.xml:0
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Clear the selection"
+msgstr "Очистить набор"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Download"
+msgstr "Скачать"
+
+#. module: odubook
+#: model:ir.model.fields.selection,name:odubook.selection__odubook_manual_file__kind__download
+msgid "Download only"
+msgstr "Только скачивание"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.xml:0
+#, python-format
+msgid "Export selected sections"
+msgstr "Экспортировать выбранные разделы"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual_file__file
+msgid "File"
+msgstr "Файл"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual_file__file_name
+msgid "File Name"
+msgstr "Имя файла"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual_file__format
+msgid "Format"
+msgstr "Формат"
+
+#. module: odubook
+#: model:ir.model.fields.selection,name:odubook.selection__odubook_manual_file__kind__html
+msgid "HTML"
+msgstr "HTML"
+
+#. module: odubook
+#: model:ir.model.fields.selection,name:odubook.selection__odubook_manual_file__kind__image
+msgid "Image"
+msgstr "Изображение"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual_file__kind
+msgid "Kind"
+msgstr "Вид"
+
+#. module: odubook
+#. openerp-web
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual_file__lang
+#: code:addons/odubook/static/src/user_menu/language.js:0
+msgid "Language"
+msgstr "Язык"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual__file_ids
+msgid "Language Versions"
+msgstr "Языковые версии"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.xml:0
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#: code:addons/odubook/static/src/user_menu/language.xml:0
+#, python-format
+msgid "Loading…"
+msgstr "Загрузка…"
+
+#. module: odubook
+#: model:ir.model,name:odubook.model_odubook_manual
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual_file__manual_id
+msgid "Manual"
+msgstr "Пособие"
+
+#. module: odubook
+#: model:ir.model,name:odubook.model_odubook_manual_file
+msgid "Manual File"
+msgstr "Файл пособия"
+
+#. module: odubook
+#: model:ir.actions.client,name:odubook.action_odubook_manuals
+#: model:ir.ui.menu,name:odubook.menu_odubook_manuals
+msgid "Manuals"
+msgstr "Пособия"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Mark all as read"
+msgstr "Отметить всё прочитанным"
+
+#. module: odubook
+#: model:ir.model.fields.selection,name:odubook.selection__odubook_manual_file__kind__markdown
+msgid "Markdown"
+msgstr "Markdown"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__module
+msgid "Module"
+msgstr "Модуль"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "New"
+msgstr "Новое"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "No changes recorded yet."
+msgstr "Изменения пока не зафиксированы."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.xml:0
+#, python-format
+msgid "No documentation found."
+msgstr "Документация не найдена."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "No manuals yet."
+msgstr "Пособий пока нет."
+
+#. module: odubook
+#: model:ir.model.fields.selection,name:odubook.selection__odubook_manual_file__kind__pdf
+msgid "PDF"
+msgstr "PDF"
+
+#. module: odubook
+#: model:ir.model.fields.selection,name:odubook.selection__odubook_manual_file__kind__text
+msgid "Plain text"
+msgstr "Обычный текст"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Read"
+msgstr "Прочитано"
+
+#. module: odubook
+#: model:ir.model,name:odubook.model_odubook_change_read
+msgid "Read Change Entry"
+msgstr "Прочитанная запись летописи"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Remove"
+msgstr "Удалить"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.js:0
+msgid "Remove document"
+msgstr "Удалить документ"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.js:0
+#, python-format
+msgid "Remove the %s version of “%s”?"
+msgstr "Удалить версию %s документа «%s»?"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.js:0
+msgid "Remove translation"
+msgstr "Удалить перевод"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.js:0
+#, python-format
+msgid "Remove “%s” from the shelf?"
+msgstr "Удалить «%s» с полки?"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.xml:0
+#, python-format
+msgid "Search the documentation…"
+msgstr "Поиск по документации…"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Search the manuals…"
+msgstr "Поиск по пособиям…"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "Select a document on the left, or add one to the shelf."
+msgstr "Выберите документ слева или добавьте новый на полку."
+
+#. module: odubook
+#: code:addons/odubook/models/manual.py:0
+msgid "Select a file to upload."
+msgstr "Выберите файл для загрузки."
+
+#. module: odubook
+#: code:addons/odubook/models/manual.py:0
+msgid "Select a language for this document."
+msgstr "Выберите язык этого документа."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.xml:0
+#, python-format
+msgid "Select a section on the left to start reading."
+msgstr "Выберите раздел слева, чтобы начать чтение."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Select an entry on the left to see what changed."
+msgstr "Выберите запись слева, чтобы просмотреть изменения."
+
+#. module: odubook
+#: code:addons/odubook/models/odubook.py:0
+#, python-format
+msgid "Selected sections"
+msgstr "Выбранные разделы"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual__sequence
+msgid "Sequence"
+msgstr "Последовательность"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "This document cannot be displayed. Download it to read it."
+msgstr "Этот документ нельзя показать. Скачайте его, чтобы прочитать."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.js:0
+msgid "This file is too large to be added to the shelf."
+msgstr "Этот файл слишком велик для полки."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/manuals/manuals.xml:0
+msgid "This format cannot be shown in the browser. Download it to open it on your computer."
+msgstr "Этот формат не показывается в браузере. Скачайте файл и откройте его на компьютере."
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_manual__name
+msgid "Title"
+msgstr "Заголовок"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Unread"
+msgstr "Непрочитано"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__user_id
+msgid "User"
+msgstr "Пользователь"
+
+#. module: odubook
+#: model:ir.model,name:odubook.model_odubook
+msgid "User Book"
+msgstr "Пользовательская документация"
+
+#. module: odubook
+#: model:ir.actions.client,name:odubook.action_odubook
+#: model:ir.ui.menu,name:odubook.menu_odubook_doc
+msgid "User Guide"
+msgstr "Руководство пользователя"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#: code:addons/odubook/static/src/book/book.js:0
+#, python-format
+msgid "Copy a link to this heading"
+msgstr "Скопировать ссылку на этот заголовок"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#: code:addons/odubook/static/src/book/book.js:0
+#, python-format
+msgid "Copy this link"
+msgstr "Скопируйте эту ссылку"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/book/book.js:0
+#, python-format
+msgid "Download this section as PDF"
+msgstr "Скачать этот раздел в PDF"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Download these entries as PDF"
+msgstr "Скачать эти записи в PDF"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Download this entry as PDF"
+msgstr "Скачать эту запись в PDF"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#: code:addons/odubook/static/src/book/book.js:0
+#, python-format
+msgid "Link copied to the clipboard"
+msgstr "Ссылка скопирована в буфер обмена"
+
+#. module: odubook
+#: code:addons/odubook/models/odubook.py:0
+#, python-format
+msgid "PDF export needs wkhtmltopdf, which is not installed on this server."
+msgstr "Для экспорта в PDF нужен wkhtmltopdf, а на этом сервере он не установлен."
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Add this entry to the PDF selection"
+msgstr "Добавить эту запись в набор для PDF"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.xml:0
+#, python-format
+msgid "Export selected entries"
+msgstr "Экспортировать выбранные записи"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#, python-format
+msgid "Selected changes"
+msgstr "Выбранные изменения"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#, python-format
+msgid "Not published yet"
+msgstr "Ещё не опубликовано"
+
+#. module: odubook
+#. openerp-web
+#: code:addons/odubook/static/src/changes/changes.js:0
+#, python-format
+msgid "Published %s"
+msgstr "Опубликовано %s"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_res_users__odubook_lang_id
+msgid "Book Language"
+msgstr "Язык Книги"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__create_uid
+msgid "Created by"
+msgstr "Создано пользователем"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__create_date
+msgid "Created on"
+msgstr "Дата создания"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__id
+msgid "ID"
+msgstr "ID"
+
+#. module: odubook
+#: model:ir.model.fields,help:odubook.field_res_users__odubook_lang_id
+msgid ""
+"Language the Book, Manuals and Changes open in. Leave it empty to follow the "
+"user interface language."
+msgstr ""
+"Язык, на котором открываются Книга, Пособия и Изменения. Оставьте поле "
+"пустым, чтобы использовать язык интерфейса."
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read____last_update
+msgid "Last Modified on"
+msgstr "Дата последнего изменения"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__write_uid
+msgid "Last Updated by"
+msgstr "Последнее обновление пользователем"
+
+#. module: odubook
+#: model:ir.model.fields,field_description:odubook.field_odubook_change_read__write_date
+msgid "Last Updated on"
+msgstr "Дата последнего обновления"
+
+#. module: odubook
+#: model:ir.model,name:odubook.model_res_users
+msgid "Users"
+msgstr "Пользователи"

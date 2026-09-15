@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mcp_profile_auditor,odumcp.profile auditor,model_odumcp_profile,group_mcp_auditor,1,0,0,0
+access_mcp_profile_manager,odumcp.profile manager,model_odumcp_profile,group_mcp_manager,1,1,1,1
+access_mcp_model_policy_auditor,odumcp.model.policy auditor,model_odumcp_model_policy,group_mcp_auditor,1,0,0,0
+access_mcp_model_policy_manager,odumcp.model.policy manager,model_odumcp_model_policy,group_mcp_manager,1,1,1,1
+access_mcp_method_policy_auditor,odumcp.method.policy auditor,model_odumcp_method_policy,group_mcp_auditor,1,0,0,0
+access_mcp_method_policy_manager,odumcp.method.policy manager,model_odumcp_method_policy,group_mcp_manager,1,1,1,1
+access_mcp_approval_auditor,odumcp.approval auditor,model_odumcp_approval,group_mcp_auditor,1,0,0,0
+access_mcp_approval_manager,odumcp.approval manager,model_odumcp_approval,group_mcp_manager,1,1,0,0
+access_mcp_approval_mass_manager,odumcp.approval.mass manager,model_odumcp_approval_mass,group_mcp_manager,1,1,1,1
+access_mcp_audit_auditor,odumcp.audit.log auditor,model_odumcp_audit_log,group_mcp_auditor,1,0,0,0
+access_mcp_audit_manager,odumcp.audit.log manager,model_odumcp_audit_log,group_mcp_manager,1,0,0,0
+access_mcp_event_ticket_system,odumcp.event.ticket system,model_odumcp_event_ticket,base.group_system,1,0,0,0

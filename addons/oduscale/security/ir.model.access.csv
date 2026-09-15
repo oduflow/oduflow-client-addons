@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+server_manager,Server manager read,model_oduscale_server,oduscale.group_manager,1,0,0,0
+server_admin,Server configuration,model_oduscale_server,base.group_system,1,1,1,0
+connection_manager,Employee access manager,model_oduscale_connection,oduscale.group_manager,1,1,1,1
+device_manager,Device inventory,model_oduscale_device,oduscale.group_manager,1,0,0,0
+key_manager,Key audit,model_oduscale_key,oduscale.group_manager,1,0,0,0
+enrollment_manager,Enrollment dialog,model_oduscale_enrollment,oduscale.group_manager,1,1,1,1

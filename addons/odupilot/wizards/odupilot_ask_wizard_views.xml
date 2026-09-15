@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_odupilot_ask_wizard_form" model="ir.ui.view">
+        <field name="name">odupilot.ask.wizard.form</field>
+        <field name="model">odupilot.ask.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Ask AI">
+                <group>
+                    <field name="res_model" invisible="1"/>
+                    <field name="res_id" invisible="1"/>
+                    <field name="record_name"/>
+                </group>
+                <field name="question" nolabel="1" placeholder="What do you want to know about this record?"/>
+                <div class="text-muted">
+                    The question is logged as an internal note in this chatter and the answer is added to that same note as soon as AI replies.
+                </div>
+                <footer>
+                    <button name="action_ask" type="object" string="Ask" class="btn-primary" data-hotkey="q"/>
+                    <button special="cancel" string="Cancel" class="btn-secondary" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

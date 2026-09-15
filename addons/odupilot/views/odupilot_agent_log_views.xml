@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_odupilot_agent_log_tree" model="ir.ui.view">
+        <field name="name">odupilot.agent.log.tree</field>
+        <field name="model">odupilot.agent.log</field>
+        <field name="arch" type="xml">
+            <list string="Agent Action Log" create="false" delete="false">
+                <field name="create_date"/>
+                <field name="agent_id"/>
+                <field name="user_id"/>
+                <field name="operation"/>
+                <field name="status"/>
+                <field name="request_id"/>
+                <field name="mcp_approval_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odupilot_agent_log_form" model="ir.ui.view">
+        <field name="name">odupilot.agent.log.form</field>
+        <field name="model">odupilot.agent.log</field>
+        <field name="arch" type="xml">
+            <form string="Agent Action Log" create="false" edit="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="session_id"/>
+                            <field name="agent_id"/>
+                            <field name="user_id"/>
+                            <field name="operation"/>
+                            <field name="status"/>
+                        </group>
+                        <group>
+                            <field name="request_id"/>
+                            <field name="mcp_approval_id"/>
+                            <field name="mcp_audit_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Input">
+                            <field name="input_text" widget="text"/>
+                        </page>
+                        <page string="Result">
+                            <field name="result_text" widget="text"/>
+                        </page>
+                        <page string="Changes">
+                            <field name="changes_text" widget="text"/>
+                        </page>
+                        <page string="Error" invisible="error_text == False">
+                            <field name="error_text" widget="text"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odupilot_agent_log" model="ir.actions.act_window">
+        <field name="name">Agent Action Log</field>
+        <field name="res_model">odupilot.agent.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'create': False, 'delete': False}</field>
+    </record>
+</odoo>

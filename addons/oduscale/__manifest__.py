@@ -1,0 +1,22 @@
+{
+    "name": "Oduscale",
+    "summary": "Employee access to Odoo through Headscale",
+    "version": "19.0.1.0.0",
+    "category": "Human Resources",
+    "author": "Oduflow",
+    "license": "LGPL-3",
+    "depends": ["hr", "mail"],
+    "external_dependencies": {"python": ["requests"]},
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "data/cron.xml",
+        "views/server_views.xml",
+        "views/connection_views.xml",
+        "wizard/enrollment_views.xml",
+        "views/employee_views.xml",
+        "views/menus.xml",
+    ],
+    "application": True,
+    "installable": True,
+}

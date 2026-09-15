@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo noupdate="1">
+    <record id="rule_odupilot_agent_available" model="ir.rule">
+        <field name="name">AI agents: available for user profile</field>
+        <field name="model_id" ref="model_odupilot_agent"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">['|', ('profile_ids', '=', False), ('profile_ids', 'in', [user.odupilot_profile_id.id])]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_odupilot_agent_admin" model="ir.rule">
+        <field name="name">AI agents: administrators</field>
+        <field name="model_id" ref="model_odupilot_agent"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_odupilot_agent_log_owner" model="ir.rule">
+        <field name="name">AI agent log: own actions</field>
+        <field name="model_id" ref="model_odupilot_agent_log"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_odupilot_agent_log_admin" model="ir.rule">
+        <field name="name">AI agent log: administrators</field>
+        <field name="model_id" ref="model_odupilot_agent_log"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_odupilot_session_member" model="ir.rule">
+        <field name="name">AI chat session: channel members</field>
+        <field name="model_id" ref="model_odupilot_session"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('channel_id.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_odupilot_session_admin" model="ir.rule">
+        <field name="name">AI chat session: administrators</field>
+        <field name="model_id" ref="model_odupilot_session"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_odupilot_event_member" model="ir.rule">
+        <field name="name">AI chat event: channel members</field>
+        <field name="model_id" ref="model_odupilot_event"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('session_id.channel_id.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_odupilot_event_admin" model="ir.rule">
+        <field name="name">AI chat event: administrators</field>
+        <field name="model_id" ref="model_odupilot_event"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_odupilot_permission_member" model="ir.rule">
+        <field name="name">AI chat permission: channel members</field>
+        <field name="model_id" ref="model_odupilot_permission"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('session_id.channel_id.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_odupilot_permission_admin" model="ir.rule">
+        <field name="name">AI chat permission: administrators</field>
+        <field name="model_id" ref="model_odupilot_permission"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_odupilot_recovery_member" model="ir.rule">
+        <field name="name">AI chat recovery: channel members</field>
+        <field name="model_id" ref="model_odupilot_recovery"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('session_id.channel_id.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_odupilot_recovery_admin" model="ir.rule">
+        <field name="name">AI chat recovery: administrators</field>
+        <field name="model_id" ref="model_odupilot_recovery"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

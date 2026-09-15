@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="1">
+        <record id="partner_category_ai_bot" model="res.partner.category">
+            <field name="name">AI Bot</field>
+        </record>
+
+        <record id="partner_ai_bot" model="res.partner">
+            <field name="name">AI</field>
+            <field name="email">ai-bot@invalid.local</field>
+            <field name="active" eval="True"/>
+            <field name="type">contact</field>
+            <field name="country_id" ref="base.pl"/>
+            <field name="category_id" eval="[(6, 0, [ref('partner_category_ai_bot')])]"/>
+            <field name="image_1920" type="base64" file="odupilot/static/src/img/ai_bot.jpg"/>
+        </record>
+
+        <record id="runtime_main" model="odupilot.runtime">
+            <field name="name">OduPilot Runtime</field>
+        </record>
+
+        <record id="agent_payment_reconciliation" model="odupilot.agent">
+            <field name="name">Payment Reconciliation</field>
+            <field name="code">payment_reconciliation</field>
+            <field name="agent_type">payment_reconciliation</field>
+            <field name="description">Reconciles exact, unique outgoing vendor payments exported through Payment Batch.</field>
+            <field name="mcp_only" eval="True"/>
+            <field name="ruleset_json">{}</field>
+            <field name="system_prompt">You are a payment reconciliation accountant. Work only with outgoing vendor payments exported through Payment Batch. Matching is performed exclusively by the deterministic Odoo method: never infer an accounting match yourself. Always preview first and report skipped, ambiguous, protected, already reconciled, or unposted lines. Apply only the exact statement lines explicitly requested by the user. Do not post bank statements, create journal entries, change Payment Batch data, or attempt an automatic rollback.</field>
+        </record>
+
+        <record id="ir_cron_odupilot_busy_watchdog" model="ir.cron">
+            <field name="name">OduPilot: Recover timed-out requests</field>
+            <field name="model_id" ref="model_odupilot_session"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_watchdog_busy_sessions()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="ir_cron_odupilot_retention" model="ir.cron">
+            <field name="name">OduPilot: Apply retention policy</field>
+            <field name="model_id" ref="model_odupilot_session"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_apply_retention()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

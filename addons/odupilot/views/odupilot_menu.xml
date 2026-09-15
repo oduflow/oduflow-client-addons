@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <menuitem id="menu_new_odupilot" name="AI Agent Chat" parent="mail.menu_root_discuss" action="action_odupilot_agent_select" groups="base.group_user" sequence="1"/>
+
+    <menuitem id="menu_odupilot_admin" name="OduPilot" parent="base.menu_administration" groups="base.group_system" sequence="90"/>
+    <menuitem id="menu_odupilot_sessions" name="Sessions" parent="menu_odupilot_admin" action="action_odupilot_session" groups="base.group_system" sequence="10"/>
+    <menuitem id="menu_odupilot_monitoring" name="Monitoring" parent="menu_odupilot_admin" action="action_odupilot_runtime" groups="base.group_system" sequence="5"/>
+    <menuitem id="menu_odupilot_commands" name="Commands" parent="menu_odupilot_admin" action="action_odupilot_command" groups="base.group_system" sequence="15"/>
+    <menuitem id="menu_odupilot_profiles" name="Profiles" parent="menu_odupilot_admin" action="action_odupilot_profile" groups="base.group_system" sequence="20"/>
+    <menuitem id="menu_odupilot_agents" name="Agents" parent="menu_odupilot_admin" action="action_odupilot_agent" groups="base.group_system" sequence="22"/>
+    <menuitem id="menu_odupilot_mcp_servers" name="MCP Servers" parent="menu_odupilot_admin" action="action_odupilot_mcp_server" groups="base.group_system" sequence="25"/>
+    <menuitem id="menu_odupilot_agent_log" name="Agent Action Log" parent="menu_odupilot_admin" action="action_odupilot_agent_log" groups="base.group_system" sequence="27"/>
+    <menuitem id="menu_odupilot_settings" name="Settings" parent="menu_odupilot_admin" action="action_odupilot_config_settings" groups="base.group_system" sequence="30"/>
+</odoo>

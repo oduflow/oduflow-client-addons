@@ -1,0 +1,20 @@
+<odoo>
+    <record id="employee_form_oduscale" model="ir.ui.view">
+        <field name="name">hr.employee.form.oduscale</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Oduscale" groups="oduscale.group_manager">
+                    <field name="oduscale_connection_ids" context="{'default_employee_id': id}">
+                        <list>
+                            <field name="server_id"/>
+                            <field name="state" widget="badge"/>
+                            <field name="last_sync"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

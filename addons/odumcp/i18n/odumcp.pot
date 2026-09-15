@@ -1,0 +1,1275 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* odumcp
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e-20240924\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-16 22:57+0000\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_method_policy_profile_model_method_unique
+msgid "A method can occur only once per model and MCP profile."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_model_policy_profile_model_unique
+msgid "A model can occur only once in an MCP profile."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_users_apikeys_description__scope_mode
+msgid "Access"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__action
+msgid "Action"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__active
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__active
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__active
+msgid "Active"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.actions.act_window,help:odumcp.action_odumcp_profiles
+msgid ""
+"Add only the business models, operations, and fields that an agent actually "
+"needs."
+msgstr ""
+
+#. module: odumcp
+#: model:res.groups,name:odumcp.group_mcp_manager
+msgid "Administrator"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__res_users_apikeys_description__scope_mode__global
+msgid "All APIs"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_activities
+msgid "Allow Activities"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_aggregate
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_aggregate
+msgid "Allow Aggregate"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_attachments
+msgid "Allow Attachments"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_binary_read
+msgid "Allow Binary Read"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_binary_write
+msgid "Allow Binary Write"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_chatter
+msgid "Allow Chatter"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_create
+msgid "Allow Create"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__allow_model_method
+msgid "Allow Model Method"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__allow_positional_arguments
+msgid "Allow Positional Arguments"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_read
+msgid "Allow Read"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_reports
+msgid "Allow Reports"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_schema
+msgid "Allow Schema"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_unlink
+msgid "Allow Unlink"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__allow_write
+msgid "Allow Write"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_method_policy__allow_model_method
+msgid "Allow calling the method without record IDs."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_method_policy__allow_positional_arguments
+msgid "Allow positional arguments after the recordset."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__allow_global_create
+msgid ""
+"Allow record creation on models without an explicit Model Policy when the "
+"assigned Odoo user has create access. Changes still require approval."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__allow_global_unlink
+msgid ""
+"Allow record deletion on models without an explicit Model Policy when the "
+"assigned Odoo user has delete access. Deletes still require approval."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__company_ids
+msgid "Allowed Companies"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__allowed_keyword_arguments
+msgid "Allowed Keyword Arguments"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Allowed Methods"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__approval_id
+msgid "Approval"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.actions.act_window,name:odumcp.action_odumcp_approvals
+#: model:ir.ui.menu,name:odumcp.menu_mcp_approvals
+msgid "Approval Inbox"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_config_settings__odumcp_approval_retention_days
+msgid "Approval Retention (days)"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__approval_ttl_minutes
+msgid "Approval TTL Minutes"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "Approvals"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+msgid "Approve"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_list
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_mass_form
+msgid "Approve Selected"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+msgid "Approve this exact change plan?"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__approved
+msgid "Approved"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__approved_at
+msgid "Approved At"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__approved_by
+msgid "Approved By"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Archived"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.actions.act_window,name:odumcp.action_odumcp_audit
+#: model:ir.ui.menu,name:odumcp.menu_mcp_audit
+msgid "Audit Log"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_graph
+msgid "Audit Requests"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_config_settings__odumcp_audit_retention_days
+msgid "Audit Retention (days)"
+msgstr ""
+
+#. module: odumcp
+#: model:res.groups,name:odumcp.group_mcp_auditor
+msgid "Auditor"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__auto_approve_low_risk
+msgid "Auto Approve Low Risk"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__method_call
+msgid "Call Allowed Method"
+msgstr ""
+
+#. module: odumcp
+#: model:res.groups,comment:odumcp.group_mcp_manager
+msgid ""
+"Can configure MCP policies, assign user access, and approve change plans."
+msgstr ""
+
+#. module: odumcp
+#: model:res.groups,comment:odumcp.group_mcp_auditor
+msgid ""
+"Can inspect MCP profiles, approvals, user MCP settings, and immutable audit "
+"records."
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_mass_form
+msgid "Cancel"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Capabilities"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval_mass__approval_ids
+msgid "Change Plans"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__code
+msgid "Code"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_method_policy__allowed_keyword_arguments
+msgid "Comma-separated exact keyword argument names. Empty forbids kwargs."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.module.category,name:odumcp.module_category_odumcp
+#: model:ir.ui.menu,name:odumcp.menu_mcp_root
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "OduMCP"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "Connector API"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__attachment_create
+msgid "Create Attachment"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__record_create
+msgid "Create Records"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.actions.act_window,help:odumcp.action_odumcp_profiles
+msgid "Create a default-deny MCP security profile"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_global_create
+msgid "Create on Any Accessible Model"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__create_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__create_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__create_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__create_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__create_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__create_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__create_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__create_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__create_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__create_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__risk_level__critical
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_method_policy__risk_level__critical
+msgid "Critical"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__daily_quota
+msgid "Daily Quota"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "Day"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__default_model_access
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Default Model Access"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid ""
+"Default Model Access applies only when a model has no explicit policy.\n"
+"                                Use Model Policies for model-specific "
+"operations, fields, domains, limits,\n"
+"                                or exceptions. Odoo ACLs, record rules, "
+"field security, and the MCP safety\n"
+"                                denylist always apply."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval_mass__mode__delete
+msgid "Delete Expired"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__record_delete
+msgid "Delete Records"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_global_unlink
+msgid "Delete from Any Accessible Model"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_mass_form
+msgid "Delete Selected"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_list
+msgid "Delete Selected Expired"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_audit_log__outcome__denied
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "Denied"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Describe the intended agent role and scope..."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__description
+msgid "Description"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__diff_json
+msgid "Diff Json"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid ""
+"Disable all authenticated MCP operations without changing user MCP settings."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__display_name
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__display_name
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__display_name
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__display_name
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__display_name
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__duration_ms
+msgid "Duration Ms"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__company_ids
+msgid "Empty means all companies available to the connector user."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_config_settings__odumcp_enabled
+msgid "Enable MCP Connector API"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_audit_log__outcome__error
+msgid "Error"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__error_class
+msgid "Error Class"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__error_code
+msgid "Error Code"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__error_message
+msgid "Error Message"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "Errors"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__executed
+msgid "Executed"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__executed_at
+msgid "Executed At"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__executing
+msgid "Executing"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__expired
+msgid "Expired"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__expires_at
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__expires_at
+msgid "Expires At"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_profile__default_model_access__explicit
+msgid "Explicit policies only"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__failed
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_search
+msgid "Failed"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__default_model_access
+msgid ""
+"Fallback for models without an explicit Model Policy. Odoo access rights, "
+"record rules, field security, and the MCP safety denylist still apply."
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Field Policies"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__forced_domain_json
+msgid "Forced Domain Json"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__risk_level__high
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_method_policy__risk_level__high
+msgid "High"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__id
+msgid "ID"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__idempotency_key
+msgid "Idempotency Key"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_approval__request_ref
+msgid ""
+"Identifier of the MCP request that produced this plan. Plans created by one "
+"request share it, so they can be approved together."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__input_hash
+msgid "Input Hash"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__input_summary
+msgid "Input Summary"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+msgid "Integrity"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_approval__request_key
+msgid ""
+"Internal grouping key: the batch key sent by the client, or an automatic "
+"one."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_model_policy__forced_domain_json
+msgid "JSON Odoo domain that is always AND-ed with the client domain."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval____last_update
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log____last_update
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket____last_update
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy____last_update
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy____last_update
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__write_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__write_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__write_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__write_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__write_uid
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__write_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__write_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__write_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__write_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__write_date
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Limits"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__risk_level__low
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_method_policy__risk_level__low
+msgid "Low"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_users_form_odumcp
+msgid "MCP Access"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_users__mcp_active
+msgid "MCP Active"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_audit_log
+msgid "MCP Audit Log"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_approval
+msgid "MCP Change Approval"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_service
+msgid "MCP Connector Service"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_event_ticket
+msgid "MCP Event Ticket"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_approval_mass
+msgid "MCP Mass Approve/Reject"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_method_policy
+msgid "MCP Method Policy"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_model_policy
+msgid "MCP Model Policy"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_odumcp_profile
+msgid "MCP Security Profile"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_profile_positive_limits
+msgid "MCP limits are outside their allowed range."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__res_users_apikeys_description__scope_mode__mcp
+msgid "MCP only"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_res_users_apikeys_description__scope_mode
+msgid ""
+"MCP-only keys can authenticate only to the MCP control API. All APIs creates "
+"a standard unrestricted Odoo API key."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__max_argument_bytes
+msgid "Max Argument Bytes"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__max_batch_size
+msgid "Max Batch Size"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__max_record_count
+msgid "Max Record Count"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__max_records
+msgid "Max Records"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__max_records_per_call
+msgid "Max Records Per Call"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_config_settings__odumcp_max_binary_bytes
+msgid "Maximum Binary/Report Bytes"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_config_settings__odumcp_max_payload_bytes
+msgid "Maximum JSON Payload Bytes"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "Maximum JSON request and response size in bytes."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_method_policy__max_argument_bytes
+msgid "Maximum canonical JSON size of args and kwargs."
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "Maximum decoded attachment or rendered report size in bytes."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__daily_quota
+msgid "Maximum requests per UTC day. Zero disables the separate daily quota."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_users__mcp_event_channel
+msgid "Mcp Event Channel"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_users__mcp_event_version
+msgid "Mcp Event Version"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__risk_level__medium
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_method_policy__risk_level__medium
+msgid "Medium"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__method_name
+msgid "Method Name"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__method_policy_ids
+msgid "Method Policy"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_method_policy_positive_max_record_count
+msgid "Method record or argument limits are outside their allowed range."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval_mass__mode
+msgid "Mode"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__model_id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__model_id
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_search
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "Model"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__model_name
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__model_name
+msgid "Model Name"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Model Policies"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__name
+msgid "Name"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__auto_approve_low_risk
+msgid "Only low-risk collaboration actions may be auto-approved."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__operation
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "Operation"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Operations"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__outcome
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "Outcome"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__payload_yaml
+msgid "Payload"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__payload_hash
+msgid "Payload Hash"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__payload_json
+msgid "Payload Json"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__pending
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_search
+msgid "Pending"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_res_config_settings__odumcp_request_window_minutes
+msgid ""
+"Plans of the same connector user and profile that arrive without an explicit"
+" batch key are grouped into one request while less than this many minutes "
+"pass between them. Zero puts every plan in its own request."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval_mass__eligible_count
+msgid "Plans to Process"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid ""
+"Plans without an explicit batch key are grouped into one\n"
+"                                    request while less than this many minutes pass between them.\n"
+"                                    Zero puts every plan in its own request."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__policy_ids
+msgid "Policy"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__message_post
+msgid "Post Message"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__profile_id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__profile_id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__profile_id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__profile_id
+#: model:ir.model.fields,field_description:odumcp.field_res_users__mcp_profile_id
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Profile"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__rate_limit_per_minute
+msgid "Rate Limit Per Minute"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_profile__default_model_access__write
+msgid "Read and update any accessible model"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_profile__default_model_access__read
+msgid "Read any accessible model"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Read-only analyst"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__read_field_ids
+msgid "Readable Fields"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__diff_yaml
+msgid "Redacted Diff"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_form
+msgid "Redacted Request Metadata"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+msgid "Reject"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_list
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_mass_form
+msgid "Reject Selected"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+msgid "Reject this change plan?"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__state__rejected
+msgid "Rejected"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__rejected_at
+msgid "Rejected At"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__rejected_by
+msgid "Rejected By"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__remote_ip
+msgid "Remote Ip"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__request_ref
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__request_id
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_search
+msgid "Request"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_res_config_settings__odumcp_request_window_minutes
+msgid "Request Grouping Window (minutes)"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__request_key
+msgid "Request Key"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__request_uid
+msgid "Request Uid"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_form
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__result_yaml
+msgid "Result"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__result_json
+msgid "Result Json"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "Retention"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_search
+msgid "Risk"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__risk_level
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__risk_level
+msgid "Risk Level"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__activity_schedule
+msgid "Schedule Activity"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.actions.act_window,name:odumcp.action_odumcp_profiles
+#: model:ir.ui.menu,name:odumcp.menu_mcp_profiles
+msgid "Security Profiles"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval_mass__skipped_count
+msgid "Skipped Records"
+msgstr ""
+
+#. module: odumcp
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_mass_form
+msgid ""
+"Skipped records are not in a state suitable for this action\n"
+"                    and will be left unchanged."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__state
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_approval_search
+msgid "State"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__status_code
+msgid "Status Code"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_audit_log__outcome__success
+msgid "Success"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__summary
+msgid "Summary"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__target_count
+msgid "Target Count"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__target_ids_json
+msgid "Target Ids Json"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__target_ids_yaml
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_form
+msgid "Target Records"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__model_name
+msgid "Technical Model Name"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_event_ticket_token_hash_unique
+msgid "The MCP event ticket must be unique."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_profile_code_unique
+msgid "The MCP profile code must be unique."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_approval_request_uid_unique
+msgid "The approval request identifier must be unique."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_approval_idempotency_unique
+msgid "The idempotency key has already been used by this MCP user."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.constraint,message:odumcp.constraint_odumcp_model_policy_max_records_range
+msgid "The per-model record limit must be between 0 and 1000."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__token_hash
+msgid "Token Hash"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__record_update
+msgid "Update Records"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_approval__user_id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__user_id
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_event_ticket__user_id
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_audit_search
+msgid "User"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__user_agent
+msgid "User Agent"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_res_users
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__user_ids
+#: model_terms:ir.ui.view,arch_db:odumcp.view_odumcp_profile_form
+msgid "Users"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_model_policy__write_field_ids
+msgid "Writable Fields"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_model_policy__max_records
+msgid "Zero inherits the profile limit."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_res_users_apikeys
+msgid "res.users.apikeys"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model,name:odumcp.model_res_users_apikeys_description
+msgid "res.users.apikeys.description"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__assigned_user_ids
+msgid "Assigned Users"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__activity_done
+msgid "Close Activity"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__allow_activities
+msgid ""
+"Let the connector schedule, update and close the activities it owns: the "
+"ones it created and the ones assigned to its Odoo user. Activities are never"
+" deleted outright."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_method_policy__requires_approval
+msgid "Require Human Approval"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields.selection,name:odumcp.selection__odumcp_approval__action__activity_update
+msgid "Update Activity"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_method_policy__requires_approval
+msgid ""
+"When disabled, a valid method call plan is approved automatically. It still "
+"uses idempotent execution and is fully audited."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_audit_log__omitted_fields
+msgid "Fields trimmed from a partial read, so a successful row still shows the policy at work."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "Model %(model)s has no field %(fields)s."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "Model %(model)s has no field %(fields)s. Call models.describe to list the fields this profile can use."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "One or more records no longer exist."
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__omitted_fields
+msgid "Omitted Fields"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_profile__allow_partial_field_reads
+msgid "Partial Field Reads"
+msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,help:odumcp.field_odumcp_profile__allow_partial_field_reads
+msgid "Return the readable part of a read request instead of refusing it, and report the skipped field names in the response. Only plain field lists are trimmed: a denied field in a domain or in the sort order, and any write, still fail. Leave off when a client must not silently work with incomplete records."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "The batch key must be a string of up to 128 characters."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "The profile policy does not allow reading %(model)s, reached through the domain path %(path)s."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "The profile policy does not allow these fields on %(model)s: %(fields)s."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "These %(model)s records are outside the allowed scope: %(ids)s."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "These %(model)s records do not exist: %(ids)s."
+msgstr ""
+
+#. module: odumcp
+#: code:addons/odumcp/models/service.py:0
+msgid "These fields on %(model)s are readonly and cannot be written: %(fields)s."
+msgstr ""

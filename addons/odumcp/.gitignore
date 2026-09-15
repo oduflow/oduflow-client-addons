@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
+.coverage
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+addons/odumcp/deploy/odumcp_server/.venv/
+addons/odumcp/deploy/odumcp_server/.env

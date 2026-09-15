@@ -1,0 +1,3074 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* odupilot
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-17 01:32+0000\n"
+"PO-Revision-Date: 2026-08-16 15:43+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#. module: odupilot
+#: model:res.groups,name:odupilot.group_bridge
+msgid "OduPilot Bridge Service"
+msgstr "Usługa mostu czatu AI"
+
+#. module: odupilot
+#: model:res.groups,comment:odupilot.group_bridge
+msgid ""
+"Technical group for the AI chat bridge service account. It unlocks the "
+"bridge RPC endpoints, which read the whole command outbox and hand out "
+"deployment secrets. Assign it to the bridge account only, never to a person."
+msgstr ""
+"Grupa techniczna dla konta serwisowego mostu czatu AI. Odblokowuje metody "
+"RPC mostu, które czytają całą kolejkę poleceń i wydają sekrety wdrożenia. "
+"Przypisuj ją wyłącznie kontu mostu, nigdy osobie."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:96
+msgid "%(label)s must contain valid JSON: %(error)s"
+msgstr "%(label)s musi zawierać prawidłowy JSON: %(error)s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:1
+msgid "%s contains an invalid character."
+msgstr "%s zawiera niedozwolony znak."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:1
+msgid "%s is required."
+msgstr "%s jest wymagane."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:108
+msgid "%s keys and values must be strings."
+msgstr "Klucze i wartości %s muszą być ciągami znaków."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:105
+msgid "%s must be a JSON object."
+msgstr "%s musi być obiektem JSON."
+
+#. module: odupilot
+#: code:addons/odupilot/models/config_validation.py:18
+msgid "%s must be an absolute HTTP or HTTPS URL."
+msgstr "%s musi być bezwzględnym adresem HTTP lub HTTPS."
+
+#. module: odupilot
+#: code:addons/odupilot/models/config_validation.py:17
+msgid "%s must be an absolute HTTPS URL."
+msgstr "%s musi być bezwzględnym adresem HTTPS."
+
+#. module: odupilot
+#: code:addons/odupilot/models/config_validation.py:20
+msgid "%s must not contain credentials."
+msgstr "%s nie może zawierać danych uwierzytelniających."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "<span class=\"o_form_label\">AI base URL</span>"
+msgstr "<span class=\"o_form_label\">Bazowy URL AI</span>"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "<span class=\"o_form_label\">Audit event retention</span>"
+msgstr "<span class=\"o_form_label\">Przechowywanie zdarzeń audytowych</span>"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "<span class=\"o_form_label\">Busy session timeout</span>"
+msgstr "<span class=\"o_form_label\">Limit czasu zajętej sesji</span>"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "<span class=\"o_form_label\">Closed session retention</span>"
+msgstr "<span class=\"o_form_label\">Przechowywanie zamkniętych sesji</span>"
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_session_odupilot_session_channel_unique
+msgid "A Discuss channel can only belong to one AI chat session."
+msgstr "Kanał Discuss może należeć tylko do jednej sesji czatu AI."
+
+#. module: odupilot
+#: model:res.partner.category,name:odupilot.partner_category_ai_bot
+msgid "AI Bot"
+msgstr "Bot AI"
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_admin
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_users_form_odupilot
+msgid "OduPilot"
+msgstr "Czat AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_profile
+msgid "OduPilot Access Profile"
+msgstr "Profil dostępu do czatu AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_event
+msgid "OduPilot Audit Event"
+msgstr "Zdarzenie audytu czatu AI"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_form
+msgid "OduPilot Command"
+msgstr "Polecenie czatu AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_command
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_tree
+msgid "OduPilot Commands"
+msgstr "Polecenia czatu AI"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "OduPilot Infrastructure"
+msgstr "Infrastruktura czatu AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_mcp_server
+msgid "OduPilot MCP Server"
+msgstr "Serwer MCP czatu AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_runtime
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "OduPilot Monitoring"
+msgstr "Monitorowanie czatu AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_command
+msgid "OduPilot Outbox Command"
+msgstr "Polecenie wychodzące czatu AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_permission
+msgid "OduPilot Permission Request"
+msgstr "Żądanie uprawnienia czatu AI"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "OduPilot Profile"
+msgstr "Profil czatu AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_profile
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_tree
+msgid "OduPilot Profiles"
+msgstr "Profile czatu AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:1
+msgid "OduPilot Runtime"
+msgstr "Działanie czatu AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_runtime
+msgid "OduPilot Runtime Status"
+msgstr "Stan działania czatu AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_session
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "OduPilot Session"
+msgstr "Sesja czatu AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_session
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_tree
+msgid "OduPilot Sessions"
+msgstr "Sesje czatu AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_config_settings
+msgid "OduPilot Settings"
+msgstr "Ustawienia czatu AI"
+
+#. module: odupilot
+#: model:ir.actions.server,name:odupilot.ir_cron_odupilot_retention_ir_actions_server
+#: model:ir.cron,cron_name:odupilot.ir_cron_odupilot_retention
+#: model:ir.cron,name:odupilot.ir_cron_odupilot_retention
+msgid "OduPilot: Apply retention policy"
+msgstr "Czat AI: zastosuj zasady przechowywania"
+
+#. module: odupilot
+#: model:ir.actions.server,name:odupilot.ir_cron_odupilot_busy_watchdog_ir_actions_server
+#: model:ir.cron,cron_name:odupilot.ir_cron_odupilot_busy_watchdog
+#: model:ir.cron,name:odupilot.ir_cron_odupilot_busy_watchdog
+msgid "OduPilot: Recover timed-out requests"
+msgstr "OduPilot: odzyskiwanie żądań po przekroczeniu czasu"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_res_config_settings__ai_base_url
+#: code:addons/odupilot/models/odupilot_session.py:534
+#: code:addons/odupilot/models/res_config_settings.py:23
+msgid "AI base URL"
+msgstr "Bazowy URL AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:143
+msgid ""
+"AI chat is not available. Ask an administrator to assign an AI chat profile "
+"with a LiteLLM API key."
+msgstr ""
+"Czat AI jest niedostępny. Poproś administratora o przypisanie profilu czatu "
+"AI z kluczem API LiteLLM."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_res_users__odupilot_profile_id
+msgid "AI chat profile"
+msgstr "Profil czatu AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/res_config_settings.py:1
+msgid "AI chat retention periods cannot be negative."
+msgstr "Okresy przechowywania danych czatu AI nie mogą być ujemne."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:100
+#: code:addons/odupilot/models/odupilot_session.py:116
+msgid "OduPilot - %s"
+msgstr "Czat AI - %s"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "AI is responding…"
+msgstr "AI odpowiada…"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:797
+msgid "AI request failed: %s"
+msgstr "Żądanie AI zakończyło się błędem: %s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:578
+msgid ""
+"AI response exceeded the %(minutes)s-minute limit and was aborted. Recovery "
+"is in progress."
+msgstr ""
+"Odpowiedź AI przekroczyła limit %(minutes)s min i została przerwana. Trwa "
+"odzyskiwanie."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid ""
+"AI session and developer environment are starting. Messages will be "
+"processed when initialization is complete."
+msgstr ""
+"Sesja AI i środowisko deweloperskie są uruchamiane. Wiadomości zostaną "
+"przetworzone po zakończeniu inicjalizacji."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:126
+msgid ""
+"AI session is starting. Messages will be processed when initialization is "
+"complete."
+msgstr ""
+"Sesja AI jest uruchamiana. Wiadomości zostaną przetworzone po zakończeniu "
+"inicjalizacji."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:180
+msgid "AI session was closed by %s."
+msgstr "Sesja AI została zamknięta przez użytkownika %s."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__abort
+msgid "Abort"
+msgstr "Przerwij"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_res_config_settings__odupilot_busy_timeout_minutes
+msgid "Abort an AI request that remains busy longer than this many minutes."
+msgstr ""
+"Przerwij żądanie AI, które pozostaje zajęte dłużej niż podana liczba minut."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "Abort requests that stay busy longer than this many minutes."
+msgstr ""
+"Przerywaj żądania, które pozostają zajęte dłużej niż podana liczba minut."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__url
+msgid "Absolute HTTP or HTTPS Streamable HTTP endpoint."
+msgstr "Bezwzględny punkt końcowy Streamable HTTP przez HTTP lub HTTPS."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__active
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__active
+msgid "Active"
+msgstr "Aktywny"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__user_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__actor_user_id
+msgid "Actual actor"
+msgstr "Rzeczywisty użytkownik"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_bootstrap_prompt
+msgid "Additional developer bootstrap instructions"
+msgstr "Dodatkowe instrukcje bootstrap dewelopera"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__error_command_count
+msgid "All command errors"
+msgstr "Wszystkie błędy poleceń"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Allow once"
+msgstr "Zezwól raz"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_permission__status__once
+msgid "Allowed once"
+msgstr "Zezwolono raz"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Always"
+msgstr "Zawsze"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_permission__status__always
+msgid "Always allowed"
+msgstr "Zawsze dozwolone"
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_session_odupilot_session_opencode_unique
+msgid "An OpenCode session can only belong to one AI chat session."
+msgstr "Sesja OpenCode może należeć tylko do jednej sesji czatu AI."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__resolved_by_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__resolved_by_id
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Answered by"
+msgstr "Odpowiedział(a)"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__attempts
+msgid "Attempts"
+msgstr "Próby"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Attention"
+msgstr "Uwaga"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "Audit Events"
+msgstr "Zdarzenia audytu"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_res_config_settings__odupilot_event_retention_days
+msgid "Audit event retention"
+msgstr "Przechowywanie zdarzeń audytowych"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__average_duration_24h
+msgid "Average duration (24h)"
+msgstr "Średni czas trwania (24 godz.)"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__branch
+msgid "Branch"
+msgstr "Gałąź"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__bridge_started_at
+msgid "Bridge started"
+msgstr "Uruchomienie mostu"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__bridge_version
+msgid "Bridge version"
+msgstr "Wersja mostu"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__event_queue_size
+msgid "Buffered events"
+msgstr "Zdarzenia w buforze"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__state__busy
+msgid "Busy"
+msgstr "Zajęty"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Busy Sessions"
+msgstr "Zajęte sesje"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__busy_since
+msgid "Busy Since"
+msgstr "Zajęta od"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_res_config_settings__odupilot_busy_timeout_minutes
+msgid "Busy session timeout"
+msgstr "Limit czasu zajętej sesji"
+
+#. module: odupilot
+#: code:addons/odupilot/models/res_config_settings.py:40
+msgid "Busy session timeout must be at least one minute."
+msgstr "Limit czasu zajętej sesji musi wynosić co najmniej jedną minutę."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__busy_session_count
+msgid "Busy sessions"
+msgstr "Zajęte sesje"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:74
+#: code:addons/odupilot/models/odupilot_command.py:181
+#: code:addons/odupilot/models/odupilot_session.py:163
+msgid "Cancelled because the AI chat was closed."
+msgstr "Anulowano, ponieważ czat AI został zamknięty."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:590
+msgid "Cancelled because the previous AI request timed out."
+msgstr "Anulowano, ponieważ poprzednie żądanie AI przekroczyło limit czasu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:686
+msgid "Cancelled by an abort request."
+msgstr "Anulowano przez żądanie przerwania."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__channel_id
+msgid "Channel"
+msgstr "Kanał"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__close
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "Close Session"
+msgstr "Zamknij sesję"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "Close this AI session for all participants?"
+msgstr "Zamknąć tę sesję AI dla wszystkich uczestników?"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__state__closed
+msgid "Closed"
+msgstr "Zamknięty"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__closed_at
+msgid "Closed at"
+msgstr "Zamknięto"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_res_config_settings__odupilot_closed_session_retention_days
+msgid "Closed session retention"
+msgstr "Przechowywanie zamkniętych sesji"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__code
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__code
+msgid "Code"
+msgstr "Kod"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__command_json
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__command_ids
+#: code:addons/odupilot/models/odupilot_mcp_server.py:168
+msgid "Command"
+msgstr "Polecenie"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__command_type
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+msgid "Command Type"
+msgstr "Typ polecenia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__error_command_24h_count
+msgid "Command errors (24h)"
+msgstr "Błędy poleceń (24 godz.)"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:172
+msgid "Command must be a non-empty JSON array of non-empty strings."
+msgstr "Polecenie musi być niepustą tablicą JSON niepustych ciągów znaków."
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_commands
+msgid "Commands"
+msgstr "Polecenia"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Commands and Sessions"
+msgstr "Polecenia i sesje"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__completed_at
+msgid "Completed at"
+msgstr "Ukończono"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__completed_command_24h_count
+msgid "Completed commands (24h)"
+msgstr "Ukończone polecenia (24 godz.)"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ustawienia konfiguracji"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:536
+msgid "Configure a valid AI base URL before starting an AI chat."
+msgstr "Przed rozpoczęciem czatu AI skonfiguruj prawidłowy bazowy URL AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:363
+msgid ""
+"Configure the developers GitHub PAT on the AI chat profile before starting a "
+"developer chat."
+msgstr ""
+"Przed rozpoczęciem czatu deweloperskiego skonfiguruj GitHub PAT deweloperów "
+"w profilu OduPilot."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:360
+msgid ""
+"Configure the developers repository URL on the AI chat profile before "
+"starting a developer chat."
+msgstr ""
+"Przed rozpoczęciem czatu deweloperskiego skonfiguruj URL repozytorium "
+"deweloperów w profilu OduPilot."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:393
+msgid "Could not generate a unique developer branch name."
+msgstr "Nie udało się wygenerować unikalnej nazwy gałęzi dewelopera."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Could not send the permission response."
+msgstr "Nie udało się wysłać odpowiedzi na żądanie uprawnienia."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__create_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__create_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__create_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__create_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__create_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__create_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__create_uid
+msgid "Created by"
+msgstr "Utworzone przez"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__create_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__create_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__create_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__create_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__create_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__create_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__create_date
+msgid "Created on"
+msgstr "Utworzono"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__health_error
+msgid "Current health error"
+msgstr "Bieżący błąd stanu"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_runtime__status__degraded
+msgid "Degraded"
+msgstr "Pogorszony"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_res_config_settings__odupilot_event_retention_days
+msgid ""
+"Delete AI chat audit event payloads after this many days. Set zero to keep "
+"them indefinitely."
+msgstr ""
+"Usuń dane zdarzeń audytowych czatu AI po tylu dniach. Ustaw zero, aby "
+"przechowywać je bezterminowo."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid ""
+"Delete closed technical session records after this many days; Discuss "
+"messages remain available."
+msgstr ""
+"Usuń rekordy techniczne zamkniętych sesji po tylu dniach; wiadomości w "
+"Dyskusjach pozostaną dostępne."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid ""
+"Delete event payloads after this many days; zero keeps them indefinitely."
+msgstr ""
+"Usuń dane zdarzeń po tylu dniach; zero oznacza przechowywanie bezterminowe."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_res_config_settings__odupilot_closed_session_retention_days
+msgid ""
+"Delete technical AI session records after this many days. Discuss channels "
+"and messages are kept. Set zero to keep records indefinitely."
+msgstr ""
+"Usuń rekordy techniczne sesji AI po tylu dniach. Kanały i wiadomości w "
+"Dyskusjach zostaną zachowane. Ustaw zero, aby przechowywać rekordy "
+"bezterminowo."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:1
+msgid "Developer branch publication failed: %s"
+msgstr "Publikacja gałęzi deweloperskiej nie powiodła się: %s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "Developer branch publication was queued."
+msgstr "Publikacja gałęzi deweloperskiej została dodana do kolejki."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:1
+msgid "Developer branch published."
+msgstr "Gałąź deweloperska została opublikowana."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:1
+msgid "Developer branch published: %s"
+msgstr "Gałąź deweloperska została opublikowana: %s"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_environment_mcp_server_id
+msgid "Developer environment MCP"
+msgstr "MCP środowiska deweloperskiego"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:1
+msgid "Developer environment MCP must be active and enabled."
+msgstr "MCP środowiska deweloperskiego musi być aktywny i włączony."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_environment_odoo_image
+msgid "Developer environment Odoo image"
+msgstr "Obraz Odoo środowiska deweloperskiego"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "Developer environment URL"
+msgstr "URL środowiska deweloperskiego"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:1
+msgid "Developer environment bootstrap requires a developer worktree profile."
+msgstr ""
+"Bootstrap środowiska deweloperskiego wymaga profilu worktree dewelopera."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_environment_template_name
+msgid "Developer environment template"
+msgstr "Szablon środowiska deweloperskiego"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "Developer environment: %s"
+msgstr "Środowisko deweloperskie: %s"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Developer workspace"
+msgstr "Obszar roboczy dewelopera"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__workspace_type__worktree
+msgid "Developer worktree"
+msgstr "Drzewo robocze programisty"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:216
+#: code:addons/odupilot/models/odupilot_session.py:88
+msgid "Developer worktree chats are restricted to Odoo administrators."
+msgstr ""
+"Czaty z drzewem roboczym programisty są dostępne wyłącznie dla "
+"administratorów Odoo."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:115
+#: code:addons/odupilot/models/res_users.py:27
+msgid ""
+"Developer worktree profiles can only be assigned to Odoo administrators."
+msgstr ""
+"Profile drzewa roboczego programisty można przypisywać tylko administratorom "
+"Odoo."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_github_pat
+msgid "Developers GitHub PAT"
+msgstr "GitHub PAT deweloperów"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:100
+#: code:addons/odupilot/models/odupilot_session.py:366
+msgid "Developers GitHub PAT contains an invalid character."
+msgstr "GitHub PAT deweloperów zawiera niedozwolony znak."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_base_branch
+msgid "Developers base branch"
+msgstr "Bazowa gałąź deweloperów"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:426
+msgid "Developers base branch \"%s\" does not exist in the repository."
+msgstr "Bazowa gałąź deweloperów „%s” nie istnieje w repozytorium."
+
+#. module: odupilot
+#: code:addons/odupilot/models/config_validation.py:37
+msgid "Developers base branch must be a valid Git branch name."
+msgstr "Bazowa gałąź deweloperów musi mieć prawidłową nazwę gałęzi Git."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__developer_repo_url
+#: code:addons/odupilot/models/odupilot_profile.py:93
+#: code:addons/odupilot/models/odupilot_session.py:369
+msgid "Developers repository URL"
+msgstr "URL repozytorium deweloperów"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__directory
+msgid "Directory"
+msgstr "Katalog"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_discuss_channel
+msgid "Discussion Channel"
+msgstr "Kanał dyskusji"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__display_name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__display_name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__display_name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__display_name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__display_name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__display_name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__display_name
+msgid "Display Name"
+msgstr "Nazwa wyświetlana"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__state__done
+msgid "Done"
+msgstr "Gotowe"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__duration_seconds
+msgid "Duration (seconds)"
+msgstr "Czas trwania (sekundy)"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__enabled
+msgid "Enable this server when OpenCode loads the workspace."
+msgstr "Włącz ten serwer podczas ładowania obszaru roboczego przez OpenCode."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__enabled
+msgid "Enabled"
+msgstr "Włączone"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__environment_json
+#: code:addons/odupilot/models/odupilot_mcp_server.py:126
+msgid "Environment"
+msgstr "Środowisko"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__env_url
+msgid "Environment URL"
+msgstr "URL środowiska"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_environment_template_name
+msgid "Environment template passed to the full MCP bootstrap tool."
+msgstr "Szablon środowiska przekazywany do narzędzia bootstrap pełnego MCP."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:129
+msgid "Environment variable name \"%s\" is not valid."
+msgstr "Nazwa zmiennej środowiskowej „%s” jest nieprawidłowa."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__error
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__error
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__error_text
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__state__error
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__state__error
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_form
+msgid "Error"
+msgstr "Błąd"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Errors"
+msgstr "Błędy"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__event_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__event_ids
+msgid "Event"
+msgstr "Zdarzenie"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__event_type
+msgid "Event Type"
+msgstr "Typ zdarzenia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__execution_user_id
+msgid "Execution identity"
+msgstr "Tożsamość wykonawcza"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_permission__status__expired
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_recovery__status__expired
+msgid "Expired"
+msgstr "Wygasło"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__external_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__external_id
+msgid "External"
+msgstr "Zewnętrzny"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:1
+msgid "Failed OduPilot Commands"
+msgstr "Nieudane polecenia czatu AI"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__workspace_type__files
+msgid "Files"
+msgstr "Pliki"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:628
+msgid "Files available to AI: %s"
+msgstr "Pliki dostępne dla AI: %s"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_environment_mcp_server_id
+msgid ""
+"Full MCP server used by the automatic developer environment bootstrap. Leave "
+"empty to create only the Git worktree."
+msgstr ""
+"Pełny serwer MCP używany do automatycznego bootstrap środowiska "
+"deweloperskiego. Pozostaw puste, aby utworzyć tylko Git worktree."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:347
+msgid "Git could not prepare the developer workspace: %s"
+msgstr "Git nie mógł przygotować obszaru roboczego dewelopera: %s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:338
+msgid "Git is not installed in the Odoo container."
+msgstr "Git nie jest zainstalowany w kontenerze Odoo."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:341
+msgid "Git timed out while preparing the developer workspace."
+msgstr ""
+"Upłynął limit czasu Git podczas przygotowywania obszaru roboczego dewelopera."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+msgid "Group By"
+msgstr "Grupuj według"
+
+#. module: odupilot
+#: code:addons/odupilot/models/mail_channel.py:78
+msgid "Guests cannot be invited to an AI chat."
+msgstr "Nie można zapraszać gości do czatu AI."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_repo_url
+msgid "HTTPS Git repository cloned for this developer profile."
+msgstr "Repozytorium Git HTTPS klonowane dla tego profilu deweloperskiego."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:117
+msgid "Header name \"%s\" is not valid."
+msgstr "Nazwa nagłówka „%s” jest nieprawidłowa."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:120
+msgid "Header values must not contain line breaks."
+msgstr "Wartości nagłówków nie mogą zawierać znaków nowego wiersza."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__headers_json
+#: code:addons/odupilot/models/odupilot_mcp_server.py:114
+msgid "Headers"
+msgstr "Nagłówki"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_runtime__status__healthy
+msgid "Healthy"
+msgstr "Sprawny"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__heartbeat_age_seconds
+msgid "Heartbeat age (seconds)"
+msgstr "Wiek sygnału aktywności (sekundy)"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__reasoning_effort__high
+msgid "High"
+msgstr "Wysoki"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__id
+msgid "ID"
+msgstr "ID"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__init
+msgid "Initialize session"
+msgstr "Zainicjuj sesję"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__state__init
+msgid "Initializing"
+msgstr "Inicjalizacja"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Instructions"
+msgstr "Instrukcje"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__command_json
+msgid "JSON array containing the executable followed by its arguments."
+msgstr "Tablica JSON zawierająca plik wykonywalny, a następnie jego argumenty."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__ruleset_json
+msgid "JSON object merged into the OpenCode permission configuration."
+msgstr "Obiekt JSON scalany z konfiguracją uprawnień OpenCode."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__headers_json
+msgid "JSON object with HTTP header names and string values."
+msgstr "Obiekt JSON z nazwami nagłówków HTTP i wartościami tekstowymi."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__oauth_json
+msgid ""
+"JSON object with OpenCode OAuth options, or false to disable OAuth auto-"
+"detection."
+msgstr ""
+"Obiekt JSON z opcjami OAuth OpenCode albo false, aby wyłączyć automatyczne "
+"wykrywanie OAuth."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__environment_json
+msgid "JSON object with environment variable names and string values."
+msgstr ""
+"Obiekt JSON z nazwami zmiennych środowiskowych i wartościami tekstowymi."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__last_message_id
+msgid "Last Message"
+msgstr "Ostatnia wiadomość"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command____last_update
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event____last_update
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server____last_update
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission____last_update
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile____last_update
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime____last_update
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session____last_update
+msgid "Last Modified on"
+msgstr "Ostatnio zmodyfikowano"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Last Runtime Error"
+msgstr "Ostatni błąd działania"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__write_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__write_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__write_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__write_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__write_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__write_uid
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__write_uid
+msgid "Last Updated by"
+msgstr "Ostatnio zaktualizowane przez"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__write_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__write_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__write_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__write_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__write_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__write_date
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__write_date
+msgid "Last Updated on"
+msgstr "Ostatnio zaktualizowano"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__last_heartbeat_at
+msgid "Last heartbeat"
+msgstr "Ostatni sygnał aktywności"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__last_error
+msgid "Last runtime error"
+msgstr "Ostatni błąd działania"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__last_error_at
+msgid "Last runtime error at"
+msgstr "Czas ostatniego błędu działania"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__last_error_state
+msgid "Last runtime error state"
+msgstr "Stan ostatniego błędu działania"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__litellm_api_key
+msgid "LiteLLM API key"
+msgstr "Klucz API LiteLLM"
+
+#. module: odupilot
+#: code:addons/odupilot/migrations/15.0.1.13.0/post-migrate.py:46
+msgid "%s (migrated key %s)"
+msgstr "%s (zmigrowany klucz %s)"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_mcp_server_form
+msgid "Local MCP"
+msgstr "Lokalny MCP"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_mcp_server__server_type__local
+msgid "Local command"
+msgstr "Polecenie lokalne"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__reasoning_effort__low
+msgid "Low"
+msgstr "Niski"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "MCP"
+msgstr "MCP"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_mcp_server_form
+msgid "MCP Server"
+msgstr "Serwer MCP"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_mcp_server
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_mcp_servers
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_mcp_server_tree
+msgid "MCP Servers"
+msgstr "Serwery MCP"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:183
+msgid ""
+"MCP server code may contain only letters, numbers, underscores, and hyphens."
+msgstr ""
+"Kod serwera MCP może zawierać tylko litery, cyfry, podkreślenia i łączniki."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__mcp_server_ids
+msgid "MCP servers"
+msgstr "Serwery MCP"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:186
+msgid "MCP timeout must be greater than zero."
+msgstr "Limit czasu MCP musi być większy od zera."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:203
+msgid "MCP working directory contains an invalid character."
+msgstr "Katalog roboczy MCP zawiera niedozwolony znak."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__mail_message_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__mail_message_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__mail_message_id
+msgid "Mail Message"
+msgstr "Wiadomość pocztowa"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__max_sessions
+msgid "Max Sessions"
+msgstr "Maksymalna liczba sesji"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__maximum_duration_24h
+msgid "Maximum duration (24h)"
+msgstr "Maksymalny czas trwania (24 godz.)"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:80
+msgid "Maximum sessions must be greater than zero."
+msgstr "Maksymalna liczba sesji musi być większa od zera."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__reasoning_effort__medium
+msgid "Medium"
+msgstr "Średni"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_mail_message
+msgid "Message"
+msgstr "Wiadomość"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__metadata_json
+msgid "Metadata Json"
+msgstr "Metadane JSON"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__reasoning_effort__minimal
+msgid "Minimal"
+msgstr "Minimalny"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__model
+msgid "Model"
+msgstr "Model językowy"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__model
+msgid "Model identifier exposed by the configured AI endpoint."
+msgstr ""
+"Identyfikator modelu udostępniany przez skonfigurowany punkt końcowy AI."
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_monitoring
+msgid "Monitoring"
+msgstr "Monitorowanie"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__name
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__name
+msgid "Name"
+msgstr "Nazwa"
+
+#. module: odupilot
+#: model:ir.actions.server,name:odupilot.action_server_new_odupilot
+#: model:ir.ui.menu,name:odupilot.menu_new_odupilot
+msgid "New OduPilot"
+msgstr "Nowy czat AI"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__next_attempt_at
+msgid "Next Attempt At"
+msgstr "Następna próba"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__oauth_json
+#: code:addons/odupilot/models/odupilot_mcp_server.py:136
+msgid "OAuth"
+msgstr "OAuth"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:157
+msgid "OAuth callbackPort must be an integer from 1 to 65535."
+msgstr "OAuth callbackPort musi być liczbą całkowitą od 1 do 65535."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:144
+msgid "OAuth contains unsupported options: %s."
+msgstr "OAuth zawiera nieobsługiwane opcje: %s."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:140
+msgid "OAuth must be a JSON object or false."
+msgstr "OAuth musi być obiektem JSON albo false."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:150
+msgid "OAuth option \"%s\" must be a string."
+msgstr "Opcja OAuth „%s” musi być ciągiem znaków."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:163
+msgid "OAuth redirectUri must be an absolute HTTP or HTTPS URL."
+msgstr "OAuth redirectUri musi być bezwzględnym adresem HTTP lub HTTPS."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_environment_odoo_image
+msgid "Odoo image passed to the full MCP bootstrap tool."
+msgstr "Obraz Odoo przekazywany do narzędzia bootstrap pełnego MCP."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_runtime__status__offline
+msgid "Offline"
+msgstr "Niedostępny"
+
+#. module: odupilot
+#: code:addons/odupilot/models/mail_channel.py:92
+msgid "Only Odoo administrators can join a developer worktree chat."
+msgstr ""
+"Do czatu z drzewem roboczym programisty mogą dołączyć tylko administratorzy "
+"Odoo."
+
+#. module: odupilot
+#: code:addons/odupilot/models/mail_channel.py:86
+msgid "Only active internal Odoo users can be invited to an AI chat."
+msgstr ""
+"Do czatu AI można zapraszać tylko aktywnych wewnętrznych użytkowników Odoo."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:1
+msgid ""
+"Only the AI chat bridge service account may report AI chat runtime status."
+msgstr "Stan działania czatu AI może zgłaszać tylko konto serwisowe mostu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:51
+#: code:addons/odupilot/models/odupilot_session.py:718
+msgid "Only the AI chat bridge service account may run the AI chat bridge."
+msgstr "Most czatu AI może uruchamiać tylko konto serwisowe mostu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:207
+msgid ""
+"Only the AI chat owner or an Odoo administrator may manage chat members."
+msgstr ""
+"Tylko właściciel czatu AI lub administrator Odoo może zarządzać uczestnikami "
+"czatu."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "Open Discuss Chat"
+msgstr "Otwórz czat Discuss"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/static/src/js/reply_notification.js:1
+msgid "Open chat"
+msgstr "Otwórz czat"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "OpenAI-compatible base URL, including `/v1` when required."
+msgstr "Bazowy URL zgodny z OpenAI, wraz z `/v1`, jeśli jest wymagane."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:159
+msgid "OpenCode did not return a session identifier."
+msgstr "OpenCode nie zwrócił identyfikatora sesji."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__opencode_healthy
+msgid "OpenCode healthy"
+msgstr "OpenCode sprawny"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__opencode_latency_ms
+msgid "OpenCode latency (ms)"
+msgstr "Opóźnienie OpenCode (ms)"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__opencode_version
+msgid "OpenCode version"
+msgstr "Wersja OpenCode"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__opencode_session_id
+msgid "Opencode Session"
+msgstr "Sesja OpenCode"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Operation:"
+msgstr "Operacja:"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__cwd
+msgid ""
+"Optional MCP process directory. Relative paths resolve from the workspace."
+msgstr ""
+"Opcjonalny katalog procesu MCP. Ścieżki względne są rozwiązywane od obszaru "
+"roboczego."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_bootstrap_prompt
+msgid ""
+"Optional instructions appended to the automatic environment bootstrap prompt."
+msgstr ""
+"Opcjonalne instrukcje dołączane do automatycznego promptu bootstrap "
+"środowiska."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Optional instructions applied to every prompt..."
+msgstr "Opcjonalne instrukcje stosowane do każdego zapytania..."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Optional instructions for the environment bootstrap agent..."
+msgstr "Opcjonalne instrukcje dla agenta bootstrap środowiska..."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "Outbox"
+msgstr "Skrzynka wychodząca"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__patterns_json
+msgid "Patterns Json"
+msgstr "Wzorce JSON"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__payload
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__payload
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_form
+msgid "Payload"
+msgstr "Dane"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__state__pending
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Pending"
+msgstr "Oczekuje"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:1
+msgid "Pending OduPilot Commands"
+msgstr "Oczekujące polecenia czatu AI"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__pending_command_count
+msgid "Pending commands"
+msgstr "Oczekujące polecenia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__permission
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__permission_ids
+msgid "Permission"
+msgstr "Uprawnienie"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "Permission approval required."
+msgstr "Wymagane jest zatwierdzenie uprawnienia."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Permission required"
+msgstr "Wymagane uprawnienie"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__permission
+msgid "Permission response"
+msgstr "Odpowiedź na prośbę o uprawnienie"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Permission response failed"
+msgstr "Nie udało się odpowiedzieć na żądanie uprawnienia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__ruleset_json
+msgid "Permission rules"
+msgstr "Reguły uprawnień"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:74
+msgid "Permission rules must be a JSON object."
+msgstr "Reguły uprawnień muszą być obiektem JSON."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:71
+msgid "Permission rules must contain valid JSON: %s"
+msgstr "Reguły uprawnień muszą zawierać prawidłowy JSON: %s"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Permissions"
+msgstr "Uprawnienia"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__timeout
+msgid "Positive timeout in milliseconds for MCP server requests."
+msgstr "Dodatni limit czasu żądań serwera MCP w milisekundach."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__state__processing
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Processing"
+msgstr "Przetwarzanie"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:1
+msgid "Processing OduPilot Commands"
+msgstr "Przetwarzane polecenia czatu AI"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__processing_started_at
+msgid "Processing Started At"
+msgstr "Rozpoczęcie przetwarzania"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__processing_command_count
+msgid "Processing commands"
+msgstr "Przetwarzane polecenia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__profile_id
+msgid "Profile"
+msgstr "Profil"
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_profiles
+msgid "Profiles"
+msgstr "Profile"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__prompt
+msgid "Prompt"
+msgstr "Zapytanie"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_profile__reasoning_effort__default
+msgid "Provider default"
+msgstr "Domyślne dostawcy"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__publish
+msgid "Publish developer branch"
+msgstr "Opublikuj gałąź deweloperską"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__pull_request_url
+msgid "Pull request URL"
+msgstr "URL pull requestu"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__state__ready
+msgid "Ready"
+msgstr "Gotowy"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__reasoning_effort
+msgid "Reasoning effort requested from the model. Choose Provider default for models that do not support thinking."
+msgstr "Poziom rozumowania żądany od modelu. Wybierz Domyślne dostawcy dla modeli, które nie obsługują myślenia."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Reject"
+msgstr "Odrzuć"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_permission__status__reject
+msgid "Rejected"
+msgstr "Odrzucono"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_mcp_server__server_type__remote
+msgid "Remote HTTP"
+msgstr "Zdalny HTTP"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_mcp_server_form
+msgid "Remote MCP"
+msgstr "Zdalny MCP"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:192
+msgid "Remote MCP URL must be an absolute HTTP or HTTPS URL."
+msgstr "URL zdalnego MCP musi być bezwzględnym adresem HTTP lub HTTPS."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_mcp_server.py:195
+msgid "Remote MCP URL must not contain credentials."
+msgstr "URL zdalnego MCP nie może zawierać danych uwierzytelniających."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__url
+msgid "Remote URL"
+msgstr "Zdalny URL"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_base_branch
+msgid "Remote branch from which new developer worktrees start."
+msgstr "Zdalna gałąź, od której rozpoczynają się nowe worktree deweloperskie."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "Remote path shared only by OpenCode and the AI chat sidecar."
+msgstr "Zdalna ścieżka współdzielona tylko przez OpenCode i sidecar czatu AI."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__repository_directory
+msgid "Repository Directory"
+msgstr "Katalog repozytorium"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__request_id
+msgid "Request"
+msgstr "Żądanie"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Requested access:"
+msgstr "Żądany dostęp:"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__resolved_at
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__resolved_at
+msgid "Resolved At"
+msgstr "Czas odpowiedzi"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_runtime_form
+msgid "Runtime"
+msgstr "Działanie"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_permission__status__submitting
+msgid "Sending response"
+msgstr "Wysyłanie odpowiedzi"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__server_type
+msgid "Server Type"
+msgstr "Typ serwera"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__session_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_event__session_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__session_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__session_id
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+msgid "Session"
+msgstr "Sesja"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__user_id
+msgid "Session owner"
+msgstr "Właściciel sesji"
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_sessions
+msgid "Sessions"
+msgstr "Sesje"
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_settings
+msgid "Settings"
+msgstr "Ustawienia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__source_message_id
+msgid "Source Message"
+msgstr "Wiadomość źródłowa"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__state
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__state
+msgid "State"
+msgstr "Stan"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_permission__status
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__status
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__status
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_command_search
+msgid "Status"
+msgstr "Stan"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__stream_message_id
+msgid "Stream Message"
+msgstr "Wiadomość strumienia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__stream_part_id
+msgid "Stream Part"
+msgstr "Część strumienia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__stream_text
+msgid "Stream Text"
+msgstr "Tekst strumienia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__stream_updated_at
+msgid "Stream Updated At"
+msgstr "Czas aktualizacji strumienia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__stuck_command_count
+msgid "Stuck commands"
+msgstr "Zablokowane polecenia"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__system_prompt
+msgid "System Prompt"
+msgstr "Instrukcja systemowa"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Technical details"
+msgstr "Szczegóły techniczne"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/static/src/js/reply_notification.js:1
+msgid "The AI answered."
+msgstr "AI odpowiedział."
+
+#. module: odupilot
+#: code:addons/odupilot/models/mail_channel.py:126
+msgid "The AI bot and session owner cannot be removed from an active AI chat."
+msgstr "Bota AI i właściciela sesji nie można usunąć z aktywnego czatu AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/mail_channel.py:182
+msgid "The AI bot and session owner must remain members of an active AI chat."
+msgstr ""
+"Bot AI i właściciel sesji muszą pozostać uczestnikami aktywnego czatu AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/mail_channel.py:149
+msgid "The AI bot cannot leave an active AI chat."
+msgstr "Bot AI nie może opuścić aktywnego czatu AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:146
+msgid "The AI chat command is not currently claimed by the bridge."
+msgstr "Polecenie czatu AI nie jest obecnie zarezerwowane przez most."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:142
+msgid "The AI chat command no longer exists."
+msgstr "Polecenie czatu AI już nie istnieje."
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_profile_odupilot_profile_code_unique
+msgid "The AI chat profile code must be unique."
+msgstr "Kod profilu czatu AI musi być unikalny."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:525
+msgid "The AI session directory is invalid."
+msgstr "Katalog sesji AI jest nieprawidłowy."
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_mcp_server_odupilot_mcp_server_code_unique
+msgid "The MCP server code must be unique."
+msgstr "Kod serwera MCP musi być unikalny."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:80
+msgid "The bridge claim expired and was returned to the outbox."
+msgstr ""
+"Rezerwacja polecenia przez most wygasła i polecenie wróciło do skrzynki "
+"wychodzącej."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:415
+msgid "The cached developers repository uses a different origin URL."
+msgstr "Repozytorium deweloperów w pamięci podręcznej używa innego origin URL."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:487
+msgid "The configured AI workspace path is invalid."
+msgstr "Skonfigurowana ścieżka przestrzeni roboczej AI jest nieprawidłowa."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "The configured developer environment MCP is unavailable."
+msgstr "Skonfigurowany MCP środowiska deweloperskiego jest niedostępny."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:633
+msgid ""
+"The current Odoo message was authored by %(actor)s (user ID %(actor_id)s). "
+"The session owner and execution identity is %(owner)s (user ID %"
+"(owner_id)s). Use the owner permissions for tools, but address and "
+"distinguish the actual author."
+msgstr ""
+"Autorem bieżącej wiadomości Odoo jest %(actor)s (ID użytkownika %"
+"(actor_id)s). Właścicielem sesji i tożsamością wykonawczą jest %(owner)s (ID "
+"użytkownika %(owner_id)s). Używaj uprawnień właściciela dla narzędzi, ale "
+"zwracaj się do rzeczywistego autora i odróżniaj go."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "The developer branch publication request returned by AI is invalid."
+msgstr ""
+"Żądanie publikacji gałęzi deweloperskiej zwrócone przez AI jest "
+"nieprawidłowe."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "The developer environment URL returned by AI is invalid."
+msgstr "URL środowiska deweloperskiego zwrócony przez AI jest nieprawidłowy."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:304
+msgid "The developer repository is busy. Try again shortly."
+msgstr "Repozytorium deweloperów jest zajęte. Spróbuj ponownie za chwilę."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:403
+msgid "The developers repository path exists but is not a Git repository."
+msgstr ""
+"Ścieżka repozytorium deweloperów istnieje, ale nie jest repozytorium Git."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_permission.py:1
+msgid "The permission response is invalid."
+msgstr "Odpowiedź na żądanie uprawnienia jest nieprawidłowa."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:226
+#: code:addons/odupilot/models/odupilot_session.py:232
+msgid "The session owner no longer has valid AI chat access."
+msgstr "Właściciel sesji nie ma już prawidłowego dostępu do czatu AI."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__reasoning_effort
+msgid "Thinking effort"
+msgstr "Poziom myślenia"
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_command_odupilot_command_external_unique
+msgid "This AI chat command already exists."
+msgstr "To polecenie czatu AI już istnieje."
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_event_odupilot_event_external_unique
+msgid "This AI chat event has already been ingested."
+msgstr "To zdarzenie czatu AI zostało już odebrane."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_permission.py:1
+msgid "This AI chat is closed."
+msgstr "Ten czat AI jest zamknięty."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:613
+msgid "This AI chat is not available."
+msgstr "Ten czat AI jest niedostępny."
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_permission_odupilot_permission_request_unique
+msgid "This AI permission request already exists."
+msgstr "To żądanie uprawnienia AI już istnieje."
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_command_odupilot_command_source_unique
+msgid "This Discuss message was already routed to AI."
+msgstr "Ta wiadomość Discuss została już przekazana do AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_permission.py:1
+msgid "This permission request has already been answered."
+msgstr "Na to żądanie uprawnienia już udzielono odpowiedzi."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__timeout
+msgid "Timeout (ms)"
+msgstr "Limit czasu (ms)"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__developer_github_pat
+msgid ""
+"Token used by Odoo only while cloning and fetching this profile repository."
+msgstr ""
+"Token używany przez Odoo tylko podczas klonowania i pobierania repozytorium "
+"tego profilu."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_mcp_server__code
+msgid "Unique OpenCode MCP server name used as a tool prefix."
+msgstr "Unikalna nazwa serwera MCP OpenCode używana jako prefiks narzędzi."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:194
+#: code:addons/odupilot/models/odupilot_command.py:190
+#: code:addons/odupilot/models/odupilot_command.py:206
+#: code:addons/odupilot/models/odupilot_command.py:198
+msgid "Unknown bridge error."
+msgstr "Nieznany błąd mostu."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__user_ids
+#: model:ir.model,name:odupilot.model_res_users
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Users"
+msgstr "Użytkownicy"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_runtime__waiting_approval_count
+msgid "Waiting approvals"
+msgstr "Oczekujące zgody"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_permission__status__pending
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__state__waiting_approval
+msgid "Waiting for approval"
+msgstr "Oczekiwanie na zatwierdzenie"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_mcp_server__cwd
+msgid "Working directory"
+msgstr "Katalog roboczy"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__workspace_type
+msgid "Workspace Type"
+msgstr "Typ przestrzeni roboczej"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:200
+#: code:addons/odupilot/models/odupilot_session.py:213
+msgid "You are not a member of this AI chat."
+msgstr "Nie jesteś uczestnikiem tego czatu AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:95
+msgid ""
+"You have reached the maximum number of active AI chat sessions for your "
+"profile."
+msgstr ""
+"Osiągnięto maksymalną liczbę aktywnych sesji czatu AI dla tego profilu."
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_mcp_server_form
+msgid "[\"npx\", \"-y\", \"package-name\"]"
+msgstr "[\"npx\", \"-y\", \"package-name\"]"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_mcp_server_form
+msgid "false or {\"clientId\": \"{env:MCP_CLIENT_ID}\"}"
+msgstr "false lub {\"clientId\": \"{env:MCP_CLIENT_ID}\"}"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "https://github.com/org/repository.git"
+msgstr "https://github.com/org/repository.git"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:349
+msgid "unknown Git error"
+msgstr "nieznany błąd Git"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "AI is working…"
+msgstr "AI pracuje…"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "AI session error"
+msgstr "Błąd sesji AI"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "AI session is closed"
+msgstr "Sesja AI jest zamknięta"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "AI session is ready"
+msgstr "Sesja AI jest gotowa"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Initializing AI session…"
+msgstr "Inicjalizowanie sesji AI…"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Waiting for permission approval"
+msgstr "Oczekiwanie na zatwierdzenie uprawnienia"
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_recovery_odupilot_recovery_failed_command_unique
+msgid "A recovery decision already exists for this AI request."
+msgstr "Decyzja odzyskiwania dla tego żądania AI już istnieje."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_command.py:1
+msgid "A recovery decision is required."
+msgstr "Wymagana jest decyzja o odzyskiwaniu."
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_recovery
+msgid "OduPilot Recovery Decision"
+msgstr "Decyzja odzyskiwania czatu AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "AI response was interrupted and requires a recovery decision."
+msgstr "Odpowiedź AI została przerwana i wymaga decyzji o odzyskiwaniu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid ""
+"AI response was interrupted before any tool call was detected. Odoo will "
+"retry the request automatically once."
+msgstr ""
+"Odpowiedź AI została przerwana przed wykryciem wywołania narzędzia. Odoo "
+"automatycznie ponowi żądanie jeden raz."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__abort_command_id
+msgid "Abort Command"
+msgstr "Polecenie przerwania"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__active_prompt_command_id
+msgid "Active Prompt Command"
+msgstr "Aktywne polecenie promptu"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__active_prompt_has_tool_activity
+msgid "Active Prompt Has Tool Activity"
+msgstr "Aktywny prompt ma aktywność narzędzi"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_recovery.py:1
+msgid "Cancelled because the original AI response arrived during recovery."
+msgstr ""
+"Anulowano, ponieważ pierwotna odpowiedź AI dotarła podczas odzyskiwania."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_recovery__status__completed
+msgid "Completed"
+msgstr "Zakończono"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Could not update the recovery request."
+msgstr "Nie udało się zaktualizować żądania odzyskiwania."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Dismiss"
+msgstr "Pomiń"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_recovery__status__dismissed
+msgid "Dismissed"
+msgstr "Pominięto"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__failed_command_id
+msgid "Failed Command"
+msgstr "Nieudane polecenie"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Interrupted request"
+msgstr "Przerwane żądanie"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid ""
+"No tool calls were detected before the interruption, so Odoo will retry this "
+"request automatically once."
+msgstr ""
+"Przed przerwaniem nie wykryto wywołań narzędzi, dlatego Odoo automatycznie "
+"ponowi to żądanie jeden raz."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__reason
+msgid "Reason"
+msgstr "Powód"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__recovery_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__recovery_ids
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_session_form
+msgid "Recovery"
+msgstr "Odzyskiwanie"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Recovery action failed"
+msgstr "Działanie odzyskiwania nie powiodło się"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Retry"
+msgstr "Ponów"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__retry_command_id
+msgid "Retry Command"
+msgstr "Polecenie ponowienia"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_recovery__status__retrying
+msgid "Retrying"
+msgstr "Ponawianie"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_recovery__status__auto_retrying
+msgid "Retrying automatically"
+msgstr "Automatyczne ponawianie"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid ""
+"The automatic or manual retry was interrupted again. Review the conversation "
+"before deciding whether to retry it."
+msgstr ""
+"Automatyczne lub ręczne ponowienie zostało ponownie przerwane. Przejrzyj "
+"rozmowę przed decyzją o kolejnym ponowieniu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_recovery.py:1
+msgid "The interrupted AI request no longer has a valid prompt payload."
+msgstr "Przerwane żądanie AI nie zawiera już prawidłowych danych promptu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid ""
+"The interrupted request used or requested tools. Retrying may repeat "
+"external changes, so review the conversation before continuing."
+msgstr ""
+"Przerwane żądanie używało narzędzi lub żądało do nich dostępu. Ponowienie "
+"może powtórzyć zmiany zewnętrzne, dlatego przed kontynuowaniem przejrzyj "
+"rozmowę."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_recovery.py:1
+msgid "The recovery response is invalid."
+msgstr "Odpowiedź dotycząca odzyskiwania jest nieprawidłowa."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_recovery.py:1
+msgid "This recovery request has already been answered."
+msgstr "Na to żądanie odzyskiwania już udzielono odpowiedzi."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_recovery__had_tool_activity
+msgid "Tool activity detected"
+msgstr "Wykryto aktywność narzędzia"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/permission_message.xml:1
+msgid "Tool activity was detected. Retrying may repeat an external change."
+msgstr ""
+"Wykryto aktywność narzędzia. Ponowienie może powtórzyć zmianę zewnętrzną."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_recovery__status__pending
+msgid "Waiting for decision"
+msgstr "Oczekiwanie na decyzję"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:414
+#, python-format
+msgid "OduPilot session %s"
+msgstr "Sesja OduPilot %s"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__mcp_api_key_id
+msgid "Session MCP API key"
+msgstr "Klucz API MCP sesji"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__mcp_api_key_secret
+msgid "Session MCP API key secret"
+msgstr "Sekret klucza API MCP sesji"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:418
+#, python-format
+msgid "The temporary MCP API key for this AI session could not be created."
+msgstr "Nie udało się utworzyć tymczasowego klucza API MCP dla tej sesji AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:1103
+#, python-format
+msgid "The AI provider is not answering yet; the request is being retried."
+msgstr "Dostawca AI jeszcze nie odpowiada; żądanie jest ponawiane."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:1105
+#, python-format
+msgid ""
+"The AI provider is not answering yet; the request is being retried. Reason: "
+"%s"
+msgstr "Dostawca AI jeszcze nie odpowiada; żądanie jest ponawiane. Powód: %s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:1
+#, python-format
+msgid ""
+"The AI usage limit has been reached. Requests will resume automatically "
+"after %(reset_at)s (%(timezone)s)."
+msgstr ""
+"Limit użycia AI został wyczerpany. Żądania zostaną automatycznie wznowione "
+"po %(reset_at)s (%(timezone)s)."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:1
+msgid ""
+"The AI usage limit has been reached. The provider will retry automatically."
+msgstr ""
+"Limit użycia AI został wyczerpany. Dostawca automatycznie ponowi żądanie."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:85
+#, python-format
+msgid "Active · last seen %s ago"
+msgstr "Aktywny · ostatnio %s temu"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:86
+#, python-format
+msgid "Active issue"
+msgstr "Problem aktywny"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:89
+#, python-format
+msgid "Resolved · was %s ago"
+msgstr "Rozwiązany · był %s temu"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:90
+#, python-format
+msgid "Resolved issue"
+msgstr "Problem rozwiązany"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:99
+#, python-format
+msgid "%s s"
+msgstr "%s s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:101
+#, python-format
+msgid "%s min"
+msgstr "%s min"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:103
+#, python-format
+msgid "%s h"
+msgstr "%s godz."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_runtime.py:104
+#, python-format
+msgid "%s d"
+msgstr "%s dni"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/models/message_renderer.py:0
+#: code:addons/odupilot/static/src/js/permission_message.js:0
+msgid "AI work: 1 step"
+msgstr "Praca AI: 1 krok"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/models/message_renderer.py:0
+#: code:addons/odupilot/static/src/js/permission_message.js:0
+msgid "AI work: %s steps"
+msgstr "Praca AI: %s krok(ów)"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:55
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "AI reasoning"
+msgstr "Rozumowanie AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:66
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Tool call failed"
+msgstr "Wywołanie narzędzia nie powiodło się"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:71
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Tool call finished"
+msgstr "Wywołanie narzędzia zakończone"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:68
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Tool call in progress"
+msgstr "Wywołanie narzędzia w toku"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:70
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Tool call requested"
+msgstr "Zażądano wywołania narzędzia"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:109
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Tool input"
+msgstr "Dane wejściowe narzędzia"
+
+#. module: odupilot
+#: code:addons/odupilot/models/message_renderer.py:110
+#: code:addons/odupilot/static/src/js/permission_message.js:1
+msgid "Tool output"
+msgstr "Wynik narzędzia"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_ask_wizard
+msgid "Ask AI About a Record"
+msgstr "Zapytaj AI o rekord"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/static/src/js/discuss_ai_category.js:1
+msgid "AI"
+msgstr "AI"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/static/src/js/chatter_ask_ai.js:1
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_ask_wizard_form
+msgid "Ask AI"
+msgstr "Zapytaj AI"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_ask_wizard_form
+msgid "Ask"
+msgstr "Zapytaj"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_ask_wizard_form
+msgid "Cancel"
+msgstr "Anuluj"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_ask_wizard_form
+msgid "What do you want to know about this record?"
+msgstr "Czego chcesz się dowiedzieć o tym rekordzie?"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_ask_wizard_form
+msgid ""
+"The question is logged as an internal note in this chatter and the answer is "
+"added to that same note as soon as AI replies."
+msgstr ""
+"Pytanie jest zapisywane jako notatka wewnętrzna w tym chatterze, a odpowiedź "
+"trafia do tej samej notatki, gdy tylko AI odpowie."
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/static/src/xml/chatter_ask_ai.xml:0
+msgid "Ask AI about this record"
+msgstr "Zapytaj AI o ten rekord"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_ask_wizard__question
+msgid "Question"
+msgstr "Pytanie"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_ask_wizard__record_name
+msgid "Record"
+msgstr "Rekord"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_ask_wizard__res_model
+msgid "Record model"
+msgstr "Model rekordu"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_ask_wizard__res_id
+msgid "Record ID"
+msgstr "ID rekordu"
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_ask_wizard.py:50
+msgid "This record cannot be discussed with AI."
+msgstr "O tym rekordzie nie można zapytać AI."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_ask_wizard.py:55
+msgid "Write a question first."
+msgstr "Najpierw napisz pytanie."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:1772
+msgid "AI answer"
+msgstr "Odpowiedź AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:216
+msgid "Ask AI - %s"
+msgstr "Zapytaj AI - %s"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__is_ask_session
+msgid "Chatter questions session"
+msgstr "Sesja pytań z chattera"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_session__is_ask_session
+msgid ""
+"Service session that answers \"Ask AI\" questions asked from the chatter of "
+"any Odoo record."
+msgstr ""
+"Sesja serwisowa, która odpowiada na pytania „Ask AI” zadane z chattera "
+"dowolnego rekordu Odoo."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__origin_model
+msgid "Origin model"
+msgstr "Model źródłowy"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_command__origin_res_id
+msgid "Origin record ID"
+msgstr "ID rekordu źródłowego"
+
+#. module: odupilot
+#. openerp-web
+#: code:addons/odupilot/static/src/xml/discuss_ai_category.xml:0
+msgid "Rename chat"
+msgstr "Zmień nazwę czatu"
+
+msgid "<span class=\"o_form_label\">Developers Profile</span>"
+msgstr "<span class=\"o_form_label\">Profil deweloperów</span>"
+
+msgid ""
+"A new developer chat and Git worktree will be created. The current URL, "
+"action, menu, view, model, record and selection are sent as invocation "
+"context."
+msgstr ""
+"Zostanie utworzony nowy czat deweloperski i Git worktree. Bieżący URL, "
+"akcja, menu, widok, model, rekord i zaznaczenie zostaną przesłane jako "
+"kontekst wywołania."
+
+msgid "OduPilot Answer"
+msgstr "Odpowiedź czatu AI"
+
+msgid "OduPilot Request"
+msgstr "Żądanie czatu AI"
+
+msgid "AI Developer"
+msgstr "Deweloper AI"
+
+msgid "Called from"
+msgstr "Wywołano z"
+
+msgid "Channel of an AI chat session, shown in the AI sidebar category."
+msgstr "Kanał sesji czatu AI wyświetlany w kategorii AI paska bocznego."
+
+msgid "Configure Developers Profile in OduPilot Settings first."
+msgstr "Najpierw skonfiguruj profil deweloperów w ustawieniach OduPilot."
+
+msgid "Current Odoo screen"
+msgstr "Bieżący ekran Odoo"
+
+msgid "Describe what the AI developer should change or investigate..."
+msgstr "Opisz, co deweloper AI powinien zmienić lub zbadać..."
+
+msgid "Developer invocation context is invalid."
+msgstr "Kontekst wywołania dewelopera jest nieprawidłowy."
+
+msgid "Developer invocation context is too large."
+msgstr "Kontekst wywołania dewelopera jest zbyt duży."
+
+msgid "Developer request"
+msgstr "Żądanie deweloperskie"
+
+msgid ""
+"Developer worktree profile used when an administrator starts AI Developer "
+"from the developer menu."
+msgstr ""
+"Profil worktree dewelopera używany, gdy administrator uruchamia dewelopera "
+"AI z menu deweloperskiego."
+
+msgid "Developers Profile"
+msgstr "Profil deweloperów"
+
+msgid "Developers Profile must be active."
+msgstr "Profil deweloperów musi być aktywny."
+
+msgid "Developers Profile must provide a Developer environment MCP."
+msgstr "Profil deweloperów musi zawierać MCP środowiska deweloperskiego."
+
+msgid "Developers Profile must provide a GitHub PAT."
+msgstr "Profil deweloperów musi zawierać GitHub PAT."
+
+msgid "Developers Profile must provide a LiteLLM API key."
+msgstr "Profil deweloperów musi zawierać klucz API LiteLLM."
+
+msgid "Developers Profile must provide a repository URL."
+msgstr "Profil deweloperów musi zawierać URL repozytorium."
+
+msgid ""
+"Developers Profile must provide an active and enabled Developer environment "
+"MCP."
+msgstr ""
+"Profil deweloperów musi zawierać aktywne i włączone MCP środowiska "
+"deweloperskiego."
+
+msgid "Developers Profile must use Developer worktree."
+msgstr "Profil deweloperów musi używać typu Developer worktree."
+
+msgid "HTTP Routing"
+msgstr "Routing HTTP"
+
+msgid "Invocation context"
+msgstr "Kontekst wywołania"
+
+msgid "Is OduPilot"
+msgstr "Czy czat AI"
+
+msgid "Is discuss sidebar category AI open?"
+msgstr "Czy kategoria AI na pasku bocznym Dyskusji jest otwarta?"
+
+msgid "Only Odoo administrators can start AI Developer."
+msgstr "Tylko administratorzy Odoo mogą uruchomić dewelopera AI."
+
+msgid "Retry Notice"
+msgstr "Powiadomienie o ponowieniu"
+
+msgid "Send to AI Developer"
+msgstr "Wyślij do dewelopera AI"
+
+msgid ""
+"Set on the AI chat message that asks the user for a decision, such as a "
+"permission or a recovery request."
+msgstr ""
+"Ustawiane w wiadomości czatu AI, która prosi użytkownika o decyzję, na "
+"przykład zgodę lub żądanie odzyskania."
+
+msgid ""
+"Set on the AI chat message that carries the answer itself. Steps with "
+"reasoning or tool calls only are not marked."
+msgstr ""
+"Ustawiane w wiadomości czatu AI zawierającej właściwą odpowiedź. Kroki "
+"obejmujące wyłącznie rozumowanie lub wywołania narzędzi nie są oznaczane."
+
+msgid "Start AI Developer"
+msgstr "Uruchom dewelopera AI"
+
+msgid "Stream Key"
+msgstr "Klucz strumienia"
+
+msgid "Stream Parts Json"
+msgstr "Części strumienia JSON"
+
+msgid "Title Auto Set"
+msgstr "Automatycznie ustawiony tytuł"
+
+msgid "Trace Blocks Json"
+msgstr "Bloki śledzenia JSON"
+
+msgid "Trace Message"
+msgstr "Wiadomość śledzenia"
+
+msgid "User Settings"
+msgstr "Ustawienia użytkownika"
+
+msgid "Worktree profile used by AI Developer in the developer menu."
+msgstr "Profil worktree używany przez dewelopera AI w menu deweloperskim."
+
+msgid "Write a developer request first."
+msgstr "Najpierw wpisz żądanie deweloperskie."
+
+msgid ""
+"You have reached the maximum number of active AI chat sessions for the "
+"Developers Profile."
+msgstr ""
+"Osiągnięto maksymalną liczbę aktywnych sesji czatu AI dla profilu "
+"deweloperów."
+
+msgid "record %s"
+msgstr "rekord %s"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "<span class=\"o_form_label\">Responsible Developer</span>"
+msgstr "<span class=\"o_form_label\">Odpowiedzialny deweloper</span>"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_developer_wizard_form
+msgid ""
+"AI first checks Prod Odoo and available documentation. If a code change is "
+"needed, the request is assigned to the responsible developer. A new "
+"developer chat and Git worktree will be created, and the current screen is "
+"sent as invocation context."
+msgstr ""
+"AI najpierw sprawdza produkcyjne Odoo i dostępną dokumentację. Jeśli potrzebna "
+"jest zmiana kodu, zgłoszenie zostaje przypisane do odpowiedzialnego dewelopera. "
+"Zostanie utworzony nowy czat deweloperski i Git worktree, a bieżący ekran "
+"zostanie wysłany jako kontekst wywołania."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_res_config_settings__odupilot_responsible_developer_id
+msgid ""
+"Administrator who receives AI Developer requests classified as code changes "
+"and joins their Discuss threads."
+msgstr ""
+"Administrator, który otrzymuje zgłoszenia AI Developer zaklasyfikowane jako "
+"zmiany kodu i dołącza do ich wątków Dyskusji."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__developer_triage_state__development
+msgid "Accepted for development"
+msgstr "Przyjęto do realizacji"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__developer_triage_state__resolved
+msgid "Answered"
+msgstr "Odpowiedziano"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__developer_triage_state__assignment_error
+msgid "Assignment failed"
+msgstr "Przypisanie nie powiodło się"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__developer_triage_state
+msgid "Developer request status"
+msgstr "Status zgłoszenia deweloperskiego"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__developer_triage_state__pending
+msgid "Investigating"
+msgstr "W trakcie analizy"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_session__developer_triage_state__none
+msgid "Not applicable"
+msgstr "Nie dotyczy"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__responsible_developer_id
+#: model:ir.model.fields,field_description:odupilot.field_res_config_settings__odupilot_responsible_developer_id
+msgid "Responsible Developer"
+msgstr "Odpowiedzialny deweloper"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.res_config_settings_view_form_odupilot
+msgid "Odoo administrator notified and added to requests accepted for development."
+msgstr "Administrator Odoo powiadamiany i dodawany do zgłoszeń przyjętych do realizacji."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/voice_text_field.xml:13
+msgid "Dictate"
+msgstr "Dyktuj"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/voice_text_field.xml:17
+msgid "Stop"
+msgstr "Zatrzymaj"
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/xml/voice_text_field.xml:21
+msgid "Transcribing…"
+msgstr "Transkrypcja…"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:244
+msgid "Configure Responsible Developer in OduPilot Settings first."
+msgstr "Najpierw skonfiguruj Odpowiedzialnego dewelopera w ustawieniach OduPilot."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:248
+#: code:addons/odupilot/models/res_config_settings.py:76
+msgid "Responsible Developer must be an active internal Odoo administrator."
+msgstr "Odpowiedzialny deweloper musi być aktywnym wewnętrznym administratorem Odoo."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:2064
+#, python-format
+msgid "Assigned to %s."
+msgstr "Przypisano do %s."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:2065
+msgid "AI returned an invalid developer triage decision."
+msgstr "AI zwróciło nieprawidłową decyzję klasyfikacji zgłoszenia deweloperskiego."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:2083
+#, python-format
+msgid ""
+"Development request \"%s\" was assigned to you. Open the AI chat in Discuss "
+"to review the conversation and continue."
+msgstr ""
+"Zgłoszenie deweloperskie „%s” zostało Ci przypisane. Otwórz czat AI w "
+"Dyskusjach, aby przejrzeć rozmowę i kontynuować."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:48
+msgid "Only Odoo administrators can use AI Developer."
+msgstr "Tylko administratorzy Odoo mogą używać AI Developer."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:55
+msgid "Voice recording must be between one second and five minutes."
+msgstr "Nagranie głosowe musi trwać od jednej sekundy do pięciu minut."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:59
+msgid "Voice recording data is invalid."
+msgstr "Dane nagrania głosowego są nieprawidłowe."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:61
+msgid "Voice recording is empty."
+msgstr "Nagranie głosowe jest puste."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:63
+msgid "Voice recording is too large (25 MB max)."
+msgstr "Nagranie głosowe jest za duże (maks. 25 MB)."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:68
+msgid "This audio format is not supported."
+msgstr "Ten format audio nie jest obsługiwany."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:82
+msgid "Configure a valid AI base URL before recording voice."
+msgstr "Przed nagrywaniem głosu skonfiguruj prawidłowy bazowy adres URL AI."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:99
+msgid "Voice transcription service is temporarily unavailable. Try again."
+msgstr "Usługa transkrypcji głosu jest tymczasowo niedostępna. Spróbuj ponownie."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:106
+msgid "Voice transcription failed. Try recording again or type the request."
+msgstr "Transkrypcja głosu nie powiodła się. Nagraj ponownie lub wpisz zgłoszenie."
+
+#. module: odupilot
+#: code:addons/odupilot/wizards/odupilot_developer_wizard.py:115
+msgid "No speech was recognized. Try recording again or type the request."
+msgstr "Nie rozpoznano mowy. Nagraj ponownie lub wpisz zgłoszenie."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/voice_text_field.js:96
+msgid ""
+"Microphone access was denied. Allow it in the browser to dictate a developer "
+"request."
+msgstr ""
+"Odmówiono dostępu do mikrofonu. Zezwól na niego w przeglądarce, aby podyktować "
+"zgłoszenie deweloperskie."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/voice_text_field.js:118
+msgid "The voice recording is empty."
+msgstr "Nagranie głosowe jest puste."
+
+#. module: odupilot
+#: code:addons/odupilot/static/src/js/voice_text_field.js:141
+msgid "Voice transcription failed. Try again or type the request."
+msgstr "Transkrypcja głosu nie powiodła się. Spróbuj ponownie lub wpisz zgłoszenie."
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_agent
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_form
+msgid "AI Agent"
+msgstr "Agent AI"
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odupilot_agent_log
+msgid "AI Agent Action Log"
+msgstr "Dziennik działań agenta AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_agent_select
+#: model:ir.ui.menu,name:odupilot.menu_new_odupilot
+msgid "AI Agent Chat"
+msgstr "Czat z agentem AI"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_agent
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_tree
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_tree_admin
+msgid "AI Agents"
+msgstr "Agenci AI"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__token_version
+msgid "AI session token version"
+msgstr "Wersja tokenu sesji AI"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__agent_id
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_session__agent_id
+msgid "Agent"
+msgstr "Agent"
+
+#. module: odupilot
+#: model:ir.actions.act_window,name:odupilot.action_odupilot_agent_log
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_agent_log
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_log_form
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_log_tree
+msgid "Agent Action Log"
+msgstr "Dziennik działań agenta"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent__agent_type
+msgid "Agent Type"
+msgstr "Typ agenta"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_profile__default_agent_id
+msgid ""
+"Agent used by Ask AI and by integrations that do not ask the user to select "
+"one."
+msgstr "Agent używany przez funkcję Zapytaj AI oraz integracje, które nie proszą użytkownika o wybór."
+
+#. module: odupilot
+#: model:ir.ui.menu,name:odupilot.menu_odupilot_agents
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_profile_form
+msgid "Agents"
+msgstr "Agenci"
+
+#. module: odupilot
+#: model_terms:ir.actions.act_window,help:odupilot.action_odupilot_agent_select
+msgid "Ask an administrator to configure an agent for your OduPilot profile."
+msgstr "Poproś administratora o skonfigurowanie agenta dla Twojego profilu OduPilot."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__agent_ids
+msgid "Available agents"
+msgstr "Dostępni agenci"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent__profile_ids
+msgid "Available for profiles"
+msgstr "Dostępny dla profili"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_log_form
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__changes_text
+msgid "Changes"
+msgstr "Zmiany"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_form
+msgid "Configure MCP Methods"
+msgstr "Skonfiguruj metody MCP"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_profile__default_agent_id
+msgid "Default agent"
+msgstr "Domyślny agent"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_form
+msgid "Define the agent role, workflow, and business boundaries..."
+msgstr "Zdefiniuj rolę agenta, przepływ pracy i granice biznesowe..."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_agent__mcp_only
+msgid "Deny all OpenCode tools except tools from the selected MCP servers."
+msgstr "Zablokuj wszystkie narzędzia OpenCode z wyjątkiem narzędzi z wybranych serwerów MCP."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent__description
+msgid "Description"
+msgstr "Opis"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_agent__agent_type__general
+msgid "General Assistant"
+msgstr "Asystent ogólny"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_log_form
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__input_text
+msgid "Input"
+msgstr "Dane wejściowe"
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_agent__system_prompt
+msgid "Instructions that define this agent role and business boundaries."
+msgstr "Instrukcje określające rolę agenta i jego granice biznesowe."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_agent__ruleset_json
+msgid "JSON object used as the OpenCode permission configuration."
+msgstr "Obiekt JSON używany jako konfiguracja uprawnień OpenCode."
+
+#. module: odupilot
+#: model:ir.model.fields,help:odupilot.field_odupilot_agent__profile_ids
+msgid "Leave empty to make the agent available for every OduPilot profile."
+msgstr "Pozostaw puste, aby agent był dostępny dla każdego profilu OduPilot."
+
+#. module: odupilot
+#: model:ir.model,name:odupilot.model_odumcp_profile
+msgid "MCP Security Profile"
+msgstr "Profil bezpieczeństwa MCP"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent__mcp_only
+msgid "MCP tools only"
+msgstr "Tylko narzędzia MCP"
+
+#. module: odupilot
+#: model_terms:ir.actions.act_window,help:odupilot.action_odupilot_agent_select
+msgid "No AI agents are available"
+msgstr "Brak dostępnych agentów AI"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__operation
+msgid "Operation"
+msgstr "Operacja"
+
+#. module: odupilot
+#: model:odupilot.agent,name:odupilot.agent_payment_reconciliation
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_agent__agent_type__payment_reconciliation
+msgid "Payment Reconciliation"
+msgstr "Uzgadnianie płatności"
+
+#. module: odupilot
+#: model:odupilot.agent,description:odupilot.agent_payment_reconciliation
+msgid ""
+"Reconciles exact, unique outgoing vendor payments exported through Payment "
+"Batch."
+msgstr "Uzgadnia dokładnie dopasowane, jednoznaczne płatności wychodzące dostawców wyeksportowane przez partię płatności."
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_command__command_type__reset
+msgid "Reset conversation"
+msgstr "Resetuj rozmowę"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_log_form
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__result_text
+msgid "Result"
+msgstr "Wynik"
+
+#. module: odupilot
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_form
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_tree
+#: model_terms:ir.ui.view,arch_db:odupilot.view_odupilot_agent_tree_admin
+msgid "Start Chat"
+msgstr "Rozpocznij czat"
+
+#. module: odupilot
+#: model:ir.model.fields.selection,name:odupilot.selection__odupilot_agent_log__status__success
+msgid "Success"
+msgstr "Powodzenie"
+
+#. module: odupilot
+#: model:ir.model.constraint,message:odupilot.constraint_odupilot_agent_odupilot_agent_code_unique
+msgid "The AI agent code must be unique."
+msgstr "Kod agenta AI musi być unikalny."
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__user_id
+msgid "User"
+msgstr "Użytkownik"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__mcp_approval_id
+msgid "MCP Approval"
+msgstr "Zatwierdzenie MCP"
+
+#. module: odupilot
+#: model:ir.model.fields,field_description:odupilot.field_odupilot_agent_log__mcp_audit_id
+msgid "MCP Audit"
+msgstr "Audyt MCP"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:88
+msgid "This AI agent is inactive."
+msgstr "Ten agent AI jest nieaktywny."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:91
+msgid "The Payment Batch reconciliation engine is not installed."
+msgstr "Mechanizm uzgadniania partii płatności nie jest zainstalowany."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:96
+msgid "Configure an active Odoo MCP server for the Payment Reconciliation agent."
+msgstr "Skonfiguruj aktywny serwer Odoo MCP dla agenta uzgadniania płatności."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:106
+msgid "Only Odoo administrators can configure agent MCP methods."
+msgstr "Tylko administratorzy Odoo mogą konfigurować metody MCP agenta."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:127
+msgid "This method can only be called by its active AI agent session."
+msgstr "Tę metodę może wywołać tylko aktywna sesja jej agenta AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:139
+msgid "This method is available only to the Payment Reconciliation agent."
+msgstr "Ta metoda jest dostępna tylko dla agenta uzgadniania płatności."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:147
+msgid "Provide between 1 and 100 unique bank statement line IDs."
+msgstr "Podaj od 1 do 100 unikalnych identyfikatorów pozycji wyciągu bankowego."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:153
+msgid "One or more bank statement lines are unavailable to this user."
+msgstr "Co najmniej jedna pozycja wyciągu bankowego jest niedostępna dla tego użytkownika."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:62
+msgid "Agent codes may contain only letters, numbers, dots, and underscores."
+msgstr "Kody agentów mogą zawierać tylko litery, cyfry, kropki i podkreślenia."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent_log.py:89
+msgid "AI agent log rows are immutable."
+msgstr "Wpisy dziennika agenta AI są niezmienne."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent_log.py:62
+msgid "An agent log can only be written by its active AI session."
+msgstr "Dziennik agenta może być zapisywany tylko przez jego aktywną sesję AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent_log.py:84
+msgid "AI agent log rows may only be created by agent methods."
+msgstr "Wpisy dziennika agenta AI mogą być tworzone tylko przez metody agenta."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:144
+msgid "Every AI chat session must have an agent."
+msgstr "Każda sesja czatu AI musi mieć agenta."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:224
+msgid "Select an AI agent or configure a default agent for this profile."
+msgstr "Wybierz agenta AI lub skonfiguruj domyślnego agenta dla tego profilu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:227
+msgid "This AI agent is not available for your OduPilot profile."
+msgstr "Ten agent AI nie jest dostępny dla Twojego profilu OduPilot."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:535
+msgid "Only the session owner can send requests to this AI agent."
+msgstr "Tylko właściciel sesji może wysyłać żądania do tego agenta AI."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:748
+msgid "The database secret is unavailable for AI session signing."
+msgstr "Sekret bazy danych do podpisywania sesji AI jest niedostępny."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:364
+msgid "Ask %(agent)s - %(initials)s"
+msgstr "Zapytaj %(agent)s — %(initials)s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:367
+msgid "%(agent)s - %(initials)s"
+msgstr "%(agent)s — %(initials)s"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:112
+msgid "Developers Profile must provide a default agent."
+msgstr "Profil deweloperów musi mieć domyślnego agenta."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:114
+msgid "Developers Profile default agent is unavailable."
+msgstr "Domyślny agent profilu deweloperów jest niedostępny."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_profile.py:157
+msgid "The default agent must be active and available for this profile."
+msgstr "Domyślny agent musi być aktywny i dostępny dla tego profilu."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:126
+msgid "MCP Methods"
+msgstr "Metody MCP"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:114
+msgid "Payment Reconciliation methods configured for %s MCP profile(s)."
+msgstr "Skonfigurowano metody uzgadniania płatności dla profili MCP: %s."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_agent.py:119
+msgid "No MCP profile found. Create an MCP profile first, then configure the methods again."
+msgstr "Nie znaleziono profilu MCP. Najpierw utwórz profil MCP, a następnie ponownie skonfiguruj metody."
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "AI is thinking…"
+msgstr "AI myśli…"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "Failed"
+msgstr "Niepowodzenie"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+msgid "Question to AI"
+msgstr "Pytanie do AI"
+
+#. module: odupilot
+#: code:addons/odupilot/models/odupilot_session.py:0
+#, python-format
+msgid "AI request failed before it could be processed: %s"
+msgstr "Żądanie AI nie powiodło się przed rozpoczęciem przetwarzania: %s"

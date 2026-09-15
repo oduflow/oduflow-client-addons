@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style>
+</head>
+<body>
+<title>Sales Cube</title>
+
+<style>
+  :root {
+    --bg:        #0A0D10;
+    --surface:   #10151A;
+    --surface-2: #161D23;
+    --line:      #232D35;
+    --line-soft: #1A222A;
+    --ink:       #DEE6EC;
+    --ink-2:     #94A2AD;
+    --muted:     #63717B;
+
+    --ax-s: #FFB020;
+    --ax-c: #2AD4C4;
+    --ax-a: #7B8CFF;
+
+    --ok:   #3DD68C;
+    --risk: #FF5A5F;
+
+    --grid: rgba(222,230,236,.045);
+
+    --f-ui: "Segoe UI Variable Display", "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --f-mono: "Cascadia Mono", Consolas, "SF Mono", ui-monospace, "Roboto Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg:        #EEF1F3;
+      --surface:   #FFFFFF;
+      --surface-2: #E7EBEE;
+      --line:      #D2D9DE;
+      --line-soft: #E3E8EB;
+      --ink:       #0D1317;
+      --ink-2:     #4B5760;
+      --muted:     #78848C;
+      --ax-s: #A96F00;
+      --ax-c: #0A7F77;
+      --ax-a: #4152C4;
+      --ok:   #168752;
+      --risk: #C4322D;
+      --grid: rgba(13,19,23,.05);
+    }
+  }
+
+  :root[data-theme="light"] {
+    --bg:        #EEF1F3;
+    --surface:   #FFFFFF;
+    --surface-2: #E7EBEE;
+    --line:      #D2D9DE;
+    --line-soft: #E3E8EB;
+    --ink:       #0D1317;
+    --ink-2:     #4B5760;
+    --muted:     #78848C;
+    --ax-s: #A96F00;
+    --ax-c: #0A7F77;
+    --ax-a: #4152C4;
+    --ok:   #168752;
+    --risk: #C4322D;
+    --grid: rgba(13,19,23,.05);
+  }
+
+  :root[data-theme="dark"] {
+    --bg:        #0A0D10;
+    --surface:   #10151A;
+    --surface-2: #161D23;
+    --line:      #232D35;
+    --line-soft: #1A222A;
+    --ink:       #DEE6EC;
+    --ink-2:     #94A2AD;
+    --muted:     #63717B;
+    --ax-s: #FFB020;
+    --ax-c: #2AD4C4;
+    --ax-a: #7B8CFF;
+    --ok:   #3DD68C;
+    --risk: #FF5A5F;
+    --grid: rgba(222,230,236,.045);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--f-ui);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 40px 20px 72px; }
+
+  h1, h2, h3 { font-family: var(--f-ui); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; text-wrap: balance; margin: 0; }
+
+  .mono {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- шапка ---------- */
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 26px; }
+
+  .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  h1 { font-size: clamp(34px, 6vw, 56px); margin: 12px 0 0; }
+
+  .lede { color: var(--ink-2); max-width: 60ch; margin: 14px 0 0; font-size: 16px; }
+
+  .triad { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 26px; }
+
+  .triad div { border-top: 2px solid var(--tc); padding-top: 10px; display: flex; flex-direction: column; gap: 3px; }
+  .triad b { font-size: 17px; color: var(--tc); letter-spacing: -.01em; }
+  .triad span { font-size: 13px; color: var(--muted); }
+
+  .eq {
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 16px 20px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 26px;
+  }
+  .eq p { margin: 0; font-family: var(--f-mono); font-size: clamp(15px, 2.2vw, 19px); letter-spacing: .02em; white-space: nowrap; }
+  .eq p b { font-weight: 600; }
+  .eq p s { text-decoration: none; color: var(--muted); padding: 0 4px; }
+  .eq span { font-size: 13px; color: var(--ink-2); flex: 1 1 320px; }
+
+  .basis { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-top: 0; }
+  .basis div { background: var(--surface); padding: 14px 18px; }
+  .basis h3 { font-size: 14.5px; margin: 5px 0 3px; }
+  .basis p { margin: 0; font-size: 13px; color: var(--ink-2); }
+
+  /* ---------- секции ---------- */
+
+  section { margin-top: 52px; }
+
+  .sec-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+  .sec-head h2 { font-size: 19px; letter-spacing: .02em; text-transform: uppercase; }
+  .sec-head p { margin: 0; color: var(--muted); font-size: 13.5px; flex: 1 1 240px; }
+
+  /* ---------- панель модели ---------- */
+
+  .model {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+
+  .stage { position: relative; border-right: 1px solid var(--line); min-width: 0; }
+
+  .stage::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  canvas { display: block; width: 100%; height: 460px; touch-action: none; cursor: grab; position: relative; }
+  canvas:active { cursor: grabbing; }
+  canvas:focus-visible { outline: 2px solid var(--ax-c); outline-offset: -2px; }
+
+  .stage-bar {
+    position: relative;
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    padding: 10px 12px;
+    border-top: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+
+  button {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  button:hover { color: var(--ink); border-color: var(--muted); }
+  button[aria-pressed="true"] { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+  button:focus-visible { outline: 2px solid var(--ax-c); outline-offset: 1px; }
+  .spacer { flex: 1; }
+
+  /* ---------- боковая панель ---------- */
+
+  .panel { display: flex; flex-direction: column; min-width: 0; }
+
+  .panel-block { padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .panel-block:last-child { border-bottom: 0; }
+
+  .idx { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .idx-row {
+    display: grid; grid-template-columns: 1fr 46px 34px;
+    gap: 8px; align-items: center;
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  }
+  .idx-row b { font-size: 13px; color: var(--vc); letter-spacing: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  .bar { height: 5px; background: var(--surface-2); position: relative; }
+  .bar i { position: absolute; inset: 0 auto 0 0; background: var(--vc); }
+
+  #readout { min-height: 176px; }
+
+  .empty { color: var(--muted); font-size: 13px; }
+
+  .cli-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .cli-head h3 { font-size: 17px; }
+  .cli-code { font-family: var(--f-mono); font-size: 15px; font-weight: 600; letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+
+  .qa { padding: 7px 0; border-top: 1px solid var(--line-soft); }
+  .qa:first-of-type { border-top: 0; }
+  .qa em { font-style: normal; font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--qc); display: block; }
+  .qa p { margin: 1px 0 0; font-size: 13.5px; color: var(--ink-2); }
+
+  .gap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 12px; }
+  .gap div { background: var(--surface-2); padding: 7px 9px; }
+  .gap em { font-style: normal; font-family: var(--f-mono); font-size: 9px; letter-spacing: .11em; text-transform: uppercase; color: var(--muted); display: block; }
+  .gap b { font-family: var(--f-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .gap-note { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+
+  .rec { margin-top: 12px; padding: 10px 12px; background: var(--surface-2); border-left: 2px solid var(--rc); }
+  .rec span { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--rc); display: block; margin-bottom: 3px; }
+  .rec p { margin: 0; font-size: 13.5px; }
+
+  .list { max-height: 172px; overflow-y: auto; }
+  .list button {
+    display: flex; width: 100%; gap: 10px; align-items: baseline;
+    border: 0; border-bottom: 1px solid var(--line-soft);
+    padding: 6px 18px; text-transform: none; letter-spacing: 0; font-size: 12.5px;
+    text-align: left; font-family: var(--f-ui);
+  }
+  .list button:hover { background: var(--surface-2); color: var(--ink); }
+  .list button[aria-pressed="true"] { background: var(--surface-2); color: var(--ink); }
+  .list button b { margin-left: auto; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; background: var(--dc); }
+
+  /* ---------- таблица слоёв ---------- */
+
+  .layers { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .lay { background: var(--surface); padding: 18px 20px; border-top: 2px solid var(--lc); }
+  .lay h3 { font-size: 16px; color: var(--lc); }
+  .lay .q { font-size: 13px; color: var(--muted); margin: 2px 0 12px; }
+  .lay ol { list-style: none; margin: 0 0 12px; padding: 0; }
+  .lay li { display: flex; gap: 9px; font-size: 13.5px; color: var(--ink-2); padding: 4px 0; border-top: 1px solid var(--line-soft); }
+  .lay li:first-child { border-top: 0; }
+  .lay li i { font-style: normal; font-family: var(--f-mono); font-size: 12px; color: var(--lc); font-weight: 600; }
+  .lay dl { margin: 0; font-size: 12.5px; color: var(--muted); display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; }
+  .lay dt { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; padding-top: 3px; }
+  .lay dd { margin: 0; }
+
+  /* ---------- вершины ---------- */
+
+  .corners { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .cor { background: var(--surface); padding: 14px 16px; display: flex; flex-direction: column; gap: 5px; border-left: 2px solid var(--cc); }
+  .cor .sig { font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+  .cor .sig u { text-decoration: none; }
+  .cor h3 { font-size: 15px; }
+  .cor p { margin: 0; font-size: 13px; color: var(--ink-2); }
+
+  /* ---------- ограничения + шаги ---------- */
+
+  .rows { border: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: 1fr 1.25fr; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .row > div { padding: 13px 18px; }
+  .row .fix { background: var(--surface-2); border-left: 1px solid var(--line); }
+  .row h3 { font-size: 14.5px; margin-bottom: 3px; }
+  .row p { margin: 0; font-size: 13px; color: var(--ink-2); }
+  .row .fix p { color: var(--ink); }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .step { background: var(--surface); padding: 14px 16px; }
+  .step h3 { font-size: 14px; margin: 6px 0 4px; }
+  .step p { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+
+  .closing {
+    margin-top: 52px; border-top: 1px solid var(--line); padding-top: 22px;
+    font-size: clamp(17px, 2.4vw, 22px); font-weight: 700; letter-spacing: -.02em; max-width: 34ch; line-height: 1.25;
+  }
+
+  @media (max-width: 900px) {
+    .model { grid-template-columns: 1fr; }
+    .stage { border-right: 0; border-bottom: 1px solid var(--line); }
+    canvas { height: 380px; }
+    .row { grid-template-columns: 1fr; }
+    .row .fix { border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="top">
+      <span class="mono">Sales management model</span>
+      <span class="mono">Three layers instead of a funnel</span>
+    </div>
+    <h1>Sales Cube</h1>
+    <p class="lede">A funnel measures how much reached the end and goes quiet there. The cube holds the whole customer base in one space and delivers a verdict on every customer: three coordinates, three questions.</p>
+
+    <div class="triad">
+      <div style="--tc:var(--ax-s)"><span class="mono">Y axis · Sales</span><b>What is happening?</b><span>Symptom</span></div>
+      <div style="--tc:var(--ax-c)"><span class="mono">X axis · Communication</span><b>Why is it happening?</b><span>Cause</span></div>
+      <div style="--tc:var(--ax-a)"><span class="mono">Z axis · Actions</span><b>How do we fix it?</b><span>Treatment</span></div>
+    </div>
+
+    <div class="eq">
+      <p><b style="color:var(--ax-s)">Sales</b> <s>=</s> f&thinsp;(<b style="color:var(--ax-c)">Communication</b>,&nbsp;<b style="color:var(--ax-a)">Actions</b>)</p>
+      <span>The vertical is not a third lever but the result of the two horizontal ones. We steer the base of the cube; the height follows. So the plan is set on communication and actions, while sales are measured.</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <span class="mono">01</span>
+      <h2>Model</h2>
+      <p>Rotate the cube with the mouse or the arrow keys. A dot is a customer, its size is volume, its colour is the state. Select a dot to read it against the three questions. The data is a demo and the company names are fictional.</p>
+    </div>
+
+    <div class="model">
+      <div class="stage">
+        <canvas id="cv" tabindex="0" aria-label="Three-dimensional model of the customer base: sales, communication and action axes"></canvas>
+        <div class="stage-bar">
+          <button data-f="all" aria-pressed="true">Whole base</button>
+          <button data-f="act" aria-pressed="false">Active</button>
+          <button data-f="sleep" aria-pressed="false">Sleeping</button>
+          <button data-f="dead" aria-pressed="false">Inactive</button>
+          <button data-f="zero" aria-pressed="false">0·0·0</button>
+          <span class="spacer"></span>
+          <button id="proj" aria-pressed="true">Projection</button>
+          <button id="grid" aria-pressed="false">64 grid</button>
+          <button id="reset" aria-pressed="false">Reset</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-block">
+          <span class="mono">Cube index · centre of mass</span>
+          <div class="idx" id="idx"></div>
+        </div>
+        <div class="panel-block" id="readout">
+          <p class="empty">No dot selected. Click a customer in the cube or in the list below.</p>
+        </div>
+        <div class="panel-block" style="padding:0">
+          <div style="padding:12px 18px 6px"><span class="mono">Base · <span id="cnt"></span></span></div>
+          <div class="list" id="list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="basis">
+      <div>
+        <span class="mono">We plan</span>
+        <h3>The base of the cube</h3>
+        <p>The manager gets a plan on communication, operations get one on actions. That is the only thing we move directly.</p>
+      </div>
+      <div>
+        <span class="mono">We measure</span>
+        <h3>The height</h3>
+        <p>Sales are not assigned, they result. “Raise sales by 15%” is a wish, not a task.</p>
+      </div>
+      <div>
+        <span class="mono">We read</span>
+        <h3>The gap</h3>
+        <p>A dot below its base means the cause lies outside the cube: price, decision maker, season. Above it means the account does not rest on us — that is a risk.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="mono">02</span>
+      <h2>Three axes</h2>
+      <p>Level 0–3 on every axis. The code reads X·Y·Z — communication · sales · actions: 2·1·2 means “reacting · not buying · on time”. Zero means “never”, it is not a worse kind of one: 0·0·0 is an untouched card, not an abandoned customer.</p>
+    </div>
+
+    <div class="layers">
+      <div class="lay" style="--lc:var(--ax-s)">
+        <h3>Sales</h3>
+        <p class="q">What is happening? · symptom · Y axis</p>
+        <ol>
+          <li><i>3</i><span>Active — shipped in the current cycle</span></li>
+          <li><i>2</i><span>Sleeping — dropped out of the cycle but used to buy</span></li>
+          <li><i>1</i><span>Inactive — more than three cycles without a shipment</span></li>
+          <li><i>0</i><span>Never — not a single deal in the card’s history</span></li>
+        </ol>
+        <dl>
+          <dt>Metrics</dt><dd>Base coverage · share of the customer’s purchases · sleeping customers won back</dd>
+          <dt>Owner</dt><dd>Commercial director</dd>
+        </dl>
+      </div>
+
+      <div class="lay" style="--lc:var(--ax-c)">
+        <h3>Communication</h3>
+        <p class="q">Why is it happening? · cause · X axis</p>
+        <ol>
+          <li><i>3</i><span>Leading — initiative with a reason, replies within the norm</span></li>
+          <li><i>2</i><span>Reacting — we answer but never start</span></li>
+          <li><i>1</i><span>Silent — the contact went quiet within the window</span></li>
+          <li><i>0</i><span>Never — not a single tracked touch</span></li>
+        </ol>
+        <dl>
+          <dt>Metrics</dt><dd>Touchpoint coverage · response time, h · share of our initiative · share of touchpoints with a reason</dd>
+          <dt>Owner</dt><dd>Account managers, CRM discipline</dd>
+        </dl>
+      </div>
+
+      <div class="lay" style="--lc:var(--ax-a)">
+        <h3>Actions</h3>
+        <p class="q">How do we fix it? · treatment · Z axis</p>
+        <ol>
+          <li><i>3</i><span>Ahead — faster than the customer expects</span></li>
+          <li><i>2</i><span>On time — the norm is met, or there is too little data</span></li>
+          <li><i>1</i><span>Failing — deadlines slip and the customer has to remind us</span></li>
+          <li><i>0</i><span>Never — there has been no confirmed order to execute</span></li>
+        </ol>
+        <dl>
+          <dt>Metrics</dt><dd>Time to sample · to quotation · order→shipment · on-time delivery share · claim closing</dd>
+          <dt>Owner</dt><dd>Logistics, operations, back office</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="mono">03</span>
+      <h2>Corners and the zero</h2>
+      <p>The extreme combinations are recognisable types; the digits run in X·Y·Z order. The cure almost always lies outside the sales department. Eight corners are built from levels 1 and 3, and the ninth — 0·0·0 — sits at the origin.</p>
+    </div>
+
+    <div class="corners">
+      <div class="cor" style="--cc:var(--ok)">
+        <span class="sig"><u style="color:var(--ax-c)">3</u>·<u style="color:var(--ax-s)">3</u>·<u style="color:var(--ax-a)">3</u></span>
+        <h3>3·3·3 Core</h3><p>Keep the process untouched. Grow the share of wallet and the assortment.</p>
+      </div>
+      <div class="cor" style="--cc:var(--risk)">
+        <span class="sig"><u style="color:var(--ax-c)">3</u>·<u style="color:var(--ax-s)">3</u>·<u style="color:var(--ax-a)">1</u></span>
+        <h3>3·3·1 Promised, not delivered</h3><p>We sell and we talk, but delivery slips. The churn will be sudden — fix operations for exactly these customers.</p>
+      </div>
+      <div class="cor" style="--cc:var(--muted)">
+        <span class="sig"><u style="color:var(--ax-c)">1</u>·<u style="color:var(--ax-s)">3</u>·<u style="color:var(--ax-a)">3</u></span>
+        <h3>1·3·3 Runs by itself</h3><p>Buys and gets served without any relationship. Vulnerable to the first competitor call — assign an owner.</p>
+      </div>
+      <div class="cor" style="--cc:var(--risk)">
+        <span class="sig"><u style="color:var(--ax-c)">1</u>·<u style="color:var(--ax-s)">3</u>·<u style="color:var(--ax-a)">1</u></span>
+        <h3>1·3·1 Sales despite us</h3><p>No communication, failing execution. Treat as a risk, not as an achievement.</p>
+      </div>
+      <div class="cor" style="--cc:var(--muted)">
+        <span class="sig"><u style="color:var(--ax-c)">3</u>·<u style="color:var(--ax-s)">1</u>·<u style="color:var(--ax-a)">3</u></span>
+        <h3>3·1·3 Effort, no sales</h3><p>We lead the communication and deliver, yet no sales. The cause is outside the cube: price, decision maker, season. Escalate or disqualify.</p>
+      </div>
+      <div class="cor" style="--cc:var(--risk)">
+        <span class="sig"><u style="color:var(--ax-c)">3</u>·<u style="color:var(--ax-s)">1</u>·<u style="color:var(--ax-a)">1</u></span>
+        <h3>3·1·1 Just talking</h3><p>The most expensive combination: talking without delivering. Stop the communication until we are ready to execute.</p>
+      </div>
+      <div class="cor" style="--cc:var(--muted)">
+        <span class="sig"><u style="color:var(--ax-c)">1</u>·<u style="color:var(--ax-s)">1</u>·<u style="color:var(--ax-a)">3</u></span>
+        <h3>1·1·3 Waiting for orders</h3><p>Execution is fine, nobody talks to the customer. The cheapest lever in the company — add initiative.</p>
+      </div>
+      <div class="cor" style="--cc:var(--risk)">
+        <span class="sig"><u style="color:var(--ax-c)">1</u>·<u style="color:var(--ax-s)">1</u>·<u style="color:var(--ax-a)">1</u></span>
+        <h3>1·1·1 Dead zone</h3><p>Bought long ago, no contact, nothing in work. Reanimate with a check date or remove from the base.</p>
+      </div>
+      <div class="cor" style="--cc:var(--risk)">
+        <span class="sig"><u style="color:var(--ax-c)">0</u>·<u style="color:var(--ax-s)">0</u>·<u style="color:var(--ax-a)">0</u></span>
+        <h3>0·0·0 Never worked</h3><p>A card without any history: never contacted, never bought, nothing executed. First touch or clean-up.</p>
+      </div>
+    </div>
+
+    <div class="rows" style="margin-top:28px">
+      <div class="row">
+        <div>
+          <h3>The 0·0·0 scenario</h3>
+          <p>The card exists but carries no history: not one tracked touch, not one deal, not one order to execute. This is not an abandoned customer — it is a customer we have never worked with.</p>
+        </div>
+        <div class="fix"><p>The <b>0·0·0</b> button above the cube shows this group only. Its share of the base is the first figure of the review: how many cards nobody has ever opened.</p></div>
+      </div>
+      <div class="row">
+        <div>
+          <h3>Why zero is separate from one</h3>
+          <p>1·1·1 is degradation: they bought, we talked, we delivered, and it all went quiet. 0·0·0 is absence of work. They must not be mixed: different causes, different cures.</p>
+        </div>
+        <div class="fix"><p>The reports count these groups separately. Otherwise untouched cards hide among the sleeping ones and the averages stop meaning anything.</p></div>
+      </div>
+      <div class="row">
+        <div>
+          <h3>Leaving zero</h3>
+          <p>The first step is taken on the base, not on sales: an owner for the card, a touch with a reason (X 0→1) and a promise we kept (Z 0→2).</p>
+        </div>
+        <div class="fix"><p>The goal is not a shipment but moving the card into the working zone. Sales are counted in the next cycle: first a history appears, then a deal.</p></div>
+      </div>
+      <div class="row">
+        <div>
+          <h3>When to clean up</h3>
+          <p>An off-profile card, a duplicate or a contact without a company stays 0·0·0 forever and keeps spoiling coverage and touchpoint plans.</p>
+        </div>
+        <div class="fix"><p>Archive it with a reason and a date. Keeping it “just in case” costs more: such rows distort the coverage share and the cube index.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="mono">04</span>
+      <h2>Limits of the model</h2>
+      <p>State them before the launch, or the cube degrades into a picture.</p>
+    </div>
+
+    <div class="rows">
+      <div class="row">
+        <div><h3>The drivers do not explain everything</h3><p>Sales result from communication and actions, but not from those alone. A perfect base does not guarantee height.</p></div>
+        <div class="fix"><p>The gap between the base and the fact is not the manager’s fault but a signal to look outside the cube: price, decision maker, season, a contract with a competitor. Such customers go to escalation, not to more pressure.</p></div>
+      </div>
+      <div class="row">
+        <div><h3>Activity is easy to fake</h3><p>Communication as a KPI will produce forty empty touchpoints a day.</p></div>
+        <div class="fix"><p>Measure coverage, response time and the share of touchpoints with a reason. Check quality by sampling, by hand.</p></div>
+      </div>
+      <div class="row">
+        <div><h3>All customers weigh the same</h3><p>20 tonnes and 2000 tonnes are one dot each; averages lie in favour of the small ones.</p></div>
+        <div class="fix"><p>Do not add a fourth axis. Weigh by volume through the dot size, and compute a separate index for the top 20.</p></div>
+      </div>
+      <div class="row">
+        <div><h3>The cube is a snapshot</h3><p>2·3·3 on the way up and 2·3·3 on the way down are opposite situations.</p></div>
+        <div class="fix"><p>Keep the history of the cells. The main report is “customers whose coordinate got worse this quarter”.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="mono">05</span>
+      <h2>Rollout</h2>
+      <p>Order matters: without the first two steps the rest produce figures nobody can agree on.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step"><span class="mono">Step 01</span><h3>Base and cycle</h3><p>Who counts as a customer and which cycle length makes them active.</p></div>
+      <div class="step"><span class="mono">Step 02</span><h3>Manual scoring</h3><p>Once, with the whole team. Half of the “active” ones will turn out sleeping.</p></div>
+      <div class="step"><span class="mono">Step 03</span><h3>Data in the system</h3><p>Touchpoint date, response time, order→shipment, sample dispatch.</p></div>
+      <div class="step"><span class="mono">Step 04</span><h3>Cube review</h3><p>Monthly, instead of the funnel review: index, movement, those that got worse.</p></div>
+      <div class="step"><span class="mono">Step 05</span><h3>Plans on the drivers</h3><p>The manager owns the “why”, operations own the “how”, the company owns the “what”.</p></div>
+    </div>
+  </section>
+
+  <p class="closing">The funnel answered one question. The cube asks three and ends not with a number but with a name and a date.</p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // [имя, продажи, коммуникации, действия, объём]
+  var DATA = [
+    ["Wisła Agro", 3.0, 2.8, 2.9, 180],      ["Nordkorn GmbH", 2.9, 3.0, 2.7, 240],
+    ["Maasland Grain", 2.8, 2.6, 3.0, 120],  ["Beauce Céréales", 3.0, 2.9, 2.6, 95],
+    ["Dunărea Cereale", 2.9, 2.8, 1.3, 310], ["Elbe Agrar", 2.7, 2.6, 1.5, 140],
+    ["Baltic Rye", 3.0, 1.2, 2.8, 260],      ["Morava Zrno", 2.8, 1.4, 2.6, 80],
+    ["Trakia Grain", 2.8, 1.1, 1.2, 190],    ["Padana Sementi", 1.2, 3.0, 2.9, 0],
+    ["Delta Zaden", 1.3, 2.8, 2.7, 0],       ["Alföld Agrár", 1.2, 2.7, 1.2, 0],
+    ["Skagen Korn", 1.4, 1.2, 2.8, 25],      ["Loire Grains", 1.6, 1.3, 2.6, 30],
+    ["Rheinsaat", 1.3, 1.1, 2.9, 15],        ["Duero Grano", 1.0, 1.0, 1.2, 0],
+    ["Tisza Mag", 1.1, 1.2, 1.0, 0],         ["Kujawy Trade", 1.0, 1.1, 1.1, 0],
+    ["Odra Agri", 2.0, 1.2, 2.1, 70],        ["Ostsee Korn", 2.0, 2.9, 1.2, 110],
+    ["Zuidkorn BV", 2.1, 2.0, 2.0, 60],      ["Kuršis Grūdai", 1.9, 2.2, 2.4, 85],
+    ["Emilia Grani", 2.2, 1.8, 1.9, 45],     ["Rīga Agro", 2.4, 2.4, 2.2, 130],
+    ["Danube Agri", 2.3, 1.6, 2.5, 100],     ["Ziarno Nord", 1.8, 2.5, 1.8, 40],
+    ["Nowa Ziarno", 0, 0, 0, 0],             ["Steppe Trading", 0, 0, 0, 0],
+    ["Adria Grains", 0, 0, 0, 0],            ["Vistula Feed", 0, 0, 0, 0],
+    ["Rhône Semences", 0, 2.8, 2.0, 0],      ["Karpaty Zerno", 0, 2.6, 0, 0],
+    ["Anatolia Tarim", 2.9, 0, 2.7, 150]
+  ];
+
+  var CLIENTS = DATA.map(function (d, i) {
+    return { id: i, name: d[0], s: d[1], c: d[2], a: d[3], vol: d[4] };
+  });
+
+  var S_TXT = ["Never bought — a card without a single deal.",
+               "Inactive — more than three cycles without a shipment.",
+               "Sleeping — used to buy but dropped out of the cycle.",
+               "Active — shipped in the current cycle."];
+  var C_TXT = ["Not a single tracked touch in the whole history.",
+               "The contact went quiet. The customer was simply forgotten.",
+               "We answer incoming messages, we never start ourselves.",
+               "Leading: regular initiative with a reason, replies within the norm."];
+  var A_TXT = ["There was nothing to execute: no confirmed orders.",
+               "Deadlines slip — samples and shipments go out late.",
+               "We meet the norm on samples and shipments.",
+               "We beat the customer’s expectations on timing."];
+
+  function lvl(v) { return v <= 0 ? 0 : (v >= 2.5 ? 3 : (v >= 1.5 ? 2 : 1)); }
+  function code(cl) { return lvl(cl.c) + "·" + lvl(cl.s) + "·" + lvl(cl.a); }
+
+  function verdict(cl) {
+    var X = lvl(cl.c), Y = lvl(cl.s), Z = lvl(cl.a);
+    if (!X && !Y && !Z) return ["risk", "0·0·0 Never worked. A card without any history: never contacted, never bought, nothing executed. First touch or clean-up."];
+    if (X === 3 && Y === 3 && Z === 3) return ["ok", "3·3·3 Core. Keep the process untouched — grow the share of wallet and the assortment."];
+    if (X === 3 && Y === 3 && Z === 1) return ["risk", "3·3·1 Promised, not delivered. We sell and we talk, but delivery slips. The churn will be sudden — fix operations for exactly these customers."];
+    if (X === 1 && Y === 3 && Z === 3) return ["watch", "1·3·3 Runs by itself. Buys and gets served without any relationship. Vulnerable to the first competitor call — assign an owner."];
+    if (X === 1 && Y === 3 && Z === 1) return ["risk", "1·3·1 Sales despite us. No communication, failing execution — treat as a risk, not as an achievement."];
+    if (X === 3 && Y === 1 && Z === 3) return ["watch", "3·1·3 Effort, no sales. We lead and deliver, yet nothing sells: the cause is outside the cube — price, decision maker, season. Escalate or disqualify."];
+    if (X === 3 && Y === 1 && Z === 1) return ["risk", "3·1·1 Just talking. The most expensive combination: talking without delivering. Stop the communication until we are ready to execute."];
+    if (X === 1 && Y === 1 && Z === 3) return ["watch", "1·1·3 Waiting for orders. Execution is fine, nobody talks to the customer. The cheapest lever — add initiative."];
+    if (X === 1 && Y === 1 && Z === 1) return ["risk", "1·1·1 Dead zone. Bought long ago, no contact, nothing in work. Reanimate with a check date or remove from the base."];
+    if (!Y) return ["watch", "Not a single deal. Take the card to its first order or close it as off-profile."];
+    if (!X) return ["watch", "Not a single touch in the whole history. Assign an owner and start with a reason."];
+    if (!Z) return ["watch", "There is nothing to execute yet: no confirmed orders."];
+    if (Z === 1) return ["risk", "Delivery lags behind. Until timing is fixed, more communication only speeds up the loss."];
+    if (X === 1) return ["watch", "Nobody remembered this customer. The cheapest lever: start a contact with a reason."];
+    if (Y === 2) return ["watch", "Sleeping on healthy drivers. Check the reason for a deal and the seasonality."];
+    return ["ok", "Healthy. Keep the current mode."];
+  }
+
+  var HEALTH = { ok: "--ok", watch: "--muted", risk: "--risk" };
+
+  CLIENTS.forEach(function (cl) {
+    var v = verdict(cl);
+    cl.state = v[0];
+    cl.rec = v[1];
+  });
+
+  // ---------- палитра ----------
+  var P = {};
+  function readPalette() {
+    var cs = getComputedStyle(document.documentElement);
+    ["--ink", "--ink-2", "--muted", "--line", "--surface", "--bg",
+     "--ax-s", "--ax-c", "--ax-a", "--ok", "--risk"].forEach(function (k) {
+      P[k] = cs.getPropertyValue(k).trim();
+    });
+  }
+  function rgba(hex, a) {
+    var h = hex.replace("#", "");
+    if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+    var n = parseInt(h, 16);
+    return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+  }
+
+  // ---------- сцена ----------
+  var cv = document.getElementById("cv");
+  var ctx = cv.getContext("2d");
+  var yaw = -0.72, pitch = 0.42;
+  var filter = "all", showGrid = false, showProj = true, selected = null, hovered = null;
+  var W = 0, H = 0, scale = 1, cx = 0, cy = 0;
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var spinning = !reduce.matches;
+
+  function norm(v) { return (v - 1.5) / 1.5; }    // 0..3 -> -1..1
+  function rot(p) {
+    var x = p[0] * Math.cos(yaw) - p[2] * Math.sin(yaw);
+    var z = p[0] * Math.sin(yaw) + p[2] * Math.cos(yaw);
+    var y = p[1] * Math.cos(pitch) - z * Math.sin(pitch);
+    z = p[1] * Math.sin(pitch) + z * Math.cos(pitch);
+    return [x, y, z];
+  }
+  function proj(p) {
+    var r = rot(p);
+    var k = 5.6 / (5.6 - r[2]);
+    return { x: cx + r[0] * scale * k, y: cy - r[1] * scale * k, z: r[2], k: k };
+  }
+
+  var CORNERS = [];
+  for (var i = 0; i < 8; i++) CORNERS.push([(i & 1) ? 1 : -1, (i & 2) ? 1 : -1, (i & 4) ? 1 : -1]);
+  var EDGES = [];
+  for (var a1 = 0; a1 < 8; a1++) for (var b1 = a1 + 1; b1 < 8; b1++) {
+    var d = 0;
+    for (var k1 = 0; k1 < 3; k1++) if (CORNERS[a1][k1] !== CORNERS[b1][k1]) d++;
+    if (d === 1) EDGES.push([a1, b1]);
+  }
+
+  function resize() {
+    var dpr = window.devicePixelRatio || 1;
+    var r = cv.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    scale = Math.min(W, H) * 0.30;
+    cx = W / 2; cy = H / 2;
+    draw();
+  }
+
+  function visible() {
+    return CLIENTS.filter(function (cl) {
+      if (filter === "act") return cl.s >= 2.5;
+      if (filter === "zero") return lvl(cl.c) === 0 && lvl(cl.s) === 0 && lvl(cl.a) === 0;
+      if (filter === "sleep") return cl.s >= 1.5 && cl.s < 2.5;
+      if (filter === "dead") return cl.s > 0 && cl.s < 1.5;
+      return true;
+    });
+  }
+
+  function line(p1, p2, color, w) {
+    var a = proj(p1), b = proj(p2);
+    ctx.strokeStyle = color; ctx.lineWidth = w;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+
+  function label(p, text, color, off) {
+    var q = proj(p);
+    ctx.font = "600 10px " + getComputedStyle(document.body).getPropertyValue("--f-mono");
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    var w = ctx.measureText(text).width;
+    ctx.fillStyle = rgba(P["--bg"], .82);
+    ctx.fillRect(q.x - w / 2 - 5, q.y + (off || 0) - 8, w + 10, 16);
+    ctx.fillStyle = color;
+    ctx.fillText(text, q.x, q.y + (off || 0));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // рёбра куба: дальние тусклее
+    EDGES.forEach(function (e) {
+      var p1 = CORNERS[e[0]], p2 = CORNERS[e[1]];
+      var mz = (rot(p1)[2] + rot(p2)[2]) / 2;
+      line(p1, p2, rgba(P["--ink"], mz < 0 ? .10 : .26), 1);
+    });
+
+    // сетка 4x4x4 на трёх дальних гранях
+    if (showGrid) {
+      var g = rgba(P["--ink"], .07);
+      [-0.5, 0, 0.5].forEach(function (t) {
+        line([-1, t, -1], [1, t, -1], g, 1); line([t, -1, -1], [t, 1, -1], g, 1);
+        line([-1, t, -1], [-1, t, 1], g, 1); line([-1, -1, t], [-1, 1, t], g, 1);
+        line([t, -1, -1], [t, -1, 1], g, 1); line([-1, -1, t], [1, -1, t], g, 1);
+      });
+    }
+
+    // оси из вершины 0·0·0
+    var O = [-1, -1, -1];
+    line(O, [-1, 1.34, -1], P["--ax-s"], 2.5);
+    line(O, [1.34, -1, -1], P["--ax-c"], 2.5);
+    line(O, [-1, -1, 1.34], P["--ax-a"], 2.5);
+
+    // проекция на плоскость драйверов: продажи как следствие
+    if (showProj) {
+      visible().forEach(function (cl) {
+        var act = selected === cl.id || hovered === cl.id;
+        var col = P[HEALTH[cl.state]];
+        var base = [norm(cl.c), -1, norm(cl.a)];
+        ctx.setLineDash([2, 3]);
+        line([norm(cl.c), norm(cl.s), norm(cl.a)], base, rgba(col, act ? .75 : .2), 1);
+        ctx.setLineDash([]);
+        var q = proj(base);
+        ctx.beginPath();
+        ctx.arc(q.x, q.y, 2.4 * q.k, 0, 6.2832);
+        ctx.fillStyle = rgba(col, act ? .85 : .32);
+        ctx.fill();
+      });
+      label([0, -1.24, 0], "DRIVER PLANE", P["--muted"]);
+    }
+
+    // точки клиентов
+    var pts = visible().map(function (cl) {
+      var q = proj([norm(cl.c), norm(cl.s), norm(cl.a)]);
+      q.cl = cl;
+      q.r = (5 + Math.sqrt(cl.vol) * 0.42) * q.k;
+      return q;
+    }).sort(function (m, n) { return m.z - n.z; });
+
+    pts.forEach(function (q) {
+      var col = P[HEALTH[q.cl.state]];
+      var sel = selected === q.cl.id, hov = hovered === q.cl.id;
+      ctx.beginPath(); ctx.arc(q.x, q.y, q.r, 0, 6.2832);
+      ctx.fillStyle = rgba(col, sel || hov ? .95 : .58); ctx.fill();
+      ctx.lineWidth = 1; ctx.strokeStyle = rgba(col, .9); ctx.stroke();
+      if (sel || hov) {
+        ctx.beginPath(); ctx.arc(q.x, q.y, q.r + 6, 0, 6.2832);
+        ctx.strokeStyle = rgba(col, .55); ctx.lineWidth = 1; ctx.stroke();
+      }
+    });
+
+    // подпись активной точки
+    var act = pts.filter(function (q) { return q.cl.id === (hovered !== null ? hovered : selected); })[0];
+    if (act) {
+      ctx.font = "600 11px " + getComputedStyle(document.body).getPropertyValue("--f-ui");
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      var t = act.cl.name + "  " + code(act.cl);
+      var w = ctx.measureText(t).width;
+      var ly = act.y - act.r - 14;
+      ctx.fillStyle = rgba(P["--bg"], .9);
+      ctx.fillRect(act.x - w / 2 - 7, ly - 9, w + 14, 18);
+      ctx.strokeStyle = rgba(P["--ink"], .2); ctx.lineWidth = 1;
+      ctx.strokeRect(act.x - w / 2 - 7, ly - 9, w + 14, 18);
+      ctx.fillStyle = P["--ink"];
+      ctx.fillText(t, act.x, ly);
+    }
+
+    // подписи осей и уровней
+    label([-1, 1.52, -1], "SALES 3", P["--ax-s"]);
+    label([1.52, -1, -1], "COMMUNICATION 3", P["--ax-c"]);
+    label([-1, -1, 1.52], "ACTIONS 3", P["--ax-a"]);
+    label(O, "0·0·0", P["--muted"], 16);
+  }
+
+  // ---------- интерфейс ----------
+  function fmt(v) { return v.toFixed(1); }
+
+  function zeroCount() {
+    return CLIENTS.filter(function (cl) {
+      return lvl(cl.c) === 0 && lvl(cl.s) === 0 && lvl(cl.a) === 0;
+    }).length;
+  }
+
+  function renderIndex() {
+    var v = visible();
+    var n = v.length || 1;
+    var av = ["s", "c", "a"].map(function (k) {
+      return v.reduce(function (t, cl) { return t + cl[k]; }, 0) / n;
+    });
+    var names = ["Sales", "Communication", "Actions"];
+    var vars = ["--ax-s", "--ax-c", "--ax-a"];
+    document.getElementById("idx").innerHTML = av.map(function (x, i) {
+      return '<div class="idx-row" style="--vc:var(' + vars[i] + ')"><span>' + names[i] +
+        '</span><span class="bar"><i style="width:' + (x / 3 * 100).toFixed(0) + '%"></i></span><b>' + fmt(x) + "</b></div>";
+    }).join("") +
+      '<div class="idx-row" style="grid-template-columns:1fr auto; border-top:1px solid var(--line-soft); padding-top:7px">' +
+      "<span>Base → height</span><b style=\"color:var(--ink)\">" +
+      fmt((av[1] + av[2]) / 2) + " → " + fmt(av[0]) + "</b></div>" +
+      '<div class="idx-row" style="grid-template-columns:1fr auto">' +
+      "<span>Never 0·0·0</span><b style=\"color:var(--risk)\">" +
+      zeroCount() + " of " + CLIENTS.length + "</b></div>";
+    document.getElementById("cnt").textContent = v.length + " of " + CLIENTS.length;
+  }
+
+  function renderList() {
+    document.getElementById("list").innerHTML = visible().map(function (cl) {
+      return '<button data-id="' + cl.id + '" aria-pressed="' + (selected === cl.id) + '">' +
+        '<span class="dot" style="--dc:var(' + HEALTH[cl.state] + ')"></span>' + cl.name +
+        "<b>" + code(cl) + "</b></button>";
+    }).join("");
+  }
+
+  function renderReadout() {
+    var el = document.getElementById("readout");
+    if (selected === null) {
+      el.innerHTML = '<p class="empty">No dot selected. Click a customer in the cube or in the list below.</p>';
+      return;
+    }
+    var cl = CLIENTS[selected];
+    var rc = HEALTH[cl.state];
+    var exp = (cl.c + cl.a) / 2, gap = cl.s - exp;
+    var gc = Math.abs(gap) < 0.5 ? "--muted" : (gap < 0 ? "--risk" : "--ok");
+    var note = Math.abs(gap) < 0.5
+      ? "Sales match the drivers. Want them higher — move the base."
+      : (gap < 0
+        ? "The drivers work, the sales do not follow. The cause is outside the cube: price, decision maker, season, a contract with a competitor."
+        : "These sales do not rest on our effort. That is not an achievement but an uninsured risk.");
+    el.innerHTML =
+      '<div class="cli-head"><h3>' + cl.name + '</h3><span class="cli-code" style="color:var(' + rc + ')">' + code(cl) + "</span></div>" +
+      '<div class="qa" style="--qc:var(--ax-s)"><em>What is happening</em><p>' + S_TXT[lvl(cl.s)] + "</p></div>" +
+      '<div class="qa" style="--qc:var(--ax-c)"><em>Why</em><p>' + C_TXT[lvl(cl.c)] + "</p></div>" +
+      '<div class="qa" style="--qc:var(--ax-a)"><em>How we fix it</em><p>' + A_TXT[lvl(cl.a)] + "</p></div>" +
+      '<div class="gap">' +
+        "<div><em>Base</em><b>" + fmt(exp) + "</b></div>" +
+        "<div><em>Actual sales</em><b>" + fmt(cl.s) + "</b></div>" +
+        '<div><em>The gap</em><b style="color:var(' + gc + ')">' + (gap > 0 ? "+" : "") + fmt(gap) + "</b></div>" +
+      "</div><p class=\"gap-note\">" + note + "</p>" +
+      '<div class="rec" style="--rc:var(' + rc + ')"><span>Decision · volume ' + cl.vol + " units</span><p>" + cl.rec + "</p></div>";
+  }
+
+  function refresh() { renderIndex(); renderList(); renderReadout(); draw(); }
+
+  function select(id) { selected = id; renderList(); renderReadout(); draw(); }
+
+  document.getElementById("list").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-id]");
+    if (b) select(parseInt(b.getAttribute("data-id"), 10));
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-f]"), function (b) {
+    b.addEventListener("click", function () {
+      filter = b.getAttribute("data-f");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-f]"), function (o) {
+        o.setAttribute("aria-pressed", String(o === b));
+      });
+      if (selected !== null && visible().indexOf(CLIENTS[selected]) === -1) selected = null;
+      refresh();
+    });
+  });
+
+  document.getElementById("proj").addEventListener("click", function () {
+    showProj = !showProj;
+    this.setAttribute("aria-pressed", String(showProj));
+    draw();
+  });
+
+  document.getElementById("grid").addEventListener("click", function () {
+    showGrid = !showGrid;
+    this.setAttribute("aria-pressed", String(showGrid));
+    draw();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    yaw = -0.72; pitch = 0.42; selected = null; refresh();
+  });
+
+  // вращение
+  var drag = null;
+  cv.addEventListener("pointerdown", function (e) {
+    spinning = false;
+    drag = { x: e.clientX, y: e.clientY, yaw: yaw, pitch: pitch, moved: 0 };
+    cv.setPointerCapture(e.pointerId);
+  });
+  cv.addEventListener("pointermove", function (e) {
+    var r = cv.getBoundingClientRect();
+    if (drag) {
+      var dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      drag.moved = Math.max(drag.moved, Math.abs(dx) + Math.abs(dy));
+      yaw = drag.yaw + dx * 0.008;
+      pitch = Math.max(-1.2, Math.min(1.2, drag.pitch + dy * 0.008));
+      draw();
+      return;
+    }
+    var mx = e.clientX - r.left, my = e.clientY - r.top, best = null, bd = 1e9;
+    visible().forEach(function (cl) {
+      var q = proj([norm(cl.c), norm(cl.s), norm(cl.a)]);
+      var d = Math.hypot(q.x - mx, q.y - my);
+      if (d < 16 && d < bd) { bd = d; best = cl.id; }
+    });
+    if (best !== hovered) { hovered = best; cv.style.cursor = best === null ? "grab" : "pointer"; draw(); }
+  });
+  cv.addEventListener("pointerup", function (e) {
+    if (drag && drag.moved < 5 && hovered !== null) select(hovered);
+    drag = null;
+    cv.releasePointerCapture(e.pointerId);
+  });
+  cv.addEventListener("pointerleave", function () {
+    if (hovered !== null) { hovered = null; draw(); }
+  });
+
+  cv.addEventListener("keydown", function (e) {
+    var k = { ArrowLeft: [-0.1, 0], ArrowRight: [0.1, 0], ArrowUp: [0, -0.1], ArrowDown: [0, 0.1] }[e.key];
+    if (!k) return;
+    e.preventDefault(); spinning = false;
+    yaw += k[0];
+    pitch = Math.max(-1.2, Math.min(1.2, pitch + k[1]));
+    draw();
+  });
+
+  function tick() {
+    if (spinning) { yaw += 0.0022; draw(); }
+    requestAnimationFrame(tick);
+  }
+
+  readPalette();
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(cv);
+  window.addEventListener("resize", resize);
+  new MutationObserver(function () { readPalette(); draw(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+      readPalette(); draw();
+    });
+  }
+
+  resize();
+  refresh();
+  requestAnimationFrame(tick);
+})();
+</script>
+
+</body></html>

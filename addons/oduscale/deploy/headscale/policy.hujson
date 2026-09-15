@@ -1,0 +1,6 @@
+{
+  "tagOwners": {"tag:odoo": ["oduscale-gateway@"]},
+  "acls": [
+    {"action": "accept", "src": ["autogroup:member"], "dst": ["tag:odoo:80"]}
+  ]
+}

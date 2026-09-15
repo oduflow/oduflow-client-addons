@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<templates xml:space="preserve">
+    <t t-inherit="mail.Message" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o-mail-Message-body')]" position="after">
+            <t t-call="odupilot.DecisionCards"/></xpath>
+    </t>
+
+<t t-inherit="mail.Thread" t-inherit-mode="extension">
+<xpath expr="//div[hasclass('o-mail-Thread')]" position="before">
+<div t-if="odupilotStatus" class="o_AiChatSessionStatus border-bottom px-3 py-2" role="status"><strong t-esc="odupilotStatus.label"/><span class="ms-2" t-esc="odupilotStatus.error"/></div>
+</xpath>
+<xpath expr="//div[hasclass('o-mail-Thread')]" position="inside">
+<div t-if="odupilotLiveBody" class="o_odupilot_live p-3" aria-live="polite" t-out="odupilotLiveBody"/>
+</xpath></t><t t-name="odupilot.DecisionCards"><t t-if="props.message.odupilot_permission">
+                <t t-set="permission" t-value="props.message.odupilot_permission"/>
+                <div class="o_AiChatPermissionCard mt-2 mb-1">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <strong class="o_AiChatPermissionCard_title">
+                            <i class="fa fa-shield me-1" aria-hidden="true"/>
+                            Permission required
+                        </strong>
+                        <span class="badge text-bg-secondary" t-esc="permission.status_label"/>
+                    </div>
+                    <div class="mt-2">
+                        <span class="text-muted">Operation:</span>
+                        <code class="ms-1" t-esc="permission.permission"/>
+                    </div>
+                    <t t-if="permission.patterns.length">
+                        <div class="mt-2 text-muted">Requested access:</div>
+                        <ul class="o_AiChatPermissionCard_patterns mb-0 ps-4">
+                            <li t-foreach="permission.patterns" t-as="pattern" t-key="pattern_index">
+                                <code t-esc="pattern"/>
+                            </li>
+                        </ul>
+                    </t>
+                    <details t-if="permission.details" class="mt-2">
+                        <summary>Technical details</summary>
+                        <pre class="o_AiChatPermissionCard_details mt-1 mb-0 p-2" t-esc="permission.details"/>
+                    </details>
+                    <div t-if="permission.status === 'pending'" class="o_AiChatPermissionCard_actions mt-3 d-flex flex-wrap">
+                        <button type="button" class="btn btn-primary btn-sm me-2 mb-1" data-response="once" t-att-disabled="odupilotState.submitting" data-kind="permission" t-on-click="replyOduPilot">
+                            Allow once
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm me-2 mb-1" data-response="always" t-att-disabled="odupilotState.submitting" data-kind="permission" t-on-click="replyOduPilot">
+                            Always
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm mb-1" data-response="reject" t-att-disabled="odupilotState.submitting" data-kind="permission" t-on-click="replyOduPilot">
+                            Reject
+                        </button>
+                    </div>
+                    <div t-if="permission.resolved_by and permission.status !== 'pending'" class="mt-2 text-muted small">
+                        Answered by <t t-esc="permission.resolved_by"/>.
+                    </div>
+                </div>
+            </t>
+            <t t-if="props.message.odupilot_recovery">
+                <t t-set="recovery" t-value="props.message.odupilot_recovery"/>
+                <div class="o_AiChatRecoveryCard mt-2 mb-1">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <strong class="o_AiChatRecoveryCard_title">
+                            <i class="fa fa-refresh me-1" aria-hidden="true"/>
+                            Interrupted request
+                        </strong>
+                        <span class="badge text-bg-secondary" t-esc="recovery.status_label"/>
+                    </div>
+                    <p class="mt-2 mb-0" t-esc="recovery.reason"/>
+                    <div t-if="recovery.had_tool_activity" class="alert alert-warning py-2 px-3 mt-2 mb-0">
+                        Tool activity was detected. Retrying may repeat an external change.
+                    </div>
+                    <div t-if="recovery.status === 'pending'" class="o_AiChatRecoveryCard_actions mt-3 d-flex flex-wrap">
+                        <button type="button" class="btn btn-primary btn-sm me-2 mb-1" data-response="retry" t-att-disabled="odupilotState.submitting" data-kind="recovery" t-on-click="replyOduPilot">
+                            Retry
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm mb-1" data-response="dismiss" t-att-disabled="odupilotState.submitting" data-kind="recovery" t-on-click="replyOduPilot">
+                            Dismiss
+                        </button>
+                    </div>
+                    <div t-if="recovery.resolved_by and recovery.status !== 'pending'" class="mt-2 text-muted small">
+                        Answered by <t t-esc="recovery.resolved_by"/>.
+                    </div>
+                </div>
+            </t>
+        </t><t t-inherit="mail.Message.bodyAsNotification" t-inherit-mode="extension"><xpath expr="//div[hasclass('o-mail-Message-body')]" position="after"><t t-call="odupilot.DecisionCards"/></xpath></t></templates>

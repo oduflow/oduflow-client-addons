@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_odupilot_session_tree" model="ir.ui.view">
+        <field name="name">odupilot.session.tree</field>
+        <field name="model">odupilot.session</field>
+        <field name="arch" type="xml">
+            <list string="OduPilot Sessions" create="false" delete="false">
+                <field name="channel_id"/>
+                <field name="user_id"/>
+                <field name="profile_id"/>
+                <field name="is_ask_session" optional="hide"/>
+                <field name="developer_triage_state" optional="hide"/>
+                <field name="responsible_developer_id" optional="hide"/>
+                <field name="state"/>
+                <field name="busy_since"/>
+                <field name="closed_at"/>
+                <field name="opencode_session_id"/>
+                <field name="branch"/>
+                <field name="env_url" widget="url"/>
+                <field name="pull_request_url" widget="url"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odupilot_session_form" model="ir.ui.view">
+        <field name="name">odupilot.session.form</field>
+        <field name="model">odupilot.session</field>
+        <field name="arch" type="xml">
+            <form string="OduPilot Session" create="false" delete="false">
+                <header>
+                    <button name="action_open_channel" type="object" string="Open Discuss Chat" class="oe_highlight"/>
+                    <button name="action_close" type="object" string="Close Session" confirm="Close this AI session for all participants?" invisible="state == 'closed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="init,ready,busy,waiting_approval,error,closed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="channel_id" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="profile_id" readonly="1"/>
+                            <field name="agent_id" readonly="1"/>
+                            <field name="is_ask_session" readonly="1"/>
+                            <field name="developer_triage_state" readonly="1"/>
+                            <field name="responsible_developer_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="opencode_session_id" readonly="1"/>
+                            <field name="last_message_id" readonly="1"/>
+                            <field name="busy_since" readonly="1"/>
+                            <field name="active_prompt_command_id" readonly="1"/>
+                            <field name="closed_at" readonly="1"/>
+                            <field name="branch" readonly="1"/>
+                            <field name="env_url" readonly="1" widget="url"/>
+                            <field name="pull_request_url" readonly="1" widget="url"/>
+                        </group>
+                    </group>
+                    <field name="error" readonly="1" invisible="error == False"/>
+                    <notebook>
+                        <page string="Audit Events">
+                            <field name="event_ids" readonly="1">
+                                <list create="false" delete="false">
+                                    <field name="create_date"/>
+                                    <field name="event_type"/>
+                                    <field name="actor_user_id"/>
+                                    <field name="execution_user_id"/>
+                                    <field name="external_id"/>
+                                    <field name="mail_message_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Outbox">
+                            <field name="command_ids" readonly="1">
+                                <list create="false" delete="false">
+                                    <field name="create_date"/>
+                                    <field name="command_type"/>
+                                    <field name="user_id"/>
+                                    <field name="state"/>
+                                    <field name="attempts"/>
+                                    <field name="next_attempt_at"/>
+                                    <field name="completed_at"/>
+                                    <field name="duration_seconds"/>
+                                    <field name="error"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Recovery">
+                            <field name="recovery_ids" readonly="1">
+                                <list create="false" delete="false">
+                                    <field name="create_date"/>
+                                    <field name="failed_command_id"/>
+                                    <field name="abort_command_id"/>
+                                    <field name="retry_command_id"/>
+                                    <field name="had_tool_activity"/>
+                                    <field name="status"/>
+                                    <field name="resolved_by_id"/>
+                                    <field name="resolved_at"/>
+                                    <field name="mail_message_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odupilot_session" model="ir.actions.act_window">
+        <field name="name">OduPilot Sessions</field>
+        <field name="res_model">odupilot.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'create': False}</field>
+    </record>
+</odoo>
