@@ -63,10 +63,10 @@ The documentation policy and translation skill were adapted from
 
 For every Oduflow service installation, reconfiguration, upgrade, credential
 rotation, recovery or removal performed for this repository, create or update
-`deploy/log/YYYY-MM-DD-<environment>-<service-or-stack>.md` using the UTC operation
+`log/YYYY-MM-DD-<environment>-<service-or-stack>.md` using the UTC operation
 date. Use one entry per environment/service scope per day and append separate
-timestamped operations. Start from [the template](deploy/log/TEMPLATE.md) and add
-the entry to [the journal index](deploy/log/README.md).
+timestamped operations. Start from [the template](log/TEMPLATE.md) and add
+the entry to [the journal index](log/README.md).
 
 Record the work as it happens, including failed or partial attempts, and finish
 the entry before reporting completion. Documentation-only imports must state
@@ -95,6 +95,7 @@ Record enough detail to reproduce and operate the installation:
 
 Keep historical observations intact; append corrections and later operations.
 Put reusable installation/operation instructions in the module's `doc/admin_guide.md`
-and technical contracts in `doc/tech_spec.md`. Keep `deploy/README.md` as the
-service/configuration overview, and link it to the journal. Write journal entries
+and technical contracts in `doc/tech_spec.md`. Keep deployment resources and their overview in `addons/<module>/deploy/`
+and `addons/<module>/deploy/README.md`, and link the overview to the root `log/`
+journal. Write journal entries
 in English; they are operational records, outside the module translation mirrors.

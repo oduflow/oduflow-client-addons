@@ -1,4 +1,4 @@
-# Oduflow Services
+# Oduscale Services
 
 This directory contains service configuration examples for Oduscale. Odoo runs
 in an Oduflow environment; Headscale and the VPN gateway run as separate Oduflow
@@ -24,12 +24,12 @@ services or provision credentials.
 
 ## Documentation
 
-- [Oduscale administrator guide](../addons/oduscale/doc/admin_guide.md): deployment procedure, module setup, credentials, backups and operations.
-- [Deployment journal](log/README.md): concrete installations, updates and verification results.
-- [Historical hr-headscale installation](log/2026-09-14-hr-headscale-oduscale.md): recorded hosts, versions, commands and checks.
+- [Oduscale administrator guide](../doc/admin_guide.md): deployment procedure, module setup, credentials, backups and operations.
+- [Deployment journal](../../../log/README.md): concrete installations, updates and verification results.
+- [Historical hr-headscale installation](../../../log/2026-09-14-hr-headscale-oduscale.md): recorded hosts, versions, commands and checks.
 
 ## Recording Work
 
-Follow the [repository agent rules](../AGENTS.md#oduflow-deployment-journal).
-Start each operation from the [journal template](log/TEMPLATE.md), fill in actual
+Follow the [repository agent rules](../../../AGENTS.md#oduflow-deployment-journal).
+Start each operation from the [journal template](../../../log/TEMPLATE.md), fill in actual
 values and outcomes, and redact secrets before saving command output.

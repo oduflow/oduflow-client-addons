@@ -70,11 +70,11 @@ changing the original network.
 
 ## Deploy Services in Oduflow
 
-Use the [service configuration examples](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/deploy)
+Use the [service configuration examples](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/addons/oduscale/deploy)
 as a starting point. They contain demo-specific values: select your environment,
 service names, public control-server domain, VPN prefixes and DNS domain first.
 Record actual values, tool arguments, image versions and results in the
-[deployment journal](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/deploy/log).
+[deployment journal](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/log).
 The journal contains historical observations, not a live environment inventory.
 
 1. Publish the chosen Git branch and use `create_environment` with your repository,
@@ -86,10 +86,10 @@ The journal contains historical observations, not a live environment inventory.
 2. Choose and record explicit Headscale and Tailscale image versions. Create four
    volumes with `create_volume`: Headscale configuration, Headscale data, gateway
    state and gateway configuration. Use distinct names for independent deployments.
-3. Adapt `deploy/headscale/config.yaml`: set the public HTTPS server URL, VPN
-   prefixes and MagicDNS domain. Adapt `deploy/headscale/policy.hujson`: its gateway
+3. Adapt `addons/oduscale/deploy/headscale/config.yaml`: set the public HTTPS server URL, VPN
+   prefixes and MagicDNS domain. Adapt `addons/oduscale/deploy/headscale/policy.hujson`: its gateway
    user owns `tag:odoo`, and members can reach that tag on port 80. Adapt
-   `deploy/gateway/serve.json` to forward port 80 to your Odoo container on port 8069.
+   `addons/oduscale/deploy/gateway/serve.json` to forward port 80 to your Odoo container on port 8069.
    Use `write_file_in_volume` to place `config.yaml` and `policy.hujson` at the root
    of the Headscale configuration volume and `serve.json` at the root of the
    gateway configuration volume.

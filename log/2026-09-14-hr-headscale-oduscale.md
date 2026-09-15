@@ -97,7 +97,7 @@ mandatory.
 7. In **Oduscale → Headscale Servers**, create a server with the API/login/VPN URLs
    from the table, key variable `ODUSCALE_API_KEY` and a 60-minute key lifetime.
    Click **Test connection**. Use distinct key variable names for multiple servers.
-8. Create employee access and test the connection using the [Oduscale user guide](../../addons/oduscale/doc/user_guide.md).
+8. Create employee access and test the connection using the [Oduscale user guide](../addons/oduscale/doc/user_guide.md).
 
 SQLite uses WAL and the persistent `oduscale-data` volume. A PostgreSQL service
 database is unnecessary: upstream Headscale recommends SQLite for new installations.
@@ -209,3 +209,14 @@ log:
 - [Headscale configuration, including SQLite](https://github.com/juanfont/headscale/blob/v0.29.3/config-example.yaml)
 - [Headscale device registration](https://headscale.net/stable/ref/registration/)
 - [Tailscale 1.98.3](https://github.com/tailscale/tailscale/releases/tag/v1.98.3)
+
+## Repository Layout Update — 2026-09-15
+
+This record now lives in the repository-root `log/` directory. The configuration
+examples moved to [addons/oduscale/deploy](../addons/oduscale/deploy/README.md).
+The old paths in the import notes and snapshot headings above are preserved as
+historical references; current configuration paths are
+`addons/oduscale/deploy/headscale/config.yaml`,
+`addons/oduscale/deploy/headscale/policy.hujson` and
+`addons/oduscale/deploy/gateway/serve.json`. File contents and services were not
+changed by this repository reorganization.

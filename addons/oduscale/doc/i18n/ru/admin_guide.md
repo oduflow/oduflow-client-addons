@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=ae9ad2db7c05 lang=ru -->
+<!-- i18n source=admin_guide.md sha=44747896a56d lang=ru -->
 # Руководство администратора Oduscale
 
 Oduscale управляет доступом на существующем сервере Headscale. Разверните сервер
@@ -72,11 +72,11 @@ Headscale. Это не проверяет клиентский маршрут VP
 
 ## Развёртывание сервисов в Oduflow
 
-Используйте [примеры конфигурации сервисов](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/deploy)
+Используйте [примеры конфигурации сервисов](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/addons/oduscale/deploy)
 как основу. Они содержат значения демонстрационного стенда: сначала выберите окружение,
 имена сервисов, публичный домен управляющего сервера, префиксы VPN и домен DNS.
 Фактические значения, аргументы инструментов, версии образов и результаты записывайте в
-[журнал развёртываний](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/deploy/log).
+[журнал развёртываний](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/log).
 Журнал содержит исторические наблюдения, а не актуальную опись окружений.
 
 1. Опубликуйте выбранную ветку Git и вызовите `create_environment` с репозиторием,
@@ -88,10 +88,10 @@ Headscale. Это не проверяет клиентский маршрут VP
 2. Выберите и запишите конкретные версии образов Headscale и Tailscale. Создайте четыре
    тома через `create_volume`: конфигурацию Headscale, данные Headscale, состояние
    шлюза и конфигурацию шлюза. Для независимых установок используйте разные имена.
-3. Адаптируйте `deploy/headscale/config.yaml`: задайте публичный HTTPS-адрес сервера,
-   префиксы VPN и домен MagicDNS. Адаптируйте `deploy/headscale/policy.hujson`: пользователь
+3. Адаптируйте `addons/oduscale/deploy/headscale/config.yaml`: задайте публичный HTTPS-адрес сервера,
+   префиксы VPN и домен MagicDNS. Адаптируйте `addons/oduscale/deploy/headscale/policy.hujson`: пользователь
    шлюза владеет `tag:odoo`, а участники имеют доступ к этому тегу на порту 80. Адаптируйте
-   `deploy/gateway/serve.json` для перенаправления порта 80 в контейнер Odoo на порт 8069.
+   `addons/oduscale/deploy/gateway/serve.json` для перенаправления порта 80 в контейнер Odoo на порт 8069.
    Через `write_file_in_volume` поместите `config.yaml` и `policy.hujson` в корень
    тома конфигурации Headscale, а `serve.json` — в корень тома
    конфигурации шлюза.

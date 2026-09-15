@@ -103,15 +103,15 @@ The 16 tests in `tests/test_oduscale.py` cover enrollment and secret handling,
 activation recovery, inactive identities, owner-filtered synchronization, uncached
 revocation, partial failures, archive hooks and rollback, permissions, protected
 remote identifiers, company isolation, reassigned nodes, HTTP redaction and URL/TTL
-validation. The [historical installation entry](../../../deploy/log/2026-09-14-hr-headscale-oduscale.md) records the September
+validation. The [historical installation entry](../../../log/2026-09-14-hr-headscale-oduscale.md) records the September
 14, 2026 installation, test and VPN checks; those are historical results, not a test
 run performed for this documentation change.
 
 ## Service Deployment Contract
 
 Reusable service provisioning, credentials, gateway routing and backup instructions
-live in `admin_guide.md`. Configuration examples live under `deploy/headscale/`
-and `deploy/gateway/`; they contain deployment-specific values and must be adapted.
+live in `admin_guide.md`. Configuration examples live under `addons/oduscale/deploy/headscale/`
+and `addons/oduscale/deploy/gateway/`; they contain deployment-specific values and must be adapted.
 Concrete hosts, image versions, applied revisions and verification evidence belong
-in `deploy/log/`, following the repository agent rules. Historical journal entries
+in `log/`, following the repository agent rules. Historical journal entries
 do not define the current runtime state or supported image-version range.

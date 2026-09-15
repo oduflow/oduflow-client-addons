@@ -10,8 +10,8 @@ inventory, access revocation and an audit history.
 - [Administrator guide](doc/admin_guide.md): installation, permissions, server configuration and operations.
 - [Technical specification](doc/tech_spec.md): models, integration contracts and validation.
 - [Change history](doc/changes/2026-09-15.md).
-- [Service overview](../../deploy/README.md): Headscale and VPN gateway configuration examples.
-- [Deployment journal](../../deploy/log/README.md): concrete installations and recorded validation.
+- [Service overview](deploy/README.md): Headscale and VPN gateway configuration examples.
+- [Deployment journal](../../log/README.md): concrete installations and recorded validation.
 
 The user and administrator guides and change entries also have Polish and Russian
 versions under `doc/i18n/`. Install `odubook` to read module guides and changes in Odoo.

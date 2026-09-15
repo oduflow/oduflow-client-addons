@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=ae9ad2db7c05 lang=pl -->
+<!-- i18n source=admin_guide.md sha=44747896a56d lang=pl -->
 # Podręcznik administratora Oduscale
 
 Oduscale zarządza dostępem na istniejącym serwerze Headscale. Przed rejestracją
@@ -71,11 +71,11 @@ zmieniać pierwotnej sieci.
 
 ## Wdrażanie usług w Oduflow
 
-Użyj [przykładów konfiguracji usług](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/deploy)
+Użyj [przykładów konfiguracji usług](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/addons/oduscale/deploy)
 jako punktu wyjścia. Zawierają wartości demonstracyjne: najpierw wybierz środowisko,
 nazwy usług, publiczną domenę serwera sterującego, prefiksy VPN i domenę DNS.
 Rzeczywiste wartości, argumenty narzędzi, wersje obrazów i wyniki zapisuj w
-[dzienniku wdrożeń](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/deploy/log).
+[dzienniku wdrożeń](https://github.com/oduflow/oduflow-client-addons/tree/19.0-headscale/log).
 Dziennik zawiera historyczne obserwacje, a nie bieżący inwentarz środowisk.
 
 1. Opublikuj wybraną gałąź Git i użyj `create_environment` z repozytorium,
@@ -87,10 +87,10 @@ Dziennik zawiera historyczne obserwacje, a nie bieżący inwentarz środowisk.
 2. Wybierz i zapisz konkretne wersje obrazów Headscale i Tailscale. Utwórz cztery
    wolumeny przez `create_volume`: konfigurację Headscale, dane Headscale, stan
    bramy i konfigurację bramy. Dla niezależnych wdrożeń stosuj odrębne nazwy.
-3. Dostosuj `deploy/headscale/config.yaml`: ustaw publiczny adres HTTPS serwera,
-   prefiksy VPN i domenę MagicDNS. Dostosuj `deploy/headscale/policy.hujson`: użytkownik
+3. Dostosuj `addons/oduscale/deploy/headscale/config.yaml`: ustaw publiczny adres HTTPS serwera,
+   prefiksy VPN i domenę MagicDNS. Dostosuj `addons/oduscale/deploy/headscale/policy.hujson`: użytkownik
    bramy jest właścicielem `tag:odoo`, a członkowie mają dostęp do tego tagu na porcie 80. Dostosuj
-   `deploy/gateway/serve.json`, aby przekierować port 80 do kontenera Odoo na port 8069.
+   `addons/oduscale/deploy/gateway/serve.json`, aby przekierować port 80 do kontenera Odoo na port 8069.
    Użyj `write_file_in_volume`, aby umieścić `config.yaml` i `policy.hujson` w katalogu
    głównym wolumenu konfiguracji Headscale oraz `serve.json` w katalogu głównym
    wolumenu konfiguracji bramy.

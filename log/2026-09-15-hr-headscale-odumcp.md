@@ -97,4 +97,4 @@
 - Local test resources removed. Environment retained for the user's existing Oduscale deployment and OduMCP use.
 - Platform follow-up: after any environment recreation/configuration reapplication, verify `/etc/odoo/odoo.conf` still contains `/mnt/extra-addons/addons`; two applies failed to propagate the repository setting and required the scoped correction documented above. Owner: environment maintainer, at next recreation.
 - UI translations: activate Polish/Russian and upgrade the module when those interface languages are needed; activation was outside this installation's scope.
-- Related guide: [OduMCP administration](../../addons/odumcp/doc/admin_guide.md).
+- Related guide: [OduMCP administration](../addons/odumcp/doc/admin_guide.md).
