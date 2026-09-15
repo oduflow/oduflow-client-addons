@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_res_config_settings_mcp_control" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.odumcp</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="priority" eval="90"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="OduMCP" groups="base.group_system" name="odumcp">
+                    <h2>Connector API</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="odumcp_enabled"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="odumcp_enabled"/>
+                                <div class="text-muted">
+                                    Disable all authenticated MCP operations without changing user MCP settings.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="odumcp_max_payload_bytes"/>
+                                <div class="text-muted">Maximum JSON request and response size in bytes.</div>
+                                <div class="content-group">
+                                    <field name="odumcp_max_payload_bytes"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="odumcp_max_binary_bytes"/>
+                                <div class="text-muted">Maximum decoded attachment or rendered report size in bytes.</div>
+                                <div class="content-group">
+                                    <field name="odumcp_max_binary_bytes"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Approvals</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="odumcp_request_window_minutes"/>
+                                <div class="text-muted">
+                                    Plans without an explicit batch key are grouped into one
+                                    request while less than this many minutes pass between them.
+                                    Zero puts every plan in its own request.
+                                </div>
+                                <div class="content-group">
+                                    <field name="odumcp_request_window_minutes"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Retention</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="odumcp_audit_retention_days"/>
+                                <div class="content-group">
+                                    <field name="odumcp_audit_retention_days"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="odumcp_approval_retention_days"/>
+                                <div class="content-group">
+                                    <field name="odumcp_approval_retention_days"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

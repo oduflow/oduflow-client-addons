@@ -1,0 +1,24 @@
+services:
+  odumcp-server:
+    image: oduist/odumcp_server:latest
+    build: .
+    restart: unless-stopped
+    environment:
+      ODUMCP_ODOO_URL: ${ODUMCP_ODOO_URL}
+      ODUMCP_EVENTS_URL: ${ODUMCP_EVENTS_URL:-}
+      ODUMCP_HOST: 0.0.0.0
+      ODUMCP_PORT: 8000
+      ODUMCP_TOOL_GROUPS: ${ODUMCP_TOOL_GROUPS:-core}
+      ODUMCP_EVENTS_ENABLED: ${ODUMCP_EVENTS_ENABLED:-true}
+      ODUMCP_QUEUE_SCOPE: ${ODUMCP_QUEUE_SCOPE:-user}
+      ODUMCP_QUEUE_TIMEOUT_SECONDS: ${ODUMCP_QUEUE_TIMEOUT_SECONDS:-300}
+      ODUMCP_QUEUE_MAX_SIZE: ${ODUMCP_QUEUE_MAX_SIZE:-100}
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

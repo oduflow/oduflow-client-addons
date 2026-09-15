@@ -1,0 +1,24 @@
+.o_ai_voice_text_field {
+    width: 100%;
+
+    .o_ai_voice_text_input {
+        min-height: 9rem;
+        width: 100%;
+        resize: vertical;
+    }
+
+    .o_ai_voice_text_controls {
+        align-items: center;
+        display: flex;
+        gap: .5rem;
+        margin-top: .5rem;
+    }
+
+    .o_ai_voice_text_timer {
+        font-variant-numeric: tabular-nums;
+    }
+
+    .o_ai_voice_text_error {
+        margin-top: .5rem;
+    }
+}

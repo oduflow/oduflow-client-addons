@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_odumcp_profile_list" model="ir.ui.view">
+        <field name="name">odumcp.profile.list</field>
+        <field name="model">odumcp.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_ids" widget="many2many_tags"/>
+                <field name="max_records_per_call"/>
+                <field name="rate_limit_per_minute"/>
+                <field name="daily_quota"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odumcp_profile_form" model="ir.ui.view">
+        <field name="name">odumcp.profile.form</field>
+        <field name="model">odumcp.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active == True"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Read-only analyst"/></h1>
+                    </div>
+                    <group>
+                        <group string="Profile">
+                            <field name="active"/>
+                            <field name="code"/>
+                            <field name="company_ids" widget="many2many_tags"/>
+                            <field name="description" placeholder="Describe the intended agent role and scope..."/>
+                        </group>
+                        <group string="Limits">
+                            <field name="max_records_per_call"/>
+                            <field name="max_batch_size"/>
+                            <field name="rate_limit_per_minute"/>
+                            <field name="daily_quota"/>
+                            <field name="approval_ttl_minutes"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Default Model Access">
+                            <field name="default_model_access" widget="radio"/>
+                            <field name="allow_global_create"/>
+                            <field name="allow_global_unlink"/>
+                        </group>
+                        <group string="Capabilities">
+                            <group>
+                                <field name="allow_schema"/>
+                                <field name="allow_reports"/>
+                                <field name="allow_chatter"/>
+                                <field name="auto_approve_low_risk"/>
+                            </group>
+                            <group>
+                                <field name="allow_aggregate"/>
+                                <field name="allow_attachments"/>
+                                <field name="allow_activities"/>
+                                <field name="allow_partial_field_reads"/>
+                            </group>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Model Policies" name="model_policies">
+                            <div class="alert alert-info mb-2" role="alert">
+                                Default Model Access applies only when a model has no explicit policy.
+                                Use Model Policies for model-specific operations, fields, domains, limits,
+                                or exceptions. Odoo ACLs, record rules, field security, and the MCP safety
+                                denylist always apply.
+                            </div>
+                            <field name="policy_ids" context="{'default_profile_id': id}">
+                                <list>
+                                    <field name="active"/>
+                                    <field name="model_id"/>
+                                    <field name="allow_read"/>
+                                    <field name="allow_aggregate"/>
+                                    <field name="allow_create"/>
+                                    <field name="allow_write"/>
+                                    <field name="allow_unlink"/>
+                                    <field name="max_records"/>
+                                    <field name="forced_domain_json" optional="hide"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="active"/>
+                                        <field name="profile_id"/>
+                                        <field name="model_id"/>
+                                        <field name="forced_domain_json"/>
+                                        <field name="max_records"/>
+                                    </group>
+                                    <group string="Operations" col="5">
+                                        <field name="allow_read"/>
+                                        <field name="allow_aggregate"/>
+                                        <field name="allow_create"/>
+                                        <field name="allow_write"/>
+                                        <field name="allow_unlink"/>
+                                    </group>
+                                    <group string="Field Policies">
+                                        <field name="read_field_ids" widget="many2many_tags"/>
+                                        <field name="write_field_ids" widget="many2many_tags"/>
+                                        <field name="allow_binary_read"/>
+                                        <field name="allow_binary_write"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Allowed Methods" name="method_policies">
+                            <field name="method_policy_ids" context="{'default_profile_id': id}">
+                                <list>
+                                    <field name="active"/>
+                                    <field name="model_id"/>
+                                    <field name="method_name"/>
+                                    <field name="risk_level"/>
+                                    <field name="requires_approval"/>
+                                    <field name="max_record_count"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="profile_id"/>
+                                        <field name="active"/>
+                                        <field name="model_id"/>
+                                        <field name="method_name"/>
+                                        <field name="risk_level"/>
+                                        <field name="requires_approval"/>
+                                        <field name="max_record_count"/>
+                                        <field name="allow_model_method"/>
+                                        <field name="allow_positional_arguments"/>
+                                        <field name="allowed_keyword_arguments"/>
+                                        <field name="max_argument_bytes"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Users" name="users">
+                            <field name="assigned_user_ids" options="{'no_create': True, 'no_create_edit': True}">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="login"/>
+                                    <field name="mcp_active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odumcp_profiles" model="ir.actions.act_window">
+        <field name="name">Security Profiles</field>
+        <field name="res_model">odumcp.profile</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a default-deny MCP security profile</p>
+            <p>Add only the business models, operations, and fields that an agent actually needs.</p>
+        </field>
+    </record>
+</odoo>

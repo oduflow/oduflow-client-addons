@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odubook.BookApp">
+        <div t-ref="root" class="o_odubook d-flex h-100">
+            <div class="o_odubook_sidebar d-flex flex-column">
+                <div class="o_odubook_search p-2">
+                    <input type="text" class="form-control form-control-sm"
+                           placeholder="Search the documentation…"
+                           t-att-value="state.search"
+                           t-on-input="onSearch"/>
+                </div>
+                <div class="o_odubook_toc flex-grow-1 overflow-auto">
+                    <t t-if="!state.loaded">
+                        <div class="text-muted p-3">Loading…</div>
+                    </t>
+                    <t t-elif="filteredPages.length === 0">
+                        <div class="text-muted p-3">No documentation found.</div>
+                    </t>
+                    <t t-foreach="filteredPages" t-as="page" t-key="page.id">
+                        <div class="o_odubook_page_link"
+                             t-att-class="{ o_active: page.id === state.activeId }"
+                             t-on-click="() => this.selectPage(page.id)"
+                             t-esc="page.title"/>
+                    </t>
+                </div>
+            </div>
+            <div class="o_odubook_content flex-grow-1 overflow-auto">
+                <t t-if="activePage">
+                    <div class="o_odubook_head"
+                         t-if="languages.length > 1 or state.selection.length">
+                        <span class="o_odubook_picked" t-if="state.selection.length">
+                            <button type="button" class="btn btn-sm btn-primary o_odubook_export_picked"
+                                    t-on-click="exportSelection">
+                                Export selected sections
+                                <span class="badge rounded-pill o_odubook_picked_count"
+                                      t-esc="state.selection.length"/>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-link o_odubook_clear_picked"
+                                    t-on-click="clearSelection">
+                                Clear the selection
+                            </button>
+                        </span>
+                        <span class="o_odubook_langs" t-if="languages.length > 1">
+                            <t t-foreach="languages" t-as="language" t-key="language.code">
+                                <button type="button" class="btn btn-sm o_odubook_lang"
+                                        t-att-class="{ o_active: language.active }"
+                                        t-att-title="language.name"
+                                        t-on-click="() => this.selectLanguage(language.code)"
+                                        t-esc="language.label"/>
+                            </t>
+                        </span>
+                    </div>
+                    <div class="o_odubook_doc" t-out="markup(activePage.html)"
+                         t-on-click="onDocClick"/>
+                </t>
+                <t t-else="">
+                    <div class="o_odubook_placeholder text-muted">
+                        Select a section on the left to start reading.
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

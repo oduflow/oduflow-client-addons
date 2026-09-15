@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_odumcp_request" model="ir.sequence">
+            <field name="name">MCP Request</field>
+            <field name="code">odumcp.request</field>
+            <field name="prefix">MCP/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

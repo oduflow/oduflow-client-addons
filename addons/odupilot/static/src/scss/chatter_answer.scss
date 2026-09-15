@@ -1,0 +1,42 @@
+// Заголовок сразу отличает вопрос AI от обычной заметки и показывает, что
+// запрос не потерялся, пока ответ считается в скрытой служебной сессии.
+.o_AiChatQuestionStatus {
+    display: flex;
+    align-items: center;
+    gap: .375rem;
+    margin-bottom: .5rem;
+    color: $text-muted;
+
+    &--pending {
+        color: $o-enterprise-color;
+    }
+
+    &--answered {
+        color: $success;
+    }
+
+    &--failed {
+        color: $danger;
+    }
+
+    strong {
+        margin-right: .125rem;
+    }
+}
+
+// Вопрос и ответ живут в одной заметке чаттера: ответ отделяется полосой,
+// иначе он читается как продолжение текста самого пользователя.
+.o_AiChatAnswer {
+    margin-top: .5rem;
+    padding-left: .75rem;
+    border-left: .1875rem solid $o-enterprise-color;
+
+    .o_AiChatAnswerAuthor {
+        margin-bottom: .25rem;
+        color: $text-muted;
+    }
+
+    > *:last-child {
+        margin-bottom: 0;
+    }
+}

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_odupilot_mcp_server_tree" model="ir.ui.view">
+        <field name="name">odupilot.mcp.server.tree</field>
+        <field name="model">odupilot.mcp.server</field>
+        <field name="arch" type="xml">
+            <list string="MCP Servers">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="server_type"/>
+                <field name="url"/>
+                <field name="enabled"/>
+                <field name="timeout"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_odupilot_mcp_server_form" model="ir.ui.view">
+        <field name="name">odupilot.mcp.server.form</field>
+        <field name="model">odupilot.mcp.server</field>
+        <field name="arch" type="xml">
+            <form string="MCP Server">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="server_type"/>
+                        </group>
+                        <group>
+                            <field name="enabled"/>
+                            <field name="timeout"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Remote MCP" invisible="server_type != 'remote'">
+                        <field name="url" required="server_type == 'remote'"/>
+                        <field name="headers_json" widget="text"/>
+                        <field name="oauth_json" widget="text" placeholder="false or {&quot;clientId&quot;: &quot;{env:MCP_CLIENT_ID}&quot;}"/>
+                    </group>
+                    <group string="Local MCP" invisible="server_type != 'local'">
+                        <field name="command_json" widget="text" placeholder="[&quot;npx&quot;, &quot;-y&quot;, &quot;package-name&quot;]" required="server_type == 'local'"/>
+                        <field name="cwd"/>
+                        <field name="environment_json" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odupilot_mcp_server" model="ir.actions.act_window">
+        <field name="name">MCP Servers</field>
+        <field name="res_model">odupilot.mcp.server</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

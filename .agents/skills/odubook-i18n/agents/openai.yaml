@@ -1,0 +1,4 @@
+interface:
+  display_name: "Odubook i18n"
+  short_description: "Sync and structurally validate Odoo documentation"
+  default_prompt: "Use $odubook-i18n to synchronize translated module documentation, validate its Markdown structure, and update SHA markers safely."

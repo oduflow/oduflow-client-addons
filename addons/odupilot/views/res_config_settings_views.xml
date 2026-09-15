@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="res_config_settings_view_form_odupilot" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.odupilot</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="OduPilot" groups="base.group_system" name="odupilot">
+                    <h2>OduPilot Infrastructure</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Developers Profile</span>
+                                <div class="text-muted">
+                                    Worktree profile used by AI Developer in the developer menu.
+                                </div>
+                                <div class="content-group">
+                                    <field name="odupilot_developers_profile_id" options="{'no_create': True}"/>
+                                </div>
+                                <div class="mt16">
+                                    <span class="o_form_label">Responsible Developer</span>
+                                    <div class="text-muted">
+                                        Odoo administrator notified and added to requests accepted for development.
+                                    </div>
+                                    <div class="content-group">
+                                        <field name="odupilot_responsible_developer_id" options="{'no_create': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">AI base URL</span>
+                                <div class="text-muted">
+                                    OpenAI-compatible base URL, including `/v1` when required.
+                                </div>
+                                <div class="content-group">
+                                    <field name="ai_base_url"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Busy session timeout</span>
+                                <div class="text-muted">
+                                    Abort requests that stay busy longer than this many minutes.
+                                </div>
+                                <div class="content-group">
+                                    <field name="odupilot_busy_timeout_minutes"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Audit event retention</span>
+                                <div class="text-muted">
+                                    Delete event payloads after this many days; zero keeps them indefinitely.
+                                </div>
+                                <div class="content-group">
+                                    <field name="odupilot_event_retention_days"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Closed session retention</span>
+                                <div class="text-muted">
+                                    Delete closed technical session records after this many days; Discuss messages remain available.
+                                </div>
+                                <div class="content-group">
+                                    <field name="odupilot_closed_session_retention_days"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_odupilot_config_settings" model="ir.actions.act_window">
+        <field name="name">OduPilot Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'odupilot'}</field>
+    </record>
+</odoo>

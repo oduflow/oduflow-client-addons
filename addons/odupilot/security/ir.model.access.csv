@@ -1,0 +1,20 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_odupilot_mcp_server_admin,AI chat MCP server administrator,model_odupilot_mcp_server,base.group_system,1,1,1,1
+access_odupilot_agent_user,AI agent user,model_odupilot_agent,base.group_user,1,0,0,0
+access_odupilot_agent_admin,AI agent administrator,model_odupilot_agent,base.group_system,1,1,1,1
+access_odupilot_agent_log_user,AI agent log user,model_odupilot_agent_log,base.group_user,1,0,0,0
+access_odupilot_agent_log_admin,AI agent log administrator,model_odupilot_agent_log,base.group_system,1,0,0,0
+access_odupilot_profile_user,AI chat profile user,model_odupilot_profile,base.group_user,1,0,0,0
+access_odupilot_profile_admin,AI chat profile administrator,model_odupilot_profile,base.group_system,1,1,1,1
+access_odupilot_session_user,AI chat session user,model_odupilot_session,base.group_user,1,0,0,0
+access_odupilot_session_admin,AI chat session administrator,model_odupilot_session,base.group_system,1,1,1,1
+access_odupilot_event_user,AI chat event user,model_odupilot_event,base.group_user,1,0,0,0
+access_odupilot_event_admin,AI chat event administrator,model_odupilot_event,base.group_system,1,1,1,1
+access_odupilot_permission_user,AI chat permission user,model_odupilot_permission,base.group_user,1,0,0,0
+access_odupilot_permission_admin,AI chat permission administrator,model_odupilot_permission,base.group_system,1,1,1,1
+access_odupilot_recovery_user,AI chat recovery user,model_odupilot_recovery,base.group_user,1,0,0,0
+access_odupilot_recovery_admin,AI chat recovery administrator,model_odupilot_recovery,base.group_system,1,1,1,1
+access_odupilot_command_admin,AI chat command administrator,model_odupilot_command,base.group_system,1,1,1,1
+access_odupilot_runtime_admin,AI chat runtime administrator,model_odupilot_runtime,base.group_system,1,0,0,0
+access_odupilot_ask_wizard_user,AI chat ask wizard user,model_odupilot_ask_wizard,base.group_user,1,1,1,1
+access_odupilot_developer_wizard_admin,AI chat developer wizard administrator,model_odupilot_developer_wizard,base.group_system,1,1,1,1

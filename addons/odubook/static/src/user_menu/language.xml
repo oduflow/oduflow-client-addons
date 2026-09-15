@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odubook.LanguageDialog">
+        <Dialog title="title" size="'sm'" footer="false">
+            <div class="o_odu_lang_list">
+                <t t-if="!state.languages.length">
+                    <div class="text-muted">Loading…</div>
+                </t>
+                <t t-foreach="state.languages" t-as="language" t-key="language.code">
+                    <button type="button" class="btn btn-link o_odu_lang_option"
+                            t-att-class="{ o_active: language.code === state.current }"
+                            t-att-disabled="state.switching ? 'disabled' : false"
+                            t-on-click="() => this.selectLanguage(language.code)">
+                        <span t-esc="language.name"/>
+                        <span class="o_odu_lang_code" t-esc="language.code"/>
+                    </button>
+                </t>
+            </div>
+        </Dialog>
+    </t>
+</templates>

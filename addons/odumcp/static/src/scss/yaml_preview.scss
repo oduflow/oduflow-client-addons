@@ -1,0 +1,43 @@
+// Подсветка YAML-предпросмотра снимков MCP: разметку отдаёт сервер
+// (models/yaml_preview.py), здесь только цвета и раскладка блока.
+.o_mcp_yaml {
+    margin: 0;
+    padding: 8px 12px;
+    background-color: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 3px;
+    color: #24292f;
+    font-family: $font-family-monospace;
+    font-size: 13px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 60vh;
+    overflow: auto;
+
+    .o_mcp_yaml_key {
+        color: #0550ae;
+    }
+
+    .o_mcp_yaml_str {
+        color: #0a7d33;
+    }
+
+    .o_mcp_yaml_num {
+        color: #953800;
+    }
+
+    .o_mcp_yaml_const {
+        color: #8250df;
+        font-style: italic;
+    }
+
+    .o_mcp_yaml_punct {
+        color: #6e7781;
+    }
+
+    .o_mcp_yaml_redacted {
+        color: #cf222e;
+        font-weight: bold;
+    }
+}

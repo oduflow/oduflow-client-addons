@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_users_form_odumcp" model="ir.ui.view">
+        <field name="name">res.users.form.odumcp</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='page_security']" position="inside">
+                <group string="MCP Access" groups="odumcp.group_mcp_manager">
+                    <field name="mcp_active"/>
+                    <field name="mcp_profile_id" required="mcp_active == True"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

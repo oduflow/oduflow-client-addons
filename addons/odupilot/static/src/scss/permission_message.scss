@@ -1,0 +1,194 @@
+.o_AiChatPermissionCard {
+    max-width: 46rem;
+    padding: 1rem;
+    border: 1px solid rgba($warning, .55);
+    border-left: .25rem solid $warning;
+    border-radius: .25rem;
+    background: rgba($warning, .08);
+
+    .o_AiChatPermissionCard_title {
+        color: darken($warning, 25%);
+    }
+
+    .o_AiChatPermissionCard_patterns {
+        overflow-wrap: anywhere;
+    }
+
+    .o_AiChatPermissionCard_details {
+        max-height: 16rem;
+        overflow: auto;
+        color: $body-color;
+        background: rgba($black, .04);
+        white-space: pre-wrap;
+    }
+}
+
+.o_AiChatRecoveryCard {
+    max-width: 46rem;
+    padding: 1rem;
+    border: 1px solid rgba($danger, .45);
+    border-left: .25rem solid $danger;
+    border-radius: .25rem;
+    background: rgba($danger, .06);
+
+    .o_AiChatRecoveryCard_title {
+        color: darken($danger, 12%);
+    }
+}
+
+.o_AiChatSessionStatus {
+    flex: 0 0 auto;
+    min-height: 2.25rem;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid rgba($black, .08);
+    font-size: .875rem;
+
+    &_initializing,
+    &_busy {
+        color: darken($primary, 18%);
+        background: rgba($primary, .09);
+    }
+
+    &_ready {
+        color: darken($success, 18%);
+        background: rgba($success, .09);
+    }
+
+    &_waiting {
+        color: darken($warning, 28%);
+        background: rgba($warning, .12);
+    }
+
+    &_error {
+        color: darken($danger, 15%);
+        background: rgba($danger, .1);
+    }
+
+    &_closed {
+        color: $text-muted;
+        background: rgba($black, .04);
+    }
+
+    &_detail {
+        min-width: 0;
+        overflow: hidden;
+        color: inherit;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.o_AiChatStream_waiting {
+    color: $text-muted;
+    font-style: italic;
+}
+
+.o_AiChatStream_cursor {
+    display: inline-block;
+    width: .45rem;
+    height: 1em;
+    margin-left: .2rem;
+    vertical-align: -.15em;
+    background: $primary;
+    animation: o_odupilot_stream_cursor 1s steps(1, end) infinite;
+}
+
+@keyframes o_odupilot_stream_cursor {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+.o_AiChatTrace {
+    margin: .25rem 0;
+    border-left: .15rem solid rgba($black, .12);
+    padding-left: .5rem;
+    font-size: .875rem;
+
+    .o_AiChatTrace_summary {
+        color: $text-muted;
+        cursor: pointer;
+        list-style: none;
+        overflow-wrap: anywhere;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+
+        &:hover {
+            color: $body-color;
+        }
+
+        .fa {
+            // Ширина держит заголовки в одной колонке, но широкий глиф
+            // (например fa-cogs) при жёстком 1em уносит текст на вторую строку.
+            min-width: 1em;
+            text-align: center;
+        }
+    }
+
+    .o_AiChatTrace_body {
+        margin: .25rem 0 .5rem;
+        color: $text-muted;
+        overflow-wrap: anywhere;
+    }
+
+    .o_AiChatTrace_title {
+        margin-bottom: .25rem;
+        font-style: italic;
+    }
+
+    .o_AiChatTrace_label {
+        margin-bottom: .1rem;
+        font-weight: bold;
+    }
+
+    .o_AiChatTrace_code {
+        max-height: 16rem;
+        margin-bottom: .5rem;
+        padding: .25rem .5rem;
+        overflow: auto;
+        background: rgba($black, .04);
+        font-size: .8125rem;
+        white-space: pre-wrap;
+    }
+}
+
+.o_AiChatTrace_reasoning {
+    border-left-color: rgba($primary, .35);
+}
+
+// Группа служебных шагов: одна свёрнутая строка вместо цепочки блоков.
+.o_AiChatTrace_group {
+    border-left-color: rgba($black, .2);
+
+    > .o_AiChatTrace_summary {
+        font-style: italic;
+    }
+
+    > .o_AiChatTrace_body {
+        margin-bottom: .25rem;
+    }
+}
+
+// Докированное окно вдвое уже Discuss: те же блоки идут плотнее, а
+// однострочная деталь ошибки прячется — целиком она видна в Discuss.
+.o_ChatWindow {
+    .o_AiChatSessionStatus {
+        padding: .375rem .5rem;
+        font-size: .8125rem;
+    }
+
+    .o_AiChatSessionStatus_detail {
+        display: none;
+    }
+
+    .o_AiChatPermissionCard,
+    .o_AiChatRecoveryCard {
+        padding: .5rem;
+    }
+
+    .o_AiChatPermissionCard_details,
+    .o_AiChatTrace_code {
+        max-height: 9rem;
+    }
+}

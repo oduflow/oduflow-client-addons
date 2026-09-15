@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_odubook" model="ir.actions.client">
+        <field name="name">User Guide</field>
+        <field name="tag">odubook.book</field>
+    </record>
+
+    <record id="action_odubook_admin" model="ir.actions.client">
+        <field name="name">Admin Guide</field>
+        <field name="tag">odubook.admin</field>
+    </record>
+
+    <record id="action_odubook_manuals" model="ir.actions.client">
+        <field name="name">Manuals</field>
+        <field name="tag">odubook.manuals</field>
+    </record>
+
+    <record id="action_odubook_changes" model="ir.actions.client">
+        <field name="name">Changes</field>
+        <field name="tag">odubook.changes</field>
+    </record>
+
+    <menuitem id="menu_odubook_root"
+              name="Odubook"
+              groups="base.group_user"
+              web_icon="odubook,static/description/icon.png"
+              sequence="5"/>
+
+    <menuitem id="menu_odubook_changes"
+              name="Changes"
+              parent="menu_odubook_root"
+              action="action_odubook_changes"
+              sequence="1"/>
+
+    <menuitem id="menu_odubook_doc"
+              name="User Guide"
+              parent="menu_odubook_root"
+              action="action_odubook"
+              sequence="5"/>
+
+    <menuitem id="menu_odubook_manuals"
+              name="Manuals"
+              parent="menu_odubook_root"
+              action="action_odubook_manuals"
+              sequence="6"/>
+
+    <menuitem id="menu_odubook_admin"
+              name="Admin Guide"
+              parent="menu_odubook_root"
+              action="action_odubook_admin"
+              groups="base.group_system"
+              sequence="7"/>
+</odoo>

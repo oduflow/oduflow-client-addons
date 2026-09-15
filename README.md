@@ -1,50 +1,28 @@
-# Oduscale для Odoo 19.0
+# Oduflow Client Addons for Odoo 19.0
 
-Модуль `oduscale` управляет VPN-доступом сотрудников к Odoo через Headscale и клиент Tailscale.
+Client addons for Odoo, maintained by Oduflow. Modules live in `addons/`; add this
+directory to Odoo's `addons_path`. Deployment resources live in `deploy/`.
 
-**Стенд:** https://hr-headscale.demo.odusfera.pl — приложение **Oduscale**.
+## Modules
 
-## Возможности
+- [Odubook](addons/odubook/README.md) — multilingual documentation, change history, document shelf and PDF export.
+- [Oduscale](addons/oduscale/README.md) — employee VPN access through Headscale and Tailscale, device inventory and access revocation.
 
-- Связь сотрудника с учётной записью Headscale; несколько серверов и компаний.
-- Одноразовый ключ для каждого устройства, по умолчанию на 60 минут.
-- Инвентаризация устройств: VPN-адреса, online, последнее соединение и срок действия.
-- Отзыв ключа, устройства или всех подключений сотрудника.
-- Автоматический отзыв при архивировании сотрудника либо связанного пользователя Odoo.
-- Синхронизация каждые 5 минут, ручное обновление, история выдачи ключей и изменения доступа.
-- Отдельная роль управления доступом; настройка API доступна системным администраторам.
-- API-ключ Headscale берётся из окружения; постоянная история не содержит секретов ключей подключения.
+## Services
 
-## Подключение сотрудника
+[Deployment resources](deploy/README.md) provide configuration for the services
+used by Oduscale:
 
-1. Администратор выдаёт ответственному пользователю право **Oduscale / Manage employee VPN access**.
-2. В **Oduscale → Employee Access** создать запись, выбрать сотрудника и сервер **Oduscale Demo**.
-   Эти записи также доступны на вкладке **Oduscale** в карточке сотрудника.
-3. Нажать **Grant access**, затем **Connect a device**.
-4. Сотрудник устанавливает Tailscale и выполняет выданную команду в терминале с правами администратора.
-   Команда содержит секрет — передавать её сотруднику безопасным способом.
-5. Открыть http://odoo.oduscale.internal (с включённым MagicDNS) или http://100.80.0.1
-   и войти под учётной записью Odoo. Нажать **Synchronize**, чтобы сразу увидеть устройство.
-6. Для отключения отдельного устройства нажать **Revoke**; для сотрудника — **Revoke all access**.
-   После повторного **Grant access** выдать новый ключ.
+- **Headscale**: device registration, VPN addressing, DNS and access policy, with
+  an internal API used by Odoo.
+- **Tailscale gateway**: persistent VPN identity and TCP forwarding to Odoo.
 
-VPN-доступ и права в Odoo независимы. Сотруднику нужна отдельная учётная запись Odoo.
-На dev-стенде публичный URL Odoo сохранён для разработки; отзыв VPN не закрывает этот URL.
+See the [administrator guide](addons/oduscale/doc/admin_guide.md) for installation
+and the [deployment journal](deploy/log/README.md) for specific environments and
+recorded results.
 
-## Разработка и проверка
+- [OduPilot](addons/odupilot/README.md) — AI conversations, record questions, tool approvals and developer workspaces.
+- [OduMCP](addons/odumcp/README.md) — MCP access policies, approvals, API authentication and audit.
 
-Код публикуется в ветке `19.0-headscale`. После commit/push:
-
-```text
-pull_and_apply(env_name="hr-headscale", upgrade="oduscale", summary_only=true)
-run_odoo_tests(env_name="hr-headscale", modules="oduscale", summary_only=true)
-```
-
-16 тестов покрывают выдачу и отзыв, ошибки сети, защиту удалённых ID, права доступа,
-компании, архивирование сотрудников и пользователей, синхронизацию и сокрытие секретов
-в сообщениях об ошибках. Сквозная проверка выполнила вход на страницу Odoo через VPN
-и подтвердила блокировку соединения после отзыва.
-
-Схема сервисов, конфигурация и порядок повторного развёртывания: [deploy/README.md](deploy/README.md).
-
-Лицензия: LGPL-3.
+Python dependencies for OduPilot are listed in `.oduflow/requirements.txt`.
+Licenses are declared per module: OduPilot retains OPL-1; the other addons use LGPL-3.

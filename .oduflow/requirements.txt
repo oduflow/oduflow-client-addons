@@ -1,0 +1,3 @@
+markdown-it-py>=3,<5
+linkify-it-py>=2,<3
+requests>=2.31,<3
