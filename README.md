@@ -48,3 +48,9 @@ run_odoo_tests(env_name="hr-headscale", modules="oduscale", summary_only=true)
 Схема сервисов, конфигурация и порядок повторного развёртывания: [deploy/README.md](deploy/README.md).
 
 Лицензия: LGPL-3.
+
+### URL field labels
+
+Headscale server fields use **API URL**, **Login URL**, and **Odoo URL**.
+The employee access record also displays **Odoo URL**. These labels are set
+explicitly on the server fields and inherited by related fields.

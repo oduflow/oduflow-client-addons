@@ -17,9 +17,9 @@ class OduscaleServer(models.Model):
 
     name = fields.Char(required=True)
     company_id = fields.Many2one("res.company", required=True, default=lambda s: s.env.company)
-    api_url = fields.Char(required=True, help="Internal Headscale URL, without /api/v1.")
-    login_url = fields.Char(required=True, help="Public HTTPS control server URL for Tailscale clients.")
-    odoo_url = fields.Char(help="Odoo URL reachable through the VPN gateway.")
+    api_url = fields.Char(string="API URL", required=True, help="Internal Headscale URL, without /api/v1.")
+    login_url = fields.Char(string="Login URL", required=True, help="Public HTTPS control server URL for Tailscale clients.")
+    odoo_url = fields.Char(string="Odoo URL", help="Odoo URL reachable through the VPN gateway.")
     api_key_env = fields.Char(default="ODUSCALE_API_KEY", required=True,
                               groups="base.group_system", help="Environment variable containing the Headscale API key.")
     key_lifetime_minutes = fields.Integer(default=60, required=True)
