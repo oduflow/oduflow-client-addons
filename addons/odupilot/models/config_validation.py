@@ -1,3 +1,4 @@
+from odoo import _ as odoo_translate
 # -*- encoding: utf-8 -*-
 import re
 from urllib.parse import urlparse
@@ -10,7 +11,7 @@ GIT_REF_PATTERN = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/-]*$')
 
 
 def validate_http_url(value, label, https_only=False, env=None):
-    _ = env._ if env is not None else _source_text
+    _ = odoo_translate if env is not None else _source_text
     parsed = urlparse(value or '')
     valid_schemes = ('https',) if https_only else ('http', 'https')
     if parsed.scheme not in valid_schemes or not parsed.netloc:
@@ -23,7 +24,7 @@ def validate_http_url(value, label, https_only=False, env=None):
 
 
 def validate_git_ref(value, env=None):
-    _ = env._ if env is not None else _source_text
+    _ = odoo_translate if env is not None else _source_text
     value = (value or '').strip()
     invalid = (
         not GIT_REF_PATTERN.fullmatch(value)

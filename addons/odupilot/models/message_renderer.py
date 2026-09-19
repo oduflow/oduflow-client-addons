@@ -1,3 +1,4 @@
+from odoo import _ as odoo_translate
 # -*- encoding: utf-8 -*-
 import re
 
@@ -50,7 +51,7 @@ def render_assistant_blocks(blocks, base_url='', env=None):
     Идущие подряд служебные блоки собираются в одну свёрнутую группу: цепочка
     из десятка вызовов инструментов иначе занимает весь экран и прячет ответ.
     """
-    translate = env._ if env is not None else _source_text
+    translate = odoo_translate if env is not None else _source_text
     chunks = []
     group = []
     for block in blocks or []:

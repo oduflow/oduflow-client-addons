@@ -74,3 +74,7 @@ Planned: `create_environment(env_name="client-addons-17", branch="17.0", repo_ur
 ### 22:00–22:03 UTC — Provisioned; installation failed
 
 Creation succeeded (63.8s), base and requirements installed. Team_1; URL https://client-addons-17.oduflow.odusfera.pl; container oduflow-1-client-addons-17-odoo; database oduflow_1_client-addons-17; workspace /srv/oduflow-data/team_1/workspaces/client-addons-17. Revision 978d997. `pull_and_apply(env_name="client-addons-17", install="odubook,odumcp,odupilot,oduscale", summary_only=true)` exited 255, output `4018fe58`. Oduscale view validation requires company_id for every user to evaluate server_id company domain; added invisible unrestricted company_id.
+
+### 22:04–22:08 UTC — Installation passed; test compatibility fixes
+
+Apply `ffa26edd` exited 0. Test output `66adc438` reported 0/0 of 45 but **was not a complete pass**: asset pregeneration crashed on missing mail.Message.bodyAsNotification. Removed that obsolete inheritance, retaining decision cards in mail.Message. After restart, tests `210fcf2a` reported 0 failures, 13 errors / 163; errors: has_access unavailable, XPath list instead of tree in test, env._ unavailable. Ported these APIs and fixtures.

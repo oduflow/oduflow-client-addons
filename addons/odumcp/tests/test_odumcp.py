@@ -135,7 +135,7 @@ class TestOduMcp(TransactionCase):
         }
         for relation_name, expected_fields in expected_form_fields.items():
             relation = arch.xpath("//field[@name='%s']" % relation_name)[0]
-            tree = relation.xpath("./list")[0]
+            tree = relation.xpath("./tree")[0]
             form = relation.xpath("./form")[0]
             form_fields = set(form.xpath(".//field/@name"))
 
