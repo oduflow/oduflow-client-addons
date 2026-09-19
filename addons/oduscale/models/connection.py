@@ -30,10 +30,7 @@ class OduscaleConnection(models.Model):
     last_sync = fields.Datetime(readonly=True)
     odoo_url = fields.Char(related="server_id.odoo_url")
 
-    _employee_server_unique = models.Constraint("UNIQUE(employee_id, server_id)",
-                                               "This employee already has access configured on this server.")
-    _remote_user_unique = models.Constraint("UNIQUE(server_id, remote_user_id)",
-                                           "This Headscale user is already linked to another employee.")
+    _sql_constraints = [('employee_server_unique', 'UNIQUE(employee_id, server_id)', 'This employee already has access configured on this server.'), ('remote_user_unique', 'UNIQUE(server_id, remote_user_id)', 'This Headscale user is already linked to another employee.')]
     _managed_fields = {"state", "remote_user_id", "remote_user_name", "device_ids", "key_ids", "last_sync"}
 
     @api.model_create_multi
@@ -195,7 +192,7 @@ class OduscaleDevice(models.Model):
     last_seen = fields.Datetime()
     expiry = fields.Datetime()
 
-    _remote_unique = models.Constraint("UNIQUE(connection_id, remote_id)", "This device is already registered.")
+    _sql_constraints = [('remote_unique', 'UNIQUE(connection_id, remote_id)', 'This device is already registered.')]
 
     def action_revoke(self):
         self.check_access("read")
@@ -225,7 +222,7 @@ class OduscaleKey(models.Model):
     expiration = fields.Datetime()
     used = fields.Boolean()
     revoked = fields.Boolean()
-    _remote_unique = models.Constraint("UNIQUE(connection_id, remote_id)", "This key is already registered.")
+    _sql_constraints = [('remote_unique', 'UNIQUE(connection_id, remote_id)', 'This key is already registered.')]
 
     def action_revoke(self):
         self.check_access("read")

@@ -1,7 +1,7 @@
 {
     "name": "Oduscale",
     "summary": "Employee access to Odoo through Headscale",
-    "version": "19.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Human Resources",
     "author": "Oduflow",
     "license": "LGPL-3",

@@ -1,3 +1,4 @@
+from odoo.osv import expression
 import json
 import re
 
@@ -194,7 +195,7 @@ class ActivityModelPolicy:
         return self.profile_id.max_records_per_call
 
     def _forced_domain(self):
-        return fields.Domain.OR(
+        return expression.OR(
             [
                 [("create_uid", "=", self.user_id)],
                 [("user_id", "=", self.user_id)],
@@ -303,8 +304,7 @@ class OduMcpProfile(models.Model):
         inverse="_inverse_assigned_user_ids",
     )
 
-    _code_unique = models.Constraint('UNIQUE(code)', 'The MCP profile code must be unique.')
-    _positive_limits = models.Constraint('CHECK(max_records_per_call > 0 AND max_records_per_call <= 1000 AND max_batch_size > 0 AND max_batch_size <= 100 AND rate_limit_per_minute > 0 AND rate_limit_per_minute <= 10000 AND daily_quota >= 0 AND approval_ttl_minutes > 0 AND approval_ttl_minutes <= 10080)', 'MCP limits are outside their allowed range.')
+    _sql_constraints = [('code_unique', 'UNIQUE(code)', 'The MCP profile code must be unique.'), ('positive_limits', 'CHECK(max_records_per_call > 0 AND max_records_per_call <= 1000 AND max_batch_size > 0 AND max_batch_size <= 100 AND rate_limit_per_minute > 0 AND rate_limit_per_minute <= 10000 AND daily_quota >= 0 AND approval_ttl_minutes > 0 AND approval_ttl_minutes <= 10080)', 'MCP limits are outside their allowed range.')]
 
     @api.constrains("code")
     def _check_code(self):
@@ -483,8 +483,7 @@ class OduMcpModelPolicy(models.Model):
         domain=_FIELD_POLICY_DOMAIN,
     )
 
-    _profile_model_unique = models.Constraint('UNIQUE(profile_id, model_id)', 'A model can occur only once in an MCP profile.')
-    _max_records_range = models.Constraint('CHECK(max_records >= 0 AND max_records <= 1000)', 'The per-model record limit must be between 0 and 1000.')
+    _sql_constraints = [('profile_model_unique', 'UNIQUE(profile_id, model_id)', 'A model can occur only once in an MCP profile.'), ('max_records_range', 'CHECK(max_records >= 0 AND max_records <= 1000)', 'The per-model record limit must be between 0 and 1000.')]
 
     @api.constrains("model_id")
     def _check_model_kind(self):
@@ -510,13 +509,13 @@ class OduMcpModelPolicy(models.Model):
                 value = json.loads(policy.forced_domain_json or "[]")
                 if not isinstance(value, list):
                     raise ValueError
-                list(fields.Domain(value))
+                list(expression.normalize_domain(value))
             except (TypeError, ValueError, json.JSONDecodeError) as exc:
                 raise ValidationError(_("Forced domain must be a valid JSON Odoo domain.")) from exc
 
     def _forced_domain(self):
         self.ensure_one()
-        return list(fields.Domain(json.loads(self.forced_domain_json or "[]")))
+        return list(expression.normalize_domain(json.loads(self.forced_domain_json or "[]")))
 
     def _allows(self, operation):
         self.ensure_one()
@@ -624,8 +623,7 @@ class OduMcpMethodPolicy(models.Model):
         help="Maximum canonical JSON size of args and kwargs.",
     )
 
-    _profile_model_method_unique = models.Constraint('UNIQUE(profile_id, model_id, method_name)', 'A method can occur only once per model and MCP profile.')
-    _positive_max_record_count = models.Constraint('CHECK(max_record_count > 0 AND max_record_count <= 100 AND max_argument_bytes >= 256 AND max_argument_bytes <= 65536)', 'Method record or argument limits are outside their allowed range.')
+    _sql_constraints = [('profile_model_method_unique', 'UNIQUE(profile_id, model_id, method_name)', 'A method can occur only once per model and MCP profile.'), ('positive_max_record_count', 'CHECK(max_record_count > 0 AND max_record_count <= 100 AND max_argument_bytes >= 256 AND max_argument_bytes <= 65536)', 'Method record or argument limits are outside their allowed range.')]
 
     @api.constrains("method_name")
     def _check_method_name(self):

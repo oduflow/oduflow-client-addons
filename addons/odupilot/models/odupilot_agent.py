@@ -50,7 +50,7 @@ class AiChatAgent(models.Model):
     session_ids = fields.One2many(
         'odupilot.session', 'agent_id', string='Sessions', readonly=True)
 
-    _odupilot_agent_code_unique = models.Constraint('unique(code)', 'The AI agent code must be unique.')
+    _sql_constraints = [('odupilot_agent_code_unique', 'unique(code)', 'The AI agent code must be unique.')]
 
     @api.constrains('code')
     def _check_code(self):

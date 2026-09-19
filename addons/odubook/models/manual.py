@@ -297,10 +297,7 @@ class OduBookManualFile(models.Model):
         readonly=True,
     )
 
-    _odubook_manual_file_lang_uniq = models.Constraint(
-        "unique(manual_id, lang)",
-        "A manual may carry only one file per language.",
-    )
+    _sql_constraints = [('odubook_manual_file_lang_uniq', 'unique(manual_id, lang)', 'A manual may carry only one file per language.')]
 
     @api.depends("file_name")
     def _compute_kind(self):

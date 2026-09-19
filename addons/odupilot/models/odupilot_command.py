@@ -55,8 +55,7 @@ class AiChatCommand(models.Model):
         compute='_compute_duration_seconds', store=True, readonly=True)
     error = fields.Text()
 
-    _odupilot_command_external_unique = models.Constraint('unique(external_id)', 'This AI chat command already exists.')
-    _odupilot_command_source_unique = models.Constraint('unique(source_message_id)', 'This Discuss message was already routed to AI.')
+    _sql_constraints = [('odupilot_command_external_unique', 'unique(external_id)', 'This AI chat command already exists.'), ('odupilot_command_source_unique', 'unique(source_message_id)', 'This Discuss message was already routed to AI.')]
 
     BRIDGE_CHANNEL = 'odupilot_commands'
 

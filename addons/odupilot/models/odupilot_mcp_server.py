@@ -73,7 +73,7 @@ class AiChatMcpServer(models.Model):
         help='JSON object with environment variable names and string values.',
     )
 
-    _odupilot_mcp_server_code_unique = models.Constraint('unique(code)', 'The MCP server code must be unique.')
+    _sql_constraints = [('odupilot_mcp_server_code_unique', 'unique(code)', 'The MCP server code must be unique.')]
 
     @api.onchange('server_type')
     def _onchange_server_type(self):

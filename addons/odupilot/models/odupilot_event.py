@@ -20,4 +20,4 @@ class AiChatEvent(models.Model):
     mail_message_id = fields.Many2one(
         'mail.message', ondelete='set null', index=True)
 
-    _odupilot_event_external_unique = models.Constraint('unique(session_id, external_id)', 'This AI chat event has already been ingested.')
+    _sql_constraints = [('odupilot_event_external_unique', 'unique(session_id, external_id)', 'This AI chat event has already been ingested.')]

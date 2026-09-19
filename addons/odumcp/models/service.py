@@ -1,3 +1,4 @@
+from odoo.osv import expression
 import base64
 import binascii
 import hashlib
@@ -1098,14 +1099,14 @@ class OduMcpService(models.AbstractModel):
         if not isinstance(client_domain, list):
             raise McpServiceError("invalid_domain", _("Domain must be a JSON list."))
         try:
-            normalized = list(fields.Domain(client_domain)) if client_domain else []
+            normalized = list(expression.normalize_domain(client_domain)) if client_domain else []
         except (AssertionError, TypeError, ValueError) as exc:
             raise McpServiceError("invalid_domain", _("Domain is malformed.")) from exc
         # По allowlist проверяется только клиентский домен: forced domain задаёт
         # администратор политики, и он намеренно шире её поля чтения.
         self._check_domain_fields(access, Model, policy, normalized)
         try:
-            return fields.Domain.AND([normalized, policy._forced_domain()])
+            return expression.AND([normalized, policy._forced_domain()])
         except (AssertionError, TypeError, ValueError) as exc:
             raise McpServiceError("invalid_domain", _("Domain is malformed.")) from exc
 
@@ -1169,7 +1170,7 @@ class OduMcpService(models.AbstractModel):
     @api.model
     def _records_in_policy(self, Model, policy, ids, operation):
         records = Model.search(
-            fields.Domain.AND([[('id', 'in', ids)], policy._forced_domain()]),
+            expression.AND([[('id', 'in', ids)], policy._forced_domain()]),
             limit=len(ids),
         )
         found = set(records.ids)

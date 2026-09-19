@@ -12,7 +12,7 @@ dynamically assembles them into an interactive book inside the Odoo UI.
 No separate wiki -- the documentation lives next to the module code and is
 shown to the user in a single click.
 """,
-    "version": "19.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Tools",
     "author": "VelesAgro, Oduflow",
     "license": "LGPL-3",

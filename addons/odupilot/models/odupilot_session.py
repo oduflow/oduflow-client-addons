@@ -138,8 +138,7 @@ class AiChatSession(models.Model):
     permission_ids = fields.One2many('odupilot.permission', 'session_id')
     recovery_ids = fields.One2many('odupilot.recovery', 'session_id')
 
-    _odupilot_session_channel_unique = models.Constraint('unique(channel_id)', 'A Discuss channel can only belong to one AI chat session.')
-    _odupilot_session_opencode_unique = models.Constraint('unique(opencode_session_id)', 'An OpenCode session can only belong to one AI chat session.')
+    _sql_constraints = [('odupilot_session_channel_unique', 'unique(channel_id)', 'A Discuss channel can only belong to one AI chat session.'), ('odupilot_session_opencode_unique', 'unique(opencode_session_id)', 'An OpenCode session can only belong to one AI chat session.')]
 
     @api.constrains('agent_id')
     def _check_agent_id(self):
