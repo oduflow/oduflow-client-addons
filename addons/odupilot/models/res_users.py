@@ -13,7 +13,7 @@ class ResUsers(models.Model):
         ondelete='set null',
     )
 
-    @api.constrains('odupilot_profile_id', 'group_ids')
+    @api.constrains('odupilot_profile_id', 'groups_id')
     def _check_odupilot_worktree_profile(self):
         invalid_users = self.filtered(
             lambda user: user.odupilot_profile_id.workspace_type == 'worktree'

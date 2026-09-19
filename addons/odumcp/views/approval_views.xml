@@ -1,10 +1,9 @@
-<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <record id="view_odumcp_approval_list" model="ir.ui.view">
         <field name="name">odumcp.approval.list</field>
         <field name="model">odumcp.approval</field>
         <field name="arch" type="xml">
-            <list create="0" edit="0" delete="0" decoration-warning="state == 'pending'" decoration-success="state == 'executed'" decoration-danger="state in ('rejected', 'failed', 'expired')">
+            <tree create="0" edit="0" delete="0" decoration-warning="state == 'pending'" decoration-success="state == 'executed'" decoration-danger="state in ('rejected', 'failed', 'expired')">
                 <header>
                     <button name="action_mass_approve" type="object" string="Approve Selected" groups="odumcp.group_mcp_manager"/>
                     <button name="action_mass_reject" type="object" string="Reject Selected" groups="odumcp.group_mcp_manager"/>
@@ -22,7 +21,7 @@
                 <field name="model_name"/>
                 <field name="target_count"/>
                 <field name="expires_at"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -32,8 +31,8 @@
         <field name="arch" type="xml">
             <form create="0" edit="0" delete="0">
                 <header>
-                    <button name="action_approve" type="object" string="Approve" class="btn-primary" confirm="Approve this exact change plan?" groups="odumcp.group_mcp_manager" invisible="state != 'pending'"/>
-                    <button name="action_reject" type="object" string="Reject" class="btn-secondary" confirm="Reject this change plan?" groups="odumcp.group_mcp_manager" invisible="state not in ('pending', 'approved')"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" confirm="Approve this exact change plan?" groups="odumcp.group_mcp_manager" attrs="{'invisible': [('state', '!=', 'pending')]}"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-secondary" confirm="Reject this change plan?" groups="odumcp.group_mcp_manager" attrs="{'invisible': [('state', 'not in', ('pending', 'approved'))]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="pending,approved,executing,executed,rejected,expired,failed"/>
                 </header>
                 <sheet>
@@ -89,14 +88,14 @@
                 <field name="mode" invisible="1"/>
                 <group>
                     <field name="eligible_count"/>
-                    <field name="skipped_count" invisible="skipped_count == 0"/>
+                    <field name="skipped_count" attrs="{'invisible': [('skipped_count', '=', 0)]}"/>
                 </group>
-                <div class="alert alert-warning" role="alert" invisible="skipped_count == 0">
+                <div class="alert alert-warning" role="alert" attrs="{'invisible': [('skipped_count', '=', 0)]}">
                     Skipped records are not in a state suitable for this action
                     and will be left unchanged.
                 </div>
                 <field name="approval_ids" nolabel="1" readonly="1">
-                    <list>
+                    <tree>
                         <field name="create_date"/>
                         <field name="request_ref"/>
                         <field name="summary"/>
@@ -104,12 +103,12 @@
                         <field name="risk_level"/>
                         <field name="user_id"/>
                         <field name="expires_at"/>
-                    </list>
+                    </tree>
                 </field>
                 <footer>
-                    <button name="action_confirm" type="object" string="Approve Selected" class="btn-primary" invisible="mode != 'approve'"/>
-                    <button name="action_confirm" type="object" string="Reject Selected" class="btn-danger" invisible="mode != 'reject'"/>
-                    <button name="action_confirm" type="object" string="Delete Selected" class="btn-danger" invisible="mode != 'delete'"/>
+                    <button name="action_confirm" type="object" string="Approve Selected" class="btn-primary" attrs="{'invisible': [('mode', '!=', 'approve')]}"/>
+                    <button name="action_confirm" type="object" string="Reject Selected" class="btn-danger" attrs="{'invisible': [('mode', '!=', 'reject')]}"/>
+                    <button name="action_confirm" type="object" string="Delete Selected" class="btn-danger" attrs="{'invisible': [('mode', '!=', 'delete')]}"/>
                     <button string="Cancel" special="cancel" class="btn-secondary"/>
                 </footer>
             </form>
@@ -142,7 +141,7 @@
     <record id="action_odumcp_approvals" model="ir.actions.act_window">
         <field name="name">Approval Inbox</field>
         <field name="res_model">odumcp.approval</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_odumcp_approval_search"/>
         <field name="context">{'search_default_pending': 1, 'search_default_group_request': 1}</field>
     </record>

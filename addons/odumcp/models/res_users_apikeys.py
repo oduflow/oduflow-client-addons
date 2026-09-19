@@ -29,6 +29,13 @@ class ResUsersApikeysDescription(models.TransientModel):
 class ResUsersApikeys(models.Model):
     _inherit = "res.users.apikeys"
 
+    expiration_date = fields.Datetime("Expiration Date", readonly=True)
+
+    def init(self):
+        super().init()
+        # Odoo 16/17 create this table manually because its key column is secret.
+        self.env.cr.execute("ALTER TABLE res_users_apikeys ADD COLUMN IF NOT EXISTS expiration_date timestamp without time zone")
+
     @api.model
     def _find_for_token(self, user, key):
         """Вернуть конкретный API key пользователя без изменения его scope."""
@@ -69,6 +76,18 @@ class ResUsersApikeys(models.Model):
                 return user_id
         return False
 
-    def _generate(self, scope, name, expiration_date):
+    def _generate(self, scope, name, expiration_date=None):
         scope = scope or self.env.context.get("odumcp_api_key_scope")
-        return super()._generate(scope, name, expiration_date)
+        key = super()._generate(scope, name)
+        if expiration_date:
+            self.env.cr.execute(
+                "UPDATE res_users_apikeys SET expiration_date = %s WHERE user_id = %s AND index = %s",
+                [expiration_date, self.env.uid, key[:INDEX_SIZE]],
+            )
+        return key
+
+    def _check_credentials(self, *, scope, key):
+        user_id = super()._check_credentials(scope=scope, key=key)
+        if user_id and self._find_for_token(self.env['res.users'].browse(user_id), key):
+            return user_id
+        return False

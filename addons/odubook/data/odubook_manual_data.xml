@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
     <!-- Первый документ полки едет вместе с модулем: артефакт «Куб продаж»
          объясняет модель veles_sales_cube и нужен в каждой базе, где она есть.
@@ -14,23 +13,20 @@
         <field name="manual_id" ref="manual_sales_cube"/>
         <field name="lang">en</field>
         <field name="file_name">cube-sales-model-en.html</field>
-        <field name="file" type="base64"
-               file="odubook/data/manuals/cube-sales-model-en.html"/>
+        <field name="file" type="base64" file="odubook/data/manuals/cube-sales-model-en.html"/>
     </record>
 
     <record id="manual_sales_cube_pl" model="odubook.manual.file">
         <field name="manual_id" ref="manual_sales_cube"/>
         <field name="lang">pl</field>
         <field name="file_name">cube-sales-model-pl.html</field>
-        <field name="file" type="base64"
-               file="odubook/data/manuals/cube-sales-model-pl.html"/>
+        <field name="file" type="base64" file="odubook/data/manuals/cube-sales-model-pl.html"/>
     </record>
 
     <record id="manual_sales_cube_ru" model="odubook.manual.file">
         <field name="manual_id" ref="manual_sales_cube"/>
         <field name="lang">ru</field>
         <field name="file_name">cube-sales-model-ru.html</field>
-        <field name="file" type="base64"
-               file="odubook/data/manuals/cube-sales-model-ru.html"/>
+        <field name="file" type="base64" file="odubook/data/manuals/cube-sales-model-ru.html"/>
     </record>
 </odoo>

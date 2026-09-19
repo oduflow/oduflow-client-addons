@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <record id="view_res_config_settings_mcp_control" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.odumcp</field>
@@ -7,7 +6,7 @@
         <field name="priority" eval="90"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app string="OduMCP" groups="base.group_system" name="odumcp">
+                <div string="OduMCP" groups="base.group_system" name="odumcp" class="app_settings_block" data-string="OduMCP" data-key="odumcp">
                     <h2>Connector API</h2>
                     <div class="row mt16 o_settings_container">
                         <div class="col-12 col-lg-6 o_setting_box">
@@ -75,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                </app>
+                </div>
             </xpath>
         </field>
     </record>

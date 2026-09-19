@@ -26,7 +26,7 @@ class TestOduBookManual(TransactionCase):
                 "name": "Book Reader",
                 "login": "odubook_reader",
                 "lang": "en_US",
-                "group_ids": [(6, 0, [cls.env.ref("base.group_user").id])],
+                "groups_id": [(6, 0, [cls.env.ref("base.group_user").id])],
             }
         )
 

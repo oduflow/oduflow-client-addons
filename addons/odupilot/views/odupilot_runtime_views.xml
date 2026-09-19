@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <record id="view_odupilot_command_search" model="ir.ui.view">
         <field name="name">odupilot.command.search</field>
@@ -24,7 +23,7 @@
         <field name="name">odupilot.command.tree</field>
         <field name="model">odupilot.command</field>
         <field name="arch" type="xml">
-            <list string="OduPilot Commands" create="false" delete="false" decoration-danger="state == 'error'" decoration-warning="state == 'processing'">
+            <tree string="OduPilot Commands" create="false" delete="false" decoration-danger="state == 'error'" decoration-warning="state == 'processing'">
                 <field name="create_date"/>
                 <field name="session_id"/>
                 <field name="command_type"/>
@@ -36,7 +35,7 @@
                 <field name="duration_seconds"/>
                 <field name="external_id" optional="hide"/>
                 <field name="error" optional="show"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -85,7 +84,7 @@
     <record id="action_odupilot_command" model="ir.actions.act_window">
         <field name="name">OduPilot Commands</field>
         <field name="res_model">odupilot.command</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="context">{'create': False}</field>
     </record>
 
@@ -112,7 +111,7 @@
                             <field name="busy_session_count" widget="statinfo" string="Busy Sessions"/>
                         </button>
                     </div>
-                    <widget name="web_ribbon" title="Attention" bg_color="bg-danger" invisible="status == 'healthy'"/>
+                    <widget name="web_ribbon" title="Attention" bg_color="bg-danger" attrs="{'invisible': [('status', '=', 'healthy')]}"/>
                     <h1><field name="name"/></h1>
                     <group string="Runtime">
                         <group>
@@ -142,7 +141,7 @@
                             <field name="maximum_duration_24h"/>
                         </group>
                     </group>
-                    <group string="Last Runtime Error" invisible="last_error == False">
+                    <group string="Last Runtime Error" attrs="{'invisible': [('last_error', '=', False)]}">
                         <field name="last_error_state" nolabel="1" widget="badge" decoration-success="not health_error" decoration-danger="health_error"/>
                         <field name="last_error" nolabel="1"/>
                     </group>

@@ -24,7 +24,4 @@ class OduBookChangeRead(models.Model):
     module = fields.Char(string="Module", required=True, index=True)
     change_date = fields.Date(string="Change Date", required=True)
 
-    _odubook_change_read_uniq = models.Constraint(
-        "unique(user_id, module, change_date)",
-        "A change entry can be marked as read only once per user.",
-    )
+    _sql_constraints = [('odubook_change_read_uniq', 'unique(user_id, module, change_date)', 'A change entry can be marked as read only once per user.')]

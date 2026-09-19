@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Отметки прочтения строго персональные: чужие строки не видны и не пишутся. -->
     <record id="odubook_change_read_own_rule" model="ir.rule">

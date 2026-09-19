@@ -50,7 +50,7 @@ class AiChatAgent(models.Model):
     session_ids = fields.One2many(
         'odupilot.session', 'agent_id', string='Sessions', readonly=True)
 
-    _odupilot_agent_code_unique = models.Constraint('unique(code)', 'The AI agent code must be unique.')
+    _sql_constraints = [('odupilot_agent_code_unique', 'unique(code)', 'The AI agent code must be unique.')]
 
     @api.constrains('code')
     def _check_code(self):
@@ -164,12 +164,14 @@ class AiChatAgent(models.Model):
             raise ValidationError(_(
                 'Provide between 1 and 100 unique bank statement line IDs.'))
         StatementLine = self.env['account.bank.statement.line']
-        StatementLine.check_access('read')
+        StatementLine.check_access_rights('read')
+        StatementLine.check_access_rule('read')
         lines = StatementLine.search([('id', 'in', statement_line_ids)])
         if set(lines.ids) != set(statement_line_ids):
             raise AccessError(_(
                 'One or more bank statement lines are unavailable to this user.'))
-        lines.check_access('read')
+        lines.check_access_rights('read')
+        lines.check_access_rule('read')
         return lines
 
     def _payment_reconciliation_plan(self, lines):

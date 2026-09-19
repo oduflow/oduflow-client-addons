@@ -40,8 +40,10 @@ class AiChatAskWizard(models.TransientModel):
         # Вопрос ложится обычной заметкой, поэтому нужны те же права, что у
         # кнопки «Log note»: проверяем их до создания сессии, чтобы отказ был
         # штатной ошибкой доступа, а не последствием половины работы.
-        record.check_access('write')
-        record.check_access('write')
+        record.check_access_rights('write')
+        record.check_access_rule('write')
+        record.check_access_rights('write')
+        record.check_access_rule('write')
         question = (self.question or '').strip()
         if not question:
             raise UserError(_('Write a question first.'))

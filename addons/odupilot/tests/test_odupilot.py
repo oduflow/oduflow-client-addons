@@ -70,19 +70,19 @@ class TestAiChat(TransactionCase):
             no_reset_password=True).create({
                 'name': 'OduPilot Bridge',
                 'login': 'odupilot_bridge',
-                'group_ids': [Command.set([cls.bridge_group.id])],
+                'groups_id': [Command.set([cls.bridge_group.id])],
             })
         # Остальные тесты вызывают bridge_* от лица тестового окружения, поэтому
         # выдаём ту же группу и ему; запись откатится вместе с транзакцией.
         cls.env.user.sudo().write({
-            'group_ids': [Command.link(cls.bridge_group.id)],
+            'groups_id': [Command.link(cls.bridge_group.id)],
         })
         cls.owner = cls.env['res.users'].with_context(
             no_reset_password=True).create({
                 'name': 'OduPilot Owner',
                 'login': 'odupilot_owner',
                 'email': 'odupilot-owner@example.com',
-                'group_ids': [Command.set([group_user.id])],
+                'groups_id': [Command.set([group_user.id])],
                 'odupilot_profile_id': cls.profile.id,
             })
         cls.invited = cls.env['res.users'].with_context(
@@ -90,14 +90,14 @@ class TestAiChat(TransactionCase):
                 'name': 'OduPilot Invited',
                 'login': 'odupilot_invited',
                 'email': 'odupilot-invited@example.com',
-                'group_ids': [Command.set([group_user.id])],
+                'groups_id': [Command.set([group_user.id])],
             })
         cls.outsider = cls.env['res.users'].with_context(
             no_reset_password=True).create({
                 'name': 'OduPilot Outsider',
                 'login': 'odupilot_outsider',
                 'email': 'odupilot-outsider@example.com',
-                'group_ids': [Command.set([group_user.id])],
+                'groups_id': [Command.set([group_user.id])],
             })
 
     @classmethod
@@ -133,7 +133,7 @@ class TestAiChat(TransactionCase):
         user = user or self.owner
         # Вопрос ложится заметкой в запись, поэтому спрашивающему нужны те же
         # права, что и для обычной заметки чаттера.
-        user.sudo().write({'group_ids': [
+        user.sudo().write({'groups_id': [
             Command.link(self.env.ref('base.group_partner_manager').id)]})
         wizard = self.env['odupilot.ask.wizard'].with_user(user).create({
             'res_model': record._name,
@@ -644,7 +644,7 @@ class TestAiChat(TransactionCase):
                 'name': 'OduPilot Ask Developer',
                 'login': 'odupilot_ask_developer',
                 'email': 'odupilot-ask-developer@example.com',
-                'group_ids': [Command.set([
+                'groups_id': [Command.set([
                     self.env.ref('base.group_system').id,
                 ])],
                 'odupilot_profile_id': profile.id,
@@ -736,7 +736,7 @@ class TestAiChat(TransactionCase):
             no_reset_password=True).create({
                 'name': 'Developer menu administrator',
                 'login': 'developer_menu_administrator',
-                'group_ids': [Command.set([
+                'groups_id': [Command.set([
                     self.env.ref('base.group_system').id,
                 ])],
             })
@@ -845,7 +845,7 @@ class TestAiChat(TransactionCase):
             no_reset_password=True).create({
                 'name': 'Responsible AI Developer',
                 'login': 'responsible_ai_developer',
-                'group_ids': [Command.set([
+                'groups_id': [Command.set([
                     self.env.ref('base.group_system').id,
                 ])],
             })
@@ -922,7 +922,7 @@ class TestAiChat(TransactionCase):
                 self.owner).action_new_developer_chat('Fix it.', {})
 
     def test_chatter_question_needs_an_odupilot_profile(self):
-        self.outsider.sudo().write({'group_ids': [
+        self.outsider.sudo().write({'groups_id': [
             Command.link(self.env.ref('base.group_partner_manager').id)]})
         wizard = self.env['odupilot.ask.wizard'].with_user(self.outsider).create({
             'res_model': 'res.partner',
@@ -1151,7 +1151,7 @@ class TestAiChat(TransactionCase):
         self.assertTrue(session.channel_id.is_odupilot)
         self.assertEqual(
             session.channel_id.image_128,
-            self.env['discuss.channel']._odupilot_default_avatar(),
+            self.env['mail.channel']._odupilot_default_avatar(),
         )
         channel_info = session.channel_id.with_user(
             self.owner).channel_info()[0]
@@ -1160,7 +1160,7 @@ class TestAiChat(TransactionCase):
         session.action_close()
         self.assertTrue(session.channel_id.is_odupilot)
 
-    def test_discuss_channel_info_and_live_session_status(self):
+    def test_mail_channel_info_and_live_session_status(self):
         session = self._new_session()
 
         channel_info = session.channel_id.with_user(
@@ -1265,7 +1265,7 @@ class TestAiChat(TransactionCase):
                 'name': 'OduPilot Developer',
                 'login': 'odupilot_developer',
                 'email': 'odupilot-developer@example.com',
-                'group_ids': [Command.set([
+                'groups_id': [Command.set([
                     self.env.ref('base.group_system').id,
                 ])],
                 'odupilot_profile_id': profile.id,
@@ -1378,7 +1378,7 @@ class TestAiChat(TransactionCase):
                 'name': 'OduPilot Windows Developer',
                 'login': 'odupilot_windows_developer',
                 'email': 'odupilot-windows-developer@example.com',
-                'group_ids': [Command.set([
+                'groups_id': [Command.set([
                     self.env.ref('base.group_system').id,
                 ])],
                 'odupilot_profile_id': profile.id,
@@ -1440,7 +1440,7 @@ class TestAiChat(TransactionCase):
             'name': 'report 2026.txt',
             'type': 'binary',
             'datas': base64.b64encode(b'report body'),
-            'res_model': 'discuss.channel',
+            'res_model': 'mail.channel',
             'res_id': session.channel_id.id,
         })
 
@@ -1705,7 +1705,7 @@ class TestAiChat(TransactionCase):
             no_reset_password=True).create({
                 'name': 'OduPilot Administrator',
                 'login': 'odupilot_administrator',
-                'group_ids': [Command.set([
+                'groups_id': [Command.set([
                     self.env.ref('base.group_system').id])],
             })
         self._new_session()
@@ -3035,7 +3035,7 @@ class TestAiChat(TransactionCase):
         }])
         self.assertEqual(session.channel_id.name, 'My invoice review')
 
-    def test_retention_removes_technical_data_but_keeps_discuss_channel(self):
+    def test_retention_removes_technical_data_but_keeps_mail_channel(self):
         closed_session = self._new_session()
         channel = closed_session.channel_id
         closed_session.write({
@@ -3276,7 +3276,7 @@ class TestAiChat(TransactionCase):
         from odoo.addons.mail.tools.discuss import Store
         session = self._new_session()
         data = Store().add(session.channel_id.with_user(self.owner)).get_result()
-        channel = data['discuss.channel'][0]
+        channel = data['mail.channel'][0]
         self.assertTrue(channel['is_odupilot'])
         self.assertEqual(channel['odupilot_session']['session_id'], session.id)
         with self.assertRaises(AccessError):
@@ -3286,7 +3286,7 @@ class TestAiChat(TransactionCase):
         session = self._new_session()
         session.channel_id.with_user(self.owner).add_members(partner_ids=self.invited.partner_id.ids)
         with self.assertRaises(AccessError):
-            self.env['discuss.channel.member'].with_user(self.invited).create({
+            self.env['mail.channel.member'].with_user(self.invited).create({
                 'channel_id': session.channel_id.id, 'partner_id': self.outsider.partner_id.id,
             })
         bot_member = session.channel_id.channel_member_ids.filtered(

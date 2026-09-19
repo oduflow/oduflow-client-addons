@@ -103,7 +103,7 @@ class AiChatProfile(models.Model):
         groups='base.group_system',
     )
 
-    _odupilot_profile_code_unique = models.Constraint('unique(code)', 'The AI chat profile code must be unique.')
+    _sql_constraints = [('odupilot_profile_code_unique', 'unique(code)', 'The AI chat profile code must be unique.')]
 
     def _developers_profile_configuration_error(self):
         """Ошибка, из-за которой профиль нельзя использовать из debug menu."""

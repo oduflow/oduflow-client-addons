@@ -15,7 +15,6 @@ from datetime import datetime, timedelta
 from markupsafe import Markup
 
 from odoo import Command, api, fields, models, _
-from odoo.addons.mail.tools.discuss import Store
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tools import format_datetime, html2plaintext, plaintext2html
 
@@ -65,7 +64,7 @@ class AiChatSession(models.Model):
     _order = 'id desc'
 
     channel_id = fields.Many2one(
-        'discuss.channel', required=True, ondelete='cascade', index=True)
+        'mail.channel', required=True, ondelete='cascade', index=True)
     user_id = fields.Many2one(
         'res.users', string='Session owner', required=True,
         ondelete='restrict', index=True)
@@ -138,8 +137,7 @@ class AiChatSession(models.Model):
     permission_ids = fields.One2many('odupilot.permission', 'session_id')
     recovery_ids = fields.One2many('odupilot.recovery', 'session_id')
 
-    _odupilot_session_channel_unique = models.Constraint('unique(channel_id)', 'A Discuss channel can only belong to one AI chat session.')
-    _odupilot_session_opencode_unique = models.Constraint('unique(opencode_session_id)', 'An OpenCode session can only belong to one AI chat session.')
+    _sql_constraints = [('odupilot_session_channel_unique', 'unique(channel_id)', 'A Discuss channel can only belong to one AI chat session.'), ('odupilot_session_opencode_unique', 'unique(opencode_session_id)', 'An OpenCode session can only belong to one AI chat session.')]
 
     @api.constrains('agent_id')
     def _check_agent_id(self):
@@ -365,7 +363,7 @@ class AiChatSession(models.Model):
                         developer_triage_state='none'):
         agent = agent or self._resolve_agent(profile)
         bot = self.env.ref('odupilot.partner_ai_bot')
-        channel = self.env['discuss.channel'].create({
+        channel = self.env['mail.channel'].create({
             'name': (
                 _('Ask %(agent)s - %(initials)s',
                   agent=agent.name, initials=self._user_initials(owner))
@@ -375,17 +373,17 @@ class AiChatSession(models.Model):
                        initials=self._user_initials(owner))),
             'channel_type': 'group',
             'is_odupilot': True,
-            'image_128': self.env['discuss.channel']._odupilot_default_avatar(),
+            'image_128': self.env['mail.channel']._odupilot_default_avatar(),
             # Владелец задаётся явно: developer launcher может быть вызван
-            # через sudo-путь, а discuss.channel по умолчанию добавляет именно
+            # через sudo-путь, а mail.channel по умолчанию добавляет именно
             # пользователя текущего env, который не обязан с ним совпадать.
             'channel_partner_ids': [Command.link(owner.partner_id.id)],
             'channel_member_ids': [
                 Command.create({'partner_id': bot.id}),
             ],
         })
-        # discuss.channel вычисляет Members в ходе create до того, как ядро
-        # добавляет текущего пользователя в discuss.channel.member.
+        # mail.channel вычисляет Members в ходе create до того, как ядро
+        # добавляет текущего пользователя в mail.channel.member.
         channel.invalidate_recordset(['channel_partner_ids'])
         if is_ask_session:
             # Вопрос из чаттера живёт в своей заметке, а не в Discuss: канал
@@ -442,7 +440,7 @@ class AiChatSession(models.Model):
                 subtype_xmlid='mail.mt_comment',
 
             )
-            # Создание discuss.channel само по себе не обновляет store открытого
+            # Создание mail.channel само по себе не обновляет store открытого
             # Discuss. Штатный broadcast добавляет новый pinned group в sidebar,
             # а служебный разговор туда попадать не должен — и владелец в нём
             # даже не участник, поэтому broadcast упал бы на правах доступа.
@@ -464,7 +462,7 @@ class AiChatSession(models.Model):
         # Discuss читает context.active_id раньше params.default_active_id.
         # Кнопка списка (например START CHAT у агента) кладёт в контекст
         # active_id текущей записи, и без явной перезаписи клиент открывал
-        # бы discuss.channel с id агента вместо канала нового чата.
+        # бы mail.channel с id агента вместо канала нового чата.
         action['context'] = {'active_id': active_id}
         action['params'] = {
             'default_active_id': active_id,
@@ -2402,7 +2400,7 @@ class AiChatSession(models.Model):
                 'chat in Discuss to review the conversation and continue.',
                 channel.name),
             'is_sticky': True,
-            'res_model': 'discuss.channel',
+            'res_model': 'mail.channel',
             'res_id': channel.id,
         })
         self._audit_event(
@@ -2550,7 +2548,7 @@ class AiChatSession(models.Model):
         """
         recipients = note.author_id | self.user_id.sudo().partner_id
         for partner in recipients:
-            Store(bus_channel=partner).add(note, ['body']).bus_send()
+            self.env['bus.bus']._sendone(partner, 'mail.message/updated', {'id': note.id, 'body': note.body})
 
     def _post_assistant_message(self, event, payload):
         self.ensure_one()
@@ -2686,4 +2684,4 @@ class AiChatSession(models.Model):
         """Показать дописанный шаг без перезагрузки Discuss."""
         self.ensure_one()
         for partner in self.channel_id.channel_partner_ids:
-            Store(bus_channel=partner).add(message, ['body']).bus_send()
+            self.env['bus.bus']._sendone(partner, 'mail.message/updated', {'id': message.id, 'body': message.body})

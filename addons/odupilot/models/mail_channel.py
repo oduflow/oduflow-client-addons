@@ -10,7 +10,7 @@ from odoo.tools import file_open, html2plaintext
 
 
 class MailChannel(models.Model):
-    _inherit = 'discuss.channel'
+    _inherit = 'mail.channel'
 
     # Отдельная категория sidebar в Discuss опирается на признак канала, а не
     # на наличие odupilot.session: сессию можно закрыть или удалить, а канал с
@@ -49,11 +49,12 @@ class MailChannel(models.Model):
         return result
 
     def channel_info(self):
-        self.check_access("read")
+        self.check_access_rights("read")
+        self.check_access_rule("read")
         return self._odupilot_channel_info()
 
     def _odupilot_channel_info(self):
-        infos = [{'id': channel.id, 'name': channel.name} for channel in self]
+        infos = super().channel_info()
         sessions = self.env['odupilot.session'].sudo().search([
             ('channel_id', 'in', self.ids),
         ])
@@ -76,14 +77,6 @@ class MailChannel(models.Model):
                     info['is_minimized'] = False
                     info['state'] = 'closed'
         return infos
-
-    def _to_store(self, store, fields):
-        super()._to_store(store, fields)
-        for info in self.sudo()._odupilot_channel_info():
-            store.add_records_fields(self.browse(info['id']), {
-                'is_odupilot': info['is_odupilot'],
-                'odupilot_session': info.get('odupilot_session'),
-            })
 
     def _get_message_create_valid_field_names(self):
         return super()._get_message_create_valid_field_names() | {'odupilot_is_answer', 'odupilot_is_request'}
@@ -128,7 +121,10 @@ class MailChannel(models.Model):
             session.enqueue_prompt(message, actor)
         return message
 
-    def _add_members(self, *, partners=None, guests=None, users=None, **kwargs):
+    def add_members(self, partner_ids=None, guest_ids=None, **kwargs):
+        partners = self.env['res.partner'].browse(partner_ids or [])
+        guests = self.env['mail.guest'].browse(guest_ids or [])
+        users = self.env['res.users']
         partners = (partners or self.env['res.partner']) | (users or self.env['res.users']).partner_id
         partner_ids = partners.ids
         guest_ids = guests.ids if guests else []
@@ -164,7 +160,7 @@ class MailChannel(models.Model):
                 if invalid_users:
                     raise AccessError(_(
                         'Only Odoo administrators can join a developer worktree chat.'))
-        result = super()._add_members(partners=partners, guests=guests, **kwargs)
+        result = super().add_members(partner_ids=partners.ids, guest_ids=guests.ids, **kwargs)
         for channel in self:
             session = sessions[channel.id]
             if not session:
@@ -223,7 +219,7 @@ class MailChannel(models.Model):
             elif partner != self.env.user.partner_id:
                 session._check_membership_manager()
         return super(MailChannel, self.with_context(
-            odupilot_membership_allowed=True))._action_unfollow(partner=partner, guest=guest, **kwargs)
+            odupilot_membership_allowed=True))._action_unfollow(partner)
 
     def write(self, values):
         if ('channel_partner_ids' not in values

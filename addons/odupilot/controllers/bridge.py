@@ -4,7 +4,7 @@ from odoo.http import request
 
 
 class OduPilotBridgeController(http.Controller):
-    @http.route('/odupilot/bridge/poll', type='jsonrpc', auth='user', methods=['POST'])
+    @http.route('/odupilot/bridge/poll', type='json', auth='user', methods=['POST'])
     def poll(self, last=0):
         commands = request.env['odupilot.command']
         commands._check_bridge_access()

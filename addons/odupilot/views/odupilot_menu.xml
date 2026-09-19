@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <menuitem id="menu_new_odupilot" name="AI Agent Chat" parent="mail.menu_root_discuss" action="action_odupilot_agent_select" groups="base.group_user" sequence="1"/>
 

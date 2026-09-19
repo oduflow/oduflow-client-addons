@@ -1,16 +1,15 @@
-<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <record id="view_odupilot_agent_tree" model="ir.ui.view">
         <field name="name">odupilot.agent.tree</field>
         <field name="model">odupilot.agent</field>
         <field name="arch" type="xml">
-            <list string="AI Agents" create="false" delete="false">
+            <tree string="AI Agents" create="false" delete="false">
                 <field name="name"/>
                 <field name="description"/>
                 <field name="agent_type"/>
                 <field name="active" invisible="1"/>
                 <button name="action_start_chat" type="object" string="Start Chat" class="oe_highlight"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -18,9 +17,9 @@
         <field name="name">odupilot.agent.tree.admin</field>
         <field name="model">odupilot.agent</field>
         <field name="priority" eval="10"/>
-        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
         <field name="arch" type="xml">
-            <list string="AI Agents">
+            <tree string="AI Agents">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="agent_type"/>
@@ -28,7 +27,7 @@
                 <field name="profile_ids" widget="many2many_tags"/>
                 <field name="active"/>
                 <button name="action_start_chat" type="object" string="Start Chat" class="oe_highlight"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -39,7 +38,7 @@
             <form string="AI Agent">
                 <header>
                     <button name="action_start_chat" type="object" string="Start Chat" class="oe_highlight"/>
-                    <button name="action_configure_mcp_methods" type="object" string="Configure MCP Methods" groups="base.group_system" invisible="agent_type != 'payment_reconciliation'"/>
+                    <button name="action_configure_mcp_methods" type="object" string="Configure MCP Methods" groups="base.group_system" attrs="{'invisible': [('agent_type', '!=', 'payment_reconciliation')]}"/>
                 </header>
                 <sheet>
                     <group>
@@ -65,12 +64,12 @@
                         </page>
                         <page string="Sessions">
                             <field name="session_ids" readonly="1">
-                                <list create="false" delete="false">
+                                <tree create="false" delete="false">
                                     <field name="create_date"/>
                                     <field name="user_id"/>
                                     <field name="state"/>
                                     <field name="channel_id"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
                     </notebook>
@@ -82,7 +81,7 @@
     <record id="action_odupilot_agent_select" model="ir.actions.act_window">
         <field name="name">AI Agent Chat</field>
         <field name="res_model">odupilot.agent</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="domain">[('active', '=', True)]</field>
         <field name="context">{'create': False, 'delete': False}</field>
         <field name="help" type="html">
@@ -94,6 +93,6 @@
     <record id="action_odupilot_agent" model="ir.actions.act_window">
         <field name="name">AI Agents</field>
         <field name="res_model">odupilot.agent</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
     </record>
 </odoo>

@@ -7,11 +7,11 @@
             <xpath expr="//notebook" position="inside">
                 <page string="Oduscale" groups="oduscale.group_manager">
                     <field name="oduscale_connection_ids" context="{'default_employee_id': id}">
-                        <list>
+                        <tree>
                             <field name="server_id"/>
                             <field name="state" widget="badge"/>
                             <field name="last_sync"/>
-                        </list>
+                        </tree>
                     </field>
                 </page>
             </xpath>

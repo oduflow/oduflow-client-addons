@@ -3,12 +3,12 @@ from odoo.exceptions import AccessError, ValidationError
 
 
 class DiscussChannelMember(models.Model):
-    _inherit = 'discuss.channel.member'
+    _inherit = 'mail.channel.member'
 
     @api.model_create_multi
     def create(self, vals_list):
         for values in vals_list:
-            channel = self.env['discuss.channel'].browse(values.get('channel_id'))
+            channel = self.env['mail.channel'].browse(values.get('channel_id'))
             session = channel.sudo()._odupilot_session() if channel else False
             if not session:
                 continue

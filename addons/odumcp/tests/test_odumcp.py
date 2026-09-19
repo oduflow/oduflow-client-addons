@@ -50,7 +50,7 @@ class TestOduMcp(TransactionCase):
             {
                 "name": "MCP Test User",
                 "login": "mcp-test-user@example.com",
-                "group_ids": [
+                "groups_id": [
                     Command.set(
                         [
                             cls.env.ref("base.group_user").id,
@@ -217,7 +217,7 @@ class TestOduMcp(TransactionCase):
         return self.env["res.users"].create({
             "name": "MCP Key User",
             "login": login,
-            "group_ids": [Command.set([self.env.ref("base.group_user").id])],
+            "groups_id": [Command.set([self.env.ref("base.group_user").id])],
         })
 
     def test_enabling_mcp_access_does_not_issue_a_permanent_key(self):
@@ -232,7 +232,7 @@ class TestOduMcp(TransactionCase):
         user = self.env["res.users"].create({
             "name": "MCP Created User",
             "login": "mcp-key-create@example.com",
-            "group_ids": [Command.set([self.env.ref("base.group_user").id])],
+            "groups_id": [Command.set([self.env.ref("base.group_user").id])],
             "mcp_active": True,
             "mcp_profile_id": self.profile.id,
         })
@@ -889,7 +889,7 @@ class TestOduMcp(TransactionCase):
     def test_global_access_reads_access_rules_for_an_erp_manager(self):
         self.profile.default_model_access = "read"
         self.mcp_user.sudo().write(
-            {"group_ids": [Command.link(self.env.ref("base.group_erp_manager").id)]}
+            {"groups_id": [Command.link(self.env.ref("base.group_erp_manager").id)]}
         )
 
         body, status = self._request(
@@ -1426,7 +1426,7 @@ class TestOduMcpActivities(TransactionCase):
             {
                 "name": "Activity MCP User",
                 "login": "mcp-activity-user@example.com",
-                "group_ids": [
+                "groups_id": [
                     Command.set(
                         [
                             cls.env.ref("base.group_user").id,
@@ -1440,7 +1440,7 @@ class TestOduMcpActivities(TransactionCase):
             {
                 "name": "Activity Other User",
                 "login": "mcp-activity-other@example.com",
-                "group_ids": [Command.set([cls.env.ref("base.group_user").id])],
+                "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
         cls.partner = (
@@ -1720,14 +1720,14 @@ class TestOduMcpMassApproval(TransactionCase):
             {
                 "name": "Mass MCP User",
                 "login": "mass-mcp-user@example.com",
-                "group_ids": [Command.set([cls.env.ref("base.group_user").id])],
+                "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
         cls.manager = cls.env["res.users"].create(
             {
                 "name": "Mass MCP Manager",
                 "login": "mass-mcp-manager@example.com",
-                "group_ids": [
+                "groups_id": [
                     Command.set(
                         [
                             cls.env.ref("base.group_user").id,
