@@ -41,3 +41,7 @@ The request includes the current screen context. The configured developer profil
 For Odoo tools, your administrator enables **MCP Active** and selects an MCP profile. OduPilot creates a signed token for each session; it does not need a personal permanent API key. Tool calls follow your Odoo access rights and MCP policies.
 
 If a session stays in initialization, ask an administrator to check the bridge. For errors, review the status and recovery card. Closing a session revokes its AI access and queues workspace cleanup while preserving the Discuss history. Optional agents, such as payment reconciliation, require their corresponding business modules and configured policies.
+
+## Odoo 18 compatibility
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

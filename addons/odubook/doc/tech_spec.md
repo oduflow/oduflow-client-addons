@@ -4,7 +4,7 @@
 
 - Technical name: `odubook`.
 - Display name: `Odubook`.
-- Version: `19.0.1.0.0` for Odoo 19.
+- Version: `18.0.1.0.0` for Odoo 18.
 - Category: `Tools`; author: `VelesAgro`; license: `LGPL-3`.
 - Flags: `application = True`, `installable = True`.
 - Dependencies: `base`, `web`; there is no dependency on `odu_base`.
@@ -49,7 +49,7 @@
   `file_name` and stored, readonly).
 - `kind` values: `markdown`, `text`, `html`, `pdf`, `image`, `download`;
   `format` is the upper-case extension shown beside the title.
-- `models.Constraint`: `unique(manual_id, lang)` — one file per language.
+- `_sql_constraints`: `unique(manual_id, lang)` — one file per language.
 - Constants define the extension→kind and extension→MIME maps, the kinds the
   server renders itself (`markdown`, `text`), `MAX_MANUAL_BYTES = 25 MiB`,
   `MAX_RENDERED_BYTES = 4 MiB`, the short-language pattern `^[a-z]{2,3}$` and
@@ -62,7 +62,7 @@
 - Fields: `user_id` (`res.users`, required, indexed, `ondelete="cascade"`,
   defaults to the current user), `module` (`Char`, required, indexed),
   `change_date` (`Date`, required).
-- `models.Constraint`: `unique(user_id, module, change_date)`.
+- `_sql_constraints`: `unique(user_id, module, change_date)`.
 - One row means «this user has seen this entry»; rows are never updated.
 
 ### `res.users`
@@ -74,7 +74,7 @@
   when the registry starts with server code newer than the database schema.
 - `SELF_READABLE_FIELDS` and `SELF_WRITEABLE_FIELDS` let the current user read
   and change the preference through the standard Preferences form.
-- This is a new Odoo 19 addon; legacy Odoo 15 database migrations are not
+- This is a new Odoo 18 addon; legacy Odoo 15 database migrations are not
   included. Existing documents, read marks and preferences require a separate
   database migration when upgrading an existing installation.
 
@@ -539,3 +539,7 @@
 - Client actions, menus and security records only. Documentation files are module
   resources read from disk; they are not database seed data. Read marks are
   created by readers at runtime, never seeded.
+
+## Branch installation contract
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database. SQL constraints use `_sql_constraints`; security groups use categories. Controller JSON routes use `type="json"`.

@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=12bbea76108b lang=pl -->
+<!-- i18n source=user_guide.md sha=548d9491464d lang=pl -->
 # Podręcznik użytkownika OduPilot
 
 ## Rozpoczęcie rozmowy
@@ -42,3 +42,7 @@ Administratorzy mogą otworzyć **AI Developer** z menu narzędzi programisty. W
 Aby udostępnić narzędzia Odoo, administrator włącza **MCP Active** i wybiera profil MCP. OduPilot tworzy podpisany token każdej sesji; nie wymaga stałego osobistego klucza API. Wywołania narzędzi podlegają Twoim uprawnieniom Odoo i politykom MCP.
 
 Jeśli sesja pozostaje w inicjalizacji, poproś administratora o sprawdzenie mostu. Przy błędzie sprawdź status i kartę odzyskiwania. Zamknięcie sesji odwołuje jej dostęp AI i kolejkuje usunięcie katalogu roboczego, zachowując historię Discuss. Opcjonalni agenci, na przykład uzgadnianie płatności, wymagają odpowiednich modułów biznesowych i skonfigurowanych polityk.
+
+## Zgodność z Odoo 18
+
+Do nowej instalacji na Odoo 18 użyj gałęzi `18.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.

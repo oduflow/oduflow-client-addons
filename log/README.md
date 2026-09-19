@@ -19,4 +19,4 @@ and add an index row. Record unknown or inapplicable details explicitly.
 Journal entries describe observations at their recorded dates, not guaranteed
 current state. Secret values must never be included.
 
-- [2026-09-19: Odoo 18 installation]( 2026-09-19-client-addons-18-install.md) — in progress.
+- [2026-09-19: Odoo 18 installation](2026-09-19-client-addons-18-install.md) — installed; 265 tests passed; temporary environment removed.

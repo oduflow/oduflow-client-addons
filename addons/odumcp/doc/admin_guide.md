@@ -151,7 +151,7 @@ overrides it, the profile grants the connector user:
 | Close | yes | `activity.done`, which posts the feedback into the record's chatter |
 | Delete | never | `record.delete` on `mail.activity` is refused, and there is no cancel action |
 
-On Odoo 19, `activity.done` uses `_action_done` to post feedback and complete the activity. Completed activities may be archived. Raw deletion through MCP remains forbidden so that completion retains its audit trail.
+On Odoo 18, `activity.done` uses `_action_done` to post feedback and complete the activity. Completed activities are removed after feedback is posted. Raw deletion through MCP remains forbidden so that completion retains its audit trail.
 
 Two fields are deliberately not writable: `res_model` and `res_id`. Moving an
 activity to another record would attach it to a record the profile may not be
@@ -278,10 +278,14 @@ MCP server while the server is in fact refusing that one user, so check both
 fields on the user before investigating the server or the session API key. OduPilot requires no permanent key in **Account Security**: it issues a signed token for every conversation.
 
 
-## Odoo 19 deployment
+## Odoo 18 deployment
 
-Install `odumcp` from `addons` together with its accompanying MCP server. The event endpoint `/odumcp/v1/events` uses authenticated short polling; the server waits one second after an empty response. Personal API keys require valid Odoo 19 expiration dates. This port does not migrate an Odoo 15 database.
+Install `odumcp` from `addons` together with its accompanying MCP server. The event endpoint `/odumcp/v1/events` uses authenticated short polling; the server waits one second after an empty response. Personal API keys require valid Odoo 18 expiration dates. This port does not migrate an Odoo 15 database.
 
 ## Installation identity
 
 Install `odumcp` as a new addon. The addon uses `odumcp.*` models and settings, `/odumcp/v1/` API routes, the `odumcp_server` Python package and `ODUMCP_*` server variables. No migration of an earlier installation is provided. Uninstall the earlier addon before deploying this code; uninstalling it also removes dependent modules and their data. Reinstall required dependent modules afterward. Build the renamed server image locally before using the Compose example (`docker compose -f docker-compose.example.yml up --build -d`); publication of that image is a separate operation.
+
+## Odoo 18 compatibility
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

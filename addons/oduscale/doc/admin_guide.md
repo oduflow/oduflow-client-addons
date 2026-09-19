@@ -78,7 +78,7 @@ Record actual values, tool arguments, image versions and results in the
 The journal contains historical observations, not a live environment inventory.
 
 1. Publish the chosen Git branch and use `create_environment` with your repository,
-   branch, environment name, `odoo_image="odoo:19.0"` and `template_name="none"`
+   branch, environment name, `odoo_image="odoo:18.0"` and `template_name="none"`
    for a fresh database. For an existing environment, preserve its database.
    Ensure `/mnt/extra-addons/addons` is on the addon path. Use `pull_and_apply`
    with `install="oduscale"` for the first installation or `upgrade="oduscale"`
@@ -154,3 +154,7 @@ the gateway state and configuration as well as Odoo's database and filestore.
 Record backup references and recovery steps before service changes; do not put
 private keys or backup credentials in the journal. Use a separate Headscale
 instance for independent Odoo clones so their actions cannot alter the original VPN.
+
+## Odoo 18 compatibility
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

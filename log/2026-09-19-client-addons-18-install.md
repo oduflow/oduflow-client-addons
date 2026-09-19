@@ -8,7 +8,7 @@
 - Oduflow instance/team:
 - Environment/database and service names/IDs:
 - Initial state and dependencies:
-- Status: in progress.
+- Status: succeeded; temporary environment removed.
 - Provenance: executed now, or historical source and import date.
 
 ## Source and Images
@@ -84,3 +84,13 @@ Apply output `a215a7a9`, exit 255: ir.ui.view uses `groups_id`, not the Odoo 19 
 ### 21:59–22:00 UTC — Installed; initial tests failed
 
 Apply `93db0bef` exited 0, all four modules installed. `run_odoo_tests(env_name="client-addons-18", modules="odubook,odumcp,odupilot,oduscale", summary_only=true)` returned 14 failures and 5 errors / 265, output `a707c755`. Correcting field access API and tests for HTTP helper, view XPath, completed activity deletion, HTML bus encoding, locale formatting, and missing fixture email.
+
+### 22:03–22:07 UTC — Final runtime verification
+
+Second test output `ff878f9e`: 1 failure, 1 error / 265; fixed sender email fixture and the completed-activity deletion assertion. Final deployed code `c91429a`: `run_odoo_tests` output `aad65b13` reports **0 failures, 0 errors / 265 tests**. Rollback-only `run_odoo_shell` verified all four modules are installed at 18.0.1.0.0. Public `http_request_to_odoo(/web/login)` received Cloudflare HTTP 403; direct container `python3 -c "import urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8069/web/login'); print(r.status)"` returned 200. Browser UI and external AI/VPN integrations were not tested. Documentation synchronization follows; no application code changes after the passing run.
+
+Cleanup planned: delete_environment(env_name="client-addons-18") to release our temporary slot for Odoo 16. No backups required for this disposable test database; no production data used.
+
+### 22:09 UTC — Cleanup completed
+
+`delete_environment(env_name="client-addons-18")` returned torn down. All application tests passed before teardown. Branch remains on origin; temporary worktree retained for code review.

@@ -146,3 +146,7 @@ client can refresh without re-reading everything.
 
 
 Choose an expiration date permitted by your Odoo groups when creating a key. Expired keys are rejected even when MCP access remains enabled.
+
+## Odoo 18 compatibility
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

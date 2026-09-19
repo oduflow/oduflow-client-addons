@@ -1,11 +1,11 @@
-<!-- i18n source=admin_guide.md sha=3bbbe897a07f lang=pl -->
+<!-- i18n source=admin_guide.md sha=a61447a04a47 lang=pl -->
 # Podręcznik administratora OduPilot
 
-## Instalacja na Odoo 19
+## Instalacja na Odoo 18
 
 Zainstaluj `odupilot` z katalogu `addons` tego repozytorium. Zależności obejmują `mail`, `auth_totp` i `odumcp`. Przed załadowaniem modułu zainstaluj pakiety Python z `.oduflow/requirements.txt`. Moduły Odoo 15 `ai_chat`, `streams` i `bus_actions` nie są wymagane.
 
-Jest to port do instalacji na Odoo 19. Nie przenosi istniejącej bazy Odoo 15 ani nie zmienia nazw zainstalowanych rekordów bazy. Importowane wpisy zmian opisują historię modułu źródłowego.
+Jest to port do instalacji na Odoo 18. Nie przenosi istniejącej bazy Odoo 15 ani nie zmienia nazw zainstalowanych rekordów bazy. Importowane wpisy zmian opisują historię modułu źródłowego.
 
 ## Infrastruktura
 
@@ -21,7 +21,7 @@ W Settings → **OduPilot** skonfiguruj profile, agentów i serwery MCP. Profil 
 
 Agent określa instrukcje, reguły narzędzi i serwery MCP. Zwykłe rozmowy mogą uruchamiać tylko agenci dostępni dla profilu użytkownika. Agenci przeznaczeni wyłącznie dla MCP są udostępniani przez MCP zamiast wyboru czatu. Opcjonalne uzgadnianie płatności wymaga odpowiednich modułów księgowych i płatniczych.
 
-Dla narzędzi Odoo włącz **MCP Active** i przypisz użytkownikowi profil MCP. Skonfiguruj serwer MCP z podstawieniem tokenu sesji w nagłówkach. Każda sesja otrzymuje podpisany token związany z właścicielem i profilem. Odwołanie dostępu i zmiany polityk są sprawdzane przy kolejnych wywołaniach. Osobiste klucze API MCP są niezależne i muszą uwzględniać terminy ważności Odoo 19.
+Dla narzędzi Odoo włącz **MCP Active** i przypisz użytkownikowi profil MCP. Skonfiguruj serwer MCP z podstawieniem tokenu sesji w nagłówkach. Każda sesja otrzymuje podpisany token związany z właścicielem i profilem. Odwołanie dostępu i zmiany polityk są sprawdzane przy kolejnych wywołaniach. Osobiste klucze API MCP są niezależne i muszą uwzględniać terminy ważności Odoo 18.
 
 Profile programistyczne z drzewami roboczymi potrzebują URL repozytorium, gałęzi bazowej, tokenu GitHub i konfiguracji środowiska. Ustaw **Developers Profile** dla menu programisty oraz opcjonalnie **Responsible Developer**. Żądanie sklasyfikowane jako praca programistyczna dodaje tego administratora do rozmowy i wysyła trwałe powiadomienie OduPilot.
 
@@ -31,7 +31,7 @@ Dyktowanie korzysta z danych LiteLLM profilu i wspólnego bazowego URL AI. Model
 
 ## Połączenie i monitoring
 
-Most odpytuje `/odupilot/bridge/poll` przez zwykły adres HTTP Odoo. Metoda jest dostępna tylko dla konta technicznego; nie można wybierać dowolnych kanałów magistrali. Po pustej odpowiedzi most czeka sekundę. Trwała kolejka poleceń XML-RPC pozostaje źródłem prawdy. Trasa długiego odpytywania Odoo 15 nie jest używana. Dla zdarzeń Discuss w przeglądarce skonfiguruj standardowy WebSocket Odoo 19.
+Most odpytuje `/odupilot/bridge/poll` przez zwykły adres HTTP Odoo. Metoda jest dostępna tylko dla konta technicznego; nie można wybierać dowolnych kanałów magistrali. Po pustej odpowiedzi most czeka sekundę. Trwała kolejka poleceń XML-RPC pozostaje źródłem prawdy. Trasa długiego odpytywania Odoo 15 nie jest używana. Dla zdarzeń Discuss w przeglądarce skonfiguruj standardowy WebSocket Odoo 18.
 
 Serwer OduMCP odpytuje `/odumcp/v1/events` z krótkotrwałym biletem zdarzeń i czeka sekundę po pustej odpowiedzi. Żądania widzą wyłącznie prywatny kanał właściciela biletu. Wdrażaj dołączoną wersję serwera MCP razem z tym modułem.
 
@@ -46,3 +46,7 @@ Zamknięcie sesji odwołuje jej token i kolejkuje usunięcie katalogu roboczego.
 ## Weryfikacja
 
 Uruchom testy Odoo dla `/odupilot,/odumcp`, testy mostu w `addons/odupilot/deploy` i testy serwera MCP w `addons/odumcp/deploy/odumcp_server`. Testy przeglądarkowe używają izolowanej bazy Odoo. Rzeczywisty dostawca, zewnętrzne repozytorium Git i środowisko programisty wymagają osobno skonfigurowanych usług; lokalne atrapy nie weryfikują ich danych uwierzytelniających.
+
+## Zgodność z Odoo 18
+
+Do nowej instalacji na Odoo 18 użyj gałęzi `18.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.

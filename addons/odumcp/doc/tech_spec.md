@@ -281,20 +281,20 @@ OduPilot issues signed session tokens and does not create temporary API-key
 rows. Session validation is provided by the OduPilot authentication extension.
 Personal MCP keys are checked against their expiration date both when matching
 a specific key and when authenticating the MCP endpoint. `_generate` forwards
-the mandatory Odoo 19 expiration argument to the core implementation.
+the mandatory Odoo 18 expiration argument to the core implementation.
 
-## Odoo 19 port
+## Odoo 18 port
 
-The module installs on Odoo 19 alongside its accompanying MCP server. It does
-not migrate existing Odoo 15 data. Groups use `res.groups.privilege` and
-`res.users.group_ids`; views use list roots, inline modifiers and Settings apps.
-ORM domains use `fields.Domain`, access checks use `check_access`, and database
-constraints use `models.Constraint`.
+The module installs on Odoo 18 alongside its accompanying MCP server. It does
+not migrate existing Odoo 15 data. Groups use `ir.module.category` and
+`res.users.groups_id`; views use list roots, inline modifiers and Settings apps.
+ORM domains use `odoo.osv.expression`, access checks use `check_access`, and database
+constraints use `_sql_constraints`.
 
 The events controller polls `bus.bus._poll` on the authenticated ticket's
 private channel without closing the request cursor. The MCP server waits one
 second after an empty response. It does not require Odoo 15's event dispatch
-long-polling API. Completed activities may be archived by Odoo 19 while their
+long-polling API. Completed activities are removed by Odoo 18 while their
 feedback remains in the chatter.
 
 ## YAML Snapshot Preview
@@ -324,3 +324,7 @@ the two fields. No separate MCP page is introduced.
 ## Installation identity
 
 The technical addon name is `odumcp`, the model namespace is `odumcp.*`, and HTTP routes begin with `/odumcp/v1/`. The standalone server package is `odumcp_server`, its CLI is `odumcp-server`, and its environment variables use `ODUMCP_*`. This is a fresh installation with no compatibility aliases or migration scripts. OduPilot depends on `odumcp`. Upstream contributor attribution is retained.
+
+## Branch installation contract
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database. SQL constraints use `_sql_constraints`; security groups use categories. Controller JSON routes use `type="json"`.

@@ -2,14 +2,14 @@
 
 ## Origin and installation boundary
 
-OduPilot is the Odoo 19 port of VelesAgro `ai_chat` 15.0.1.46.0. The addon and
+OduPilot is the Odoo 18 port of VelesAgro `ai_chat` 15.0.1.46.0. The addon and
 model prefix is `odupilot`; assets, XML IDs, configuration parameters, bridge
 methods and environment variables use that namespace. The original OPL-1
-license and Odooist attribution remain. This addon installs into a new Odoo 19
+license and Odooist attribution remain. This addon installs into a new Odoo 18
 database; it does not perform a database upgrade from Odoo 15. Imported daily
 change entries are historical records of the source implementation.
 
-Dependencies are `mail`, `auth_totp` and the accompanying Odoo 19 `odumcp`.
+Dependencies are `mail`, `auth_totp` and the accompanying Odoo 18 `odumcp`.
 Browser and event functionality previously supplied by `streams` and
 `bus_actions` is implemented locally. The Python requirements are declared in
 `.oduflow/requirements.txt` and the manifest.
@@ -33,7 +33,7 @@ session's bot cannot be removed, including by supplying a bypass context.
 Record rules expose sessions, permissions, recoveries and audit events only to
 members or administrators. Public bridge methods require
 `odupilot.group_bridge`, independently of administrator status. The group is
-part of an Odoo 19 `res.groups.privilege`; installation does not alter existing
+part of an Odoo 18 `ir.module.category`; installation does not alter existing
 user memberships. Methods that need credentials elevate access internally
 after verifying the caller.
 
@@ -86,7 +86,7 @@ messages without discarding edits to the form.
 
 ## Browser data and streaming
 
-Odoo 19 `_to_store` serializes custom channel and message properties.
+Odoo 18 `_to_store` serializes custom channel and message properties.
 `Store.add_records_fields` is used inside overrides to avoid recursion.
 `channel_info` is a guarded compatibility method; normal browser traffic uses
 Discuss Store. `action_open_channel` supplies a numeric channel ID in the
@@ -150,3 +150,7 @@ HTTP tests exercise the bridge route and the snapshot RPC. Hoot tests cover
 stream delta assembly and gap detection. The bridge and MCP server retain
 independent Python suites. Live provider credentials and external developer
 environments require integration validation after configuration.
+
+## Branch installation contract
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database. SQL constraints use `_sql_constraints`; security groups use categories. Controller JSON routes use `type="json"`.

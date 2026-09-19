@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=44747896a56d lang=pl -->
+<!-- i18n source=admin_guide.md sha=3b2463565c49 lang=pl -->
 # Podręcznik administratora Oduscale
 
 Oduscale zarządza dostępem na istniejącym serwerze Headscale. Przed rejestracją
@@ -79,7 +79,7 @@ Rzeczywiste wartości, argumenty narzędzi, wersje obrazów i wyniki zapisuj w
 Dziennik zawiera historyczne obserwacje, a nie bieżący inwentarz środowisk.
 
 1. Opublikuj wybraną gałąź Git i użyj `create_environment` z repozytorium,
-   gałęzią, nazwą środowiska, `odoo_image="odoo:19.0"` i `template_name="none"`
+   gałęzią, nazwą środowiska, `odoo_image="odoo:18.0"` i `template_name="none"`
    dla nowej bazy. W istniejącym środowisku zachowaj bazę danych.
    Upewnij się, że `/mnt/extra-addons/addons` jest na ścieżce dodatków. Użyj `pull_and_apply`
    z `install="oduscale"` przy pierwszej instalacji lub `upgrade="oduscale"`
@@ -155,3 +155,7 @@ Twórz kopie stanu i konfiguracji bramy oraz bazy danych i magazynu plików Odoo
 Zapisuj odnośniki do kopii i kroki odtwarzania przed zmianami usług; nie umieszczaj
 kluczy prywatnych ani danych dostępu do kopii w dzienniku. Dla niezależnych klonów
 Odoo używaj osobnej instancji Headscale, aby nie zmieniały pierwotnej sieci VPN.
+
+## Zgodność z Odoo 18
+
+Do nowej instalacji na Odoo 18 użyj gałęzi `18.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.
