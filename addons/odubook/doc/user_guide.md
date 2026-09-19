@@ -221,3 +221,9 @@ by hand with the language buttons above them.
 
 The User Guide answers “what is true now”. The Changes archive answers “what
 changed and when”.
+
+## Module audits
+
+Administrators can open **Book → Audit** to read module audit reports. This
+section is hidden from regular users. Reports describe the reviewed revision,
+findings and validation limits; opening the section does not run an audit.

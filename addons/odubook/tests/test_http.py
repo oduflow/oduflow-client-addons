@@ -35,6 +35,14 @@ class TestOdubookHttp(HttpCase):
         self.assertEqual(self._rpc("/odubook/admin")["error"]["data"]["name"],
                          "odoo.exceptions.AccessError")
 
+    def test_audit_rpc_rejects_non_administrators(self):
+        for user in (self.reader, self.portal):
+            with self.subTest(user=user.login):
+                self.authenticate(user.login, user.login)
+                result = self._rpc("/odubook/audit")
+                self.assertEqual(result["error"]["data"]["name"],
+                                 "odoo.exceptions.AccessError")
+
     def test_portal_cannot_read_documentation_or_files(self):
         self.authenticate(self.portal.login, self.portal.login)
         self.assertEqual(self._rpc("/odubook/book")["error"]["data"]["name"],
