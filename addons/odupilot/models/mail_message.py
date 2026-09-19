@@ -18,8 +18,8 @@ class MailMessage(models.Model):
         default=False,
     )
 
-    def message_format(self, format_reply=True):
-        values = [{'id': message.id, 'author_id': [message.author_id.id, message.author_id.name], 'body': message.body} for message in self]
+    def message_format(self, format_reply=True, **kwargs):
+        values = super().message_format(format_reply=format_reply, **kwargs)
         permissions = self.env['odupilot.permission'].sudo().search([
             ('mail_message_id', 'in', self.ids),
         ])
@@ -68,9 +68,3 @@ class MailMessage(models.Model):
                     item['odupilot_recovery'] = recovery._format_for_client()
         return values
 
-    def _to_store(self, store, fields, **kwargs):
-        super()._to_store(store, fields, **kwargs)
-        for info in self.message_format():
-            store.add_records_fields(self.browse(info['id']), {
-                key: value for key, value in info.items() if key.startswith('odupilot_')
-            })

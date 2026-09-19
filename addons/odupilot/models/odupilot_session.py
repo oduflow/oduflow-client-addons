@@ -15,7 +15,6 @@ from datetime import datetime, timedelta
 from markupsafe import Markup
 
 from odoo import Command, api, fields, models, _
-from odoo.addons.mail.tools.discuss import Store
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tools import format_datetime, html2plaintext, plaintext2html
 
@@ -138,8 +137,7 @@ class AiChatSession(models.Model):
     permission_ids = fields.One2many('odupilot.permission', 'session_id')
     recovery_ids = fields.One2many('odupilot.recovery', 'session_id')
 
-    _odupilot_session_channel_unique = models.Constraint('unique(channel_id)', 'A Discuss channel can only belong to one AI chat session.')
-    _odupilot_session_opencode_unique = models.Constraint('unique(opencode_session_id)', 'An OpenCode session can only belong to one AI chat session.')
+    _sql_constraints = [('odupilot_session_channel_unique', 'unique(channel_id)', 'A Discuss channel can only belong to one AI chat session.'), ('odupilot_session_opencode_unique', 'unique(opencode_session_id)', 'An OpenCode session can only belong to one AI chat session.')]
 
     @api.constrains('agent_id')
     def _check_agent_id(self):
@@ -2550,7 +2548,7 @@ class AiChatSession(models.Model):
         """
         recipients = note.author_id | self.user_id.sudo().partner_id
         for partner in recipients:
-            Store(bus_channel=partner).add(note, ['body']).bus_send()
+            self.env['bus.bus']._sendone(partner, 'mail.message/updated', {'id': note.id, 'body': note.body})
 
     def _post_assistant_message(self, event, payload):
         self.ensure_one()
@@ -2686,4 +2684,4 @@ class AiChatSession(models.Model):
         """Показать дописанный шаг без перезагрузки Discuss."""
         self.ensure_one()
         for partner in self.channel_id.channel_partner_ids:
-            Store(bus_channel=partner).add(message, ['body']).bus_send()
+            self.env['bus.bus']._sendone(partner, 'mail.message/updated', {'id': message.id, 'body': message.body})

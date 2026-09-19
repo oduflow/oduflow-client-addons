@@ -14,11 +14,11 @@ class TestOduscale(TransactionCase):
         super().setUpClass()
         cls.manager = cls.env["res.users"].create({
             "name": "VPN Manager", "login": "oduscale-test-manager",
-            "group_ids": [Command.set([cls.env.ref("oduscale.group_manager").id])],
+            "groups_id": [Command.set([cls.env.ref("oduscale.group_manager").id])],
         })
         cls.employee_user = cls.env["res.users"].create({
             "name": "VPN Employee", "login": "oduscale-test-employee",
-            "group_ids": [Command.set([cls.env.ref("base.group_user").id])],
+            "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
         })
         cls.server = cls.env["oduscale.server"].create({
             "name": "Test Headscale", "api_url": "http://headscale:8080",

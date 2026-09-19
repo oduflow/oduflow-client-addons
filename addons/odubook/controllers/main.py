@@ -24,32 +24,32 @@ def _pdf_filename(title):
 class OduBookController(http.Controller):
     """JSON-обёртка над ``odubook`` для клиентских действий."""
 
-    @http.route("/odubook/book", type="jsonrpc", auth="user")
+    @http.route("/odubook/book", type="json", auth="user")
     def book(self, lang=None):
         return request.env["odubook"].get_book(lang=lang)
 
-    @http.route("/odubook/admin", type="jsonrpc", auth="user")
+    @http.route("/odubook/admin", type="json", auth="user")
     def admin_book(self, lang=None):
         # Группа дополнительно проверяется на сервере в get_admin_book.
         return request.env["odubook"].get_admin_book(lang=lang)
 
-    @http.route("/odubook/changes", type="jsonrpc", auth="user")
+    @http.route("/odubook/changes", type="json", auth="user")
     def changes(self, lang=None):
         return request.env["odubook"].get_changes(lang=lang)
 
-    @http.route("/odubook/change", type="jsonrpc", auth="user")
+    @http.route("/odubook/change", type="json", auth="user")
     def change(self, entries=None, mark_read=True, lang=None):
         # Отдаёт текст запрошенных записей; лента отмечает прочитанное сама.
         return request.env["odubook"].read_changes(
             entries or [], mark_read=mark_read, lang=lang
         )
 
-    @http.route("/odubook/languages", type="jsonrpc", auth="user")
+    @http.route("/odubook/languages", type="json", auth="user")
     def languages(self):
         # Языки интерфейса для переключателя в меню пользователя.
         return request.env["odubook"].get_ui_languages()
 
-    @http.route("/odubook/changes/read", type="jsonrpc", auth="user")
+    @http.route("/odubook/changes/read", type="json", auth="user")
     def changes_read(self, entries=None):
         # Отмечает прочитанными записи, доскроллленные читателем в ленте.
         return request.env["odubook"].mark_entries_read(entries or [])
@@ -129,19 +129,19 @@ class OduBookController(http.Controller):
         ]
         return request.make_response(pdf, headers=headers)
 
-    @http.route("/odubook/changes/read_all", type="jsonrpc", auth="user")
+    @http.route("/odubook/changes/read_all", type="json", auth="user")
     def changes_read_all(self):
         return request.env["odubook"].mark_all_read()
 
-    @http.route("/odubook/manuals", type="jsonrpc", auth="user")
+    @http.route("/odubook/manuals", type="json", auth="user")
     def manuals(self, lang=None):
         return request.env["odubook.manual"].get_manuals(lang=lang)
 
-    @http.route("/odubook/manuals/read", type="jsonrpc", auth="user")
+    @http.route("/odubook/manuals/read", type="json", auth="user")
     def manual_read(self, manual_id=None, lang=None):
         return request.env["odubook.manual"].read_manual(manual_id, lang=lang)
 
-    @http.route("/odubook/manuals/upload", type="jsonrpc", auth="user")
+    @http.route("/odubook/manuals/upload", type="json", auth="user")
     def manual_upload(self, name=None, file_name=None, data=None, lang=None,
                       manual_id=None):
         # Право на создание проверяет ORM: полку ведёт администратор.
@@ -149,7 +149,7 @@ class OduBookController(http.Controller):
             name, file_name, data, lang=lang, manual_id=manual_id
         )
 
-    @http.route("/odubook/manuals/delete", type="jsonrpc", auth="user")
+    @http.route("/odubook/manuals/delete", type="json", auth="user")
     def manual_delete(self, manual_id=None, lang=None):
         return request.env["odubook.manual"].delete_manual(manual_id, lang=lang)
 
@@ -168,7 +168,8 @@ class OduBookController(http.Controller):
         if not version:
             raise request.not_found()
         try:
-            version.check_access("read")
+            version.check_access_rights("read")
+            version.check_access_rule("read")
         except AccessError:
             raise request.not_found()
         content = base64.b64decode(version.file or b"")

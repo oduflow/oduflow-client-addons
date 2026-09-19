@@ -1,3 +1,4 @@
+from odoo.osv import expression
 import base64
 import binascii
 import hashlib
@@ -676,7 +677,8 @@ class OduMcpService(models.AbstractModel):
             raise McpServiceError("invalid_values", _("Create values must be an object or list of objects."))
         if len(values_list) > access.mcp_profile_id.max_batch_size:
             raise McpServiceError("batch_too_large", _("Create batch exceeds the profile limit."), status=413)
-        Model.check_access("create")
+        Model.check_access_rights("create")
+        Model.check_access_rule("create")
         normalized_values = [
             self._write_values(policy, Model, values, "create")
             for values in values_list
@@ -1078,13 +1080,14 @@ class OduMcpService(models.AbstractModel):
             raise McpServiceError("unknown_model", _("Model is not installed."), status=404)
         Model = env[model_name]
         access_operation = "read" if operation == "aggregate" else operation
-        Model.check_access(access_operation)
+        Model.check_access_rights(access_operation)
+        Model.check_access_rule(access_operation)
         return Model, policy
 
     @api.model
     def _has_model_access(self, Model, operation):
         access_operation = "read" if operation == "aggregate" else operation
-        return Model.has_access(access_operation)
+        return Model.check_access_rights(access_operation, raise_exception=False)
 
     @api.model
     def _model_name(self, params):
@@ -1098,14 +1101,14 @@ class OduMcpService(models.AbstractModel):
         if not isinstance(client_domain, list):
             raise McpServiceError("invalid_domain", _("Domain must be a JSON list."))
         try:
-            normalized = list(fields.Domain(client_domain)) if client_domain else []
+            normalized = list(expression.normalize_domain(client_domain)) if client_domain else []
         except (AssertionError, TypeError, ValueError) as exc:
             raise McpServiceError("invalid_domain", _("Domain is malformed.")) from exc
         # По allowlist проверяется только клиентский домен: forced domain задаёт
         # администратор политики, и он намеренно шире её поля чтения.
         self._check_domain_fields(access, Model, policy, normalized)
         try:
-            return fields.Domain.AND([normalized, policy._forced_domain()])
+            return expression.AND([normalized, policy._forced_domain()])
         except (AssertionError, TypeError, ValueError) as exc:
             raise McpServiceError("invalid_domain", _("Domain is malformed.")) from exc
 
@@ -1169,7 +1172,7 @@ class OduMcpService(models.AbstractModel):
     @api.model
     def _records_in_policy(self, Model, policy, ids, operation):
         records = Model.search(
-            fields.Domain.AND([[('id', 'in', ids)], policy._forced_domain()]),
+            expression.AND([[('id', 'in', ids)], policy._forced_domain()]),
             limit=len(ids),
         )
         found = set(records.ids)
@@ -1205,7 +1208,8 @@ class OduMcpService(models.AbstractModel):
                 status=403,
                 data={"model": Model._name, "denied_ids": denied},
             )
-        records.check_access(operation)
+        records.check_access_rights(operation)
+        records.check_access_rule(operation)
         return records
 
     @api.model

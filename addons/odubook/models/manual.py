@@ -191,7 +191,8 @@ class OduBookManual(models.Model):
         if not manual:
             return {"id": False, "lang": False, "kind": False, "html": False}
         # Обычное чтение: право проверяет ORM, документ виден всем сотрудникам.
-        manual.check_access("read")
+        manual.check_access_rights("read")
+        manual.check_access_rule("read")
         version = manual._version_for(lang)
         if not version:
             return {"id": manual.id, "lang": False, "kind": False, "html": False}
@@ -297,10 +298,7 @@ class OduBookManualFile(models.Model):
         readonly=True,
     )
 
-    _odubook_manual_file_lang_uniq = models.Constraint(
-        "unique(manual_id, lang)",
-        "A manual may carry only one file per language.",
-    )
+    _sql_constraints = [('odubook_manual_file_lang_uniq', 'unique(manual_id, lang)', 'A manual may carry only one file per language.')]
 
     @api.depends("file_name")
     def _compute_kind(self):

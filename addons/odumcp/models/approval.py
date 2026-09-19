@@ -111,8 +111,7 @@ class OduMcpApproval(models.Model):
         groups="odumcp.group_mcp_manager",
     )
 
-    _request_uid_unique = models.Constraint('UNIQUE(request_uid)', 'The approval request identifier must be unique.')
-    _idempotency_unique = models.Constraint('UNIQUE(user_id, idempotency_key)', 'The idempotency key has already been used by this MCP user.')
+    _sql_constraints = [('request_uid_unique', 'UNIQUE(request_uid)', 'The approval request identifier must be unique.'), ('idempotency_unique', 'UNIQUE(user_id, idempotency_key)', 'The idempotency key has already been used by this MCP user.')]
 
     @api.depends("diff_json", "result_json")
     def _compute_snapshot_yaml(self):

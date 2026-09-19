@@ -221,10 +221,12 @@ class AiChatDeveloperWizard(models.TransientModel):
                 break
         if model_name and model_name in self.env:
             model = self.env[model_name]
-            model.check_access('read')
+            model.check_access_rights('read')
+            model.check_access_rule('read')
             records = model.browse(normalized_ids).exists()
             if records:
-                records.check_access('read')
+                records.check_access_rights('read')
+                records.check_access_rule('read')
             result['records'] = {
                 'model': model_name,
                 'ids': records.ids,

@@ -30,10 +30,7 @@ class OduscaleConnection(models.Model):
     last_sync = fields.Datetime(readonly=True)
     odoo_url = fields.Char(related="server_id.odoo_url")
 
-    _employee_server_unique = models.Constraint("UNIQUE(employee_id, server_id)",
-                                               "This employee already has access configured on this server.")
-    _remote_user_unique = models.Constraint("UNIQUE(server_id, remote_user_id)",
-                                           "This Headscale user is already linked to another employee.")
+    _sql_constraints = [('employee_server_unique', 'UNIQUE(employee_id, server_id)', 'This employee already has access configured on this server.'), ('remote_user_unique', 'UNIQUE(server_id, remote_user_id)', 'This Headscale user is already linked to another employee.')]
     _managed_fields = {"state", "remote_user_id", "remote_user_name", "device_ids", "key_ids", "last_sync"}
 
     @api.model_create_multi
@@ -59,7 +56,8 @@ class OduscaleConnection(models.Model):
         return super().unlink()
 
     def _check_action(self):
-        self.check_access("write")
+        self.check_access_rights("write")
+        self.check_access_rule("write")
         self.server_id._check_manager()
 
     def _lock(self):
@@ -195,10 +193,11 @@ class OduscaleDevice(models.Model):
     last_seen = fields.Datetime()
     expiry = fields.Datetime()
 
-    _remote_unique = models.Constraint("UNIQUE(connection_id, remote_id)", "This device is already registered.")
+    _sql_constraints = [('remote_unique', 'UNIQUE(connection_id, remote_id)', 'This device is already registered.')]
 
     def action_revoke(self):
-        self.check_access("read")
+        self.check_access_rights("read")
+        self.check_access_rule("read")
         for device in self:
             connection = device.connection_id
             connection._check_action()
@@ -225,10 +224,11 @@ class OduscaleKey(models.Model):
     expiration = fields.Datetime()
     used = fields.Boolean()
     revoked = fields.Boolean()
-    _remote_unique = models.Constraint("UNIQUE(connection_id, remote_id)", "This key is already registered.")
+    _sql_constraints = [('remote_unique', 'UNIQUE(connection_id, remote_id)', 'This key is already registered.')]
 
     def action_revoke(self):
-        self.check_access("read")
+        self.check_access_rights("read")
+        self.check_access_rule("read")
         for key in self:
             key.connection_id._check_action()
             key.connection_id._lock()

@@ -4,7 +4,7 @@
         <field name="name">odupilot.agent.log.tree</field>
         <field name="model">odupilot.agent.log</field>
         <field name="arch" type="xml">
-            <list string="Agent Action Log" create="false" delete="false">
+            <tree string="Agent Action Log" create="false" delete="false">
                 <field name="create_date"/>
                 <field name="agent_id"/>
                 <field name="user_id"/>
@@ -12,7 +12,7 @@
                 <field name="status"/>
                 <field name="request_id"/>
                 <field name="mcp_approval_id"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -59,7 +59,7 @@
     <record id="action_odupilot_agent_log" model="ir.actions.act_window">
         <field name="name">Agent Action Log</field>
         <field name="res_model">odupilot.agent.log</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="context">{'create': False, 'delete': False}</field>
     </record>
 </odoo>

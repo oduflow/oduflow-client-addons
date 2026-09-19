@@ -32,7 +32,7 @@ class AiChatPermission(models.Model):
         'res.users', string='Answered by', ondelete='set null', index=True)
     resolved_at = fields.Datetime(copy=False)
 
-    _odupilot_permission_request_unique = models.Constraint('unique(session_id, request_id)', 'This AI permission request already exists.')
+    _sql_constraints = [('odupilot_permission_request_unique', 'unique(session_id, request_id)', 'This AI permission request already exists.')]
 
     def _json_value(self, field_name, fallback):
         self.ensure_one()

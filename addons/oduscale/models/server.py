@@ -68,7 +68,8 @@ class OduscaleServer(models.Model):
     def _check_manager(self):
         if not self.env.su and not self.env.user.has_group("oduscale.group_manager"):
             raise AccessError(_("Only Oduscale managers can manage VPN access."))
-        self.check_access("read")
+        self.check_access_rights("read")
+        self.check_access_rule("read")
 
     def action_test_connection(self):
         self._check_manager()

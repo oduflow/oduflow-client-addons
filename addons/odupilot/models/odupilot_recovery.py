@@ -36,7 +36,7 @@ class AiChatRecovery(models.Model):
         'res.users', string='Answered by', ondelete='set null', index=True)
     resolved_at = fields.Datetime(copy=False)
 
-    _odupilot_recovery_failed_command_unique = models.Constraint('unique(failed_command_id)', 'A recovery decision already exists for this AI request.')
+    _sql_constraints = [('odupilot_recovery_failed_command_unique', 'unique(failed_command_id)', 'A recovery decision already exists for this AI request.')]
 
     def _format_for_client(self):
         self.ensure_one()
