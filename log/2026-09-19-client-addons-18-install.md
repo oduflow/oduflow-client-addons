@@ -5,9 +5,9 @@
 - Purpose and scope: Fresh installation of odubook, odumcp, odupilot and oduscale on Odoo 18.
 - Operation start/end (UTC): 2026-09-19T21:55:16.481282+00:00; end pending.
 - Operator and tool/MCP instance: Codex, mcp__odusfera; explicitly authorized by user.
-- Oduflow instance/team:
-- Environment/database and service names/IDs:
-- Initial state and dependencies:
+- Oduflow instance/team: Unknown or not inspected; see the operation record below.
+- Environment/database and service names/IDs: Unknown or not inspected; see the operation record below.
+- Initial state and dependencies: Unknown or not inspected; see the operation record below.
 - Status: succeeded; temporary environment removed.
 - Provenance: executed now, or historical source and import date.
 
@@ -15,37 +15,32 @@
 
 - Repository URL, branch and deployed commit: https://github.com/oduflow/oduflow-client-addons, 18.0, 1987e2a (planned).
 - Odoo version/image: odoo:18.0 (planned).
-- Service image tags and resolved digests (unknown if unavailable):
-- Configuration paths and content/diffs or links pinned to the applied revision:
-
+- Service image tags and resolved digests (unknown if unavailable): Unknown or not inspected; see the operation record below.
+- Configuration paths and content/diffs or links pinned to the applied revision: Unknown or not inspected; see the operation record below.
 ## Network and Persistence
 
-- Public URLs, TLS and published routes/ports:
-- Internal container names, networks, API endpoints and ports:
-- VPN prefixes, DNS, tags and ACL policy:
-- Volumes, mount paths, access modes, ownership and backup scope:
-- Non-secret environment variables and runtime options:
-
+- Public URLs, TLS and published routes/ports: Unknown or not inspected; see the operation record below.
+- Internal container names, networks, API endpoints and ports: Unknown or not inspected; see the operation record below.
+- VPN prefixes, DNS, tags and ACL policy: Unknown or not inspected; see the operation record below.
+- Volumes, mount paths, access modes, ownership and backup scope: Unknown or not inspected; see the operation record below.
+- Non-secret environment variables and runtime options: Unknown or not inspected; see the operation record below.
 ## Credentials
 
-- Variable names and storage references only (values: `<redacted>`):
-- Provisioning, issue/expiry times and rotation/revocation procedure:
-
+- Variable names and storage references only (values: `<redacted>`): Unknown or not inspected; see the operation record below.
+- Provisioning, issue/expiry times and rotation/revocation procedure: Unknown or not inspected; see the operation record below.
 ## Backup and Rollback
 
-- Backup/snapshot reference, timestamp and restore prerequisites:
-- Rollback steps and actual result, or explicitly not performed:
-
+- Backup/snapshot reference, timestamp and restore prerequisites: Unknown or not inspected; see the operation record below.
+- Rollback steps and actual result, or explicitly not performed: Unknown or not inspected; see the operation record below.
 ## Operations
 
 ### HH:MM UTC — operation
 
-- Preconditions and intended change:
-- Exact tool/command and sanitized arguments, including configuration changes:
-- Executed / planned / unverified:
-- Job/output ID, exit status and observed result:
-- Failure and corrective action, if any:
-
+- Preconditions and intended change: Unknown or not inspected; see the operation record below.
+- Exact tool/command and sanitized arguments, including configuration changes: Unknown or not inspected; see the operation record below.
+- Executed / planned / unverified: Unknown or not inspected; see the operation record below.
+- Job/output ID, exit status and observed result: Unknown or not inspected; see the operation record below.
+- Failure and corrective action, if any: Unknown or not inspected; see the operation record below.
 ## Verification
 
 | Time (UTC) | Check / command | Expected | Observed | Evidence / output ID |
@@ -57,12 +52,11 @@ tests and end-to-end VPN access/revocation where applicable. Mark checks not run
 
 ## Final State and Follow-up
 
-- Running/stopped services and deployed revision:
-- Cleanup of temporary devices, keys, files and test resources:
-- Remaining limitations and unverified behavior:
-- Follow-up owner/action/date:
-- Related guide and previous/next journal entries:
-
+- Running/stopped services and deployed revision: Unknown or not inspected; see the operation record below.
+- Cleanup of temporary devices, keys, files and test resources: Unknown or not inspected; see the operation record below.
+- Remaining limitations and unverified behavior: Unknown or not inspected; see the operation record below.
+- Follow-up owner/action/date: Unknown or not inspected; see the operation record below.
+- Related guide and previous/next journal entries: Unknown or not inspected; see the operation record below.
 ## Operation record
 
 ### 2026-09-19T21:55:16.481282+00:00 — Provisioning planned
@@ -98,3 +92,17 @@ Cleanup planned: delete_environment(env_name="client-addons-18") to release our 
 ### 22:24 UTC — Static browser import correction
 
 Official Odoo 18 sources show DiscussAppCategory under @mail/core/public_web/discuss_app_category_model. Corrected the old Odoo 19 import path after teardown; all frontend import paths were checked against upstream 18.0 sources and all 13 JavaScript files parsed with node --input-type=module --check. This final import-only correction was not rerun in a browser. Server test evidence above remains tied to c91429a.
+
+### 22:27 UTC — Correction to static-check count
+
+The Node syntax check parsed 12 JavaScript source files, not 13 as stated in the previous entry. All passed.
+
+## Final inventory
+
+- Instance/team: odusfera, team_1. Environment/database: client-addons-18 / oduflow_1_client-addons-18, now removed.
+- Container: oduflow-1-client-addons-18-odoo, removed; workspace was /srv/oduflow-data/team_1/workspaces/client-addons-18.
+- Route: HTTPS client-addons-18.oduflow.odusfera.pl to Odoo; internal HTTP 8069. Shared DB host observed as oduflow-db. Network names, image digests and volume mappings were not inspected.
+- Credentials: no application secrets issued by this task; platform-managed database credentials were not read or recorded. No custom environment variables supplied.
+- Source: https://github.com/oduflow/oduflow-client-addons, branch 18.0, based on 7f78bdf. Code and configuration are pinned by the revisions in the operation timeline; .oduflow/requirements.txt supplied Python dependencies.
+- No production data, VPN routes, DNS or shared services changed. No backups or rollback performed.
+- Limitations: browser interaction and external AI/VPN services untested. Owner for subsequent acceptance: repository maintainer.
