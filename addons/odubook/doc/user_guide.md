@@ -221,3 +221,7 @@ by hand with the language buttons above them.
 
 The User Guide answers “what is true now”. The Changes archive answers “what
 changed and when”.
+
+## Odoo 16 compatibility
+
+Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

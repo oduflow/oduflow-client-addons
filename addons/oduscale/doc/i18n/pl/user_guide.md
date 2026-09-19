@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=fbf8843af828 lang=pl -->
+<!-- i18n source=user_guide.md sha=1e78d775a34d lang=pl -->
 # Podręcznik użytkownika Oduscale
 
 Oduscale pozwala osobom zarządzającym dostępem podłączać urządzenia pracowników do
@@ -69,3 +69,7 @@ kończy się błędem; skontaktuj się z administratorem i ponów ją po przywr�
   administratora o przywrócenie łączności, a potem ponów działanie i synchronizację.
 
 Cofnięcie dostępu VPN nie blokuje osobno udostępnionego publicznego adresu Odoo.
+
+## Zgodność z Odoo 16
+
+Do nowej instalacji na Odoo 16 użyj gałęzi `16.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.

@@ -1,4 +1,4 @@
-# Oduflow Client Addons for Odoo 19.0
+# Oduflow Client Addons for Odoo 16.0
 
 Client addons for Odoo, maintained by Oduflow. Modules live in `addons/`; add this
 directory to Odoo's `addons_path`. Deployment resources live in each module’s `addons/<module>/deploy/` directory.

@@ -68,3 +68,7 @@ administrator and retry after service is restored.
   administrator to restore connectivity, then retry and synchronize.
 
 Revoking VPN access does not block a separately exposed public Odoo address.
+
+## Odoo 16 compatibility
+
+Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=6c375ca67b95 lang=pl -->
+<!-- i18n source=admin_guide.md sha=6e0c03439203 lang=pl -->
 # Podręcznik administratora OduMCP
 
 ## Role bezpieczeństwa
@@ -162,7 +162,7 @@ nie nadpisuje — profil daje użytkownikowi konektora:
 | Zamknięcie | tak | `activity.done`, który wpisuje notatkę do chattera rekordu |
 | Usunięcie | nigdy | `record.delete` na `mail.activity` jest odrzucany, nie ma też akcji anulowania |
 
-W Odoo 19 `activity.done` używa `_action_done`, aby opublikować notatkę i zakończyć działanie. Zakończone działania mogą być archiwizowane. Bezpośrednie usuwanie przez MCP pozostaje zabronione, aby zakończenie zachowało ślad audytu.
+W Odoo 16 `activity.done` używa `_action_done`, aby opublikować notatkę i zakończyć działanie. Zakończone działania są usuwane po opublikowaniu notatki. Bezpośrednie usuwanie przez MCP pozostaje zabronione, aby zakończenie zachowało ślad audytu.
 
 Dwa pola celowo nie są zapisywalne: `res_model` i `res_id`. Przeniesienie
 działania na inny rekord dołączyłoby je do rekordu, którego profil może nie mieć
@@ -295,10 +295,14 @@ OduPilot nie wymaga stałego klucza w **Account Security**: dla każdej rozmowy
 tworzy i unieważnia osobny klucz.
 
 
-## Wdrożenie na Odoo 19
+## Wdrożenie na Odoo 16
 
-Zainstaluj `odumcp` z `addons` wraz z dołączonym serwerem MCP. Adres zdarzeń `/odumcp/v1/events` używa uwierzytelnionego krótkiego odpytywania; serwer czeka sekundę po pustej odpowiedzi. Osobiste klucze API wymagają prawidłowych terminów ważności Odoo 19. Ten port nie przenosi bazy Odoo 15.
+Zainstaluj `odumcp` z `addons` wraz z dołączonym serwerem MCP. Adres zdarzeń `/odumcp/v1/events` używa uwierzytelnionego krótkiego odpytywania; serwer czeka sekundę po pustej odpowiedzi. Osobiste klucze API mogą mieć termin ważności; wygasłe klucze są odrzucane. Ten port nie przenosi bazy Odoo 15.
 
 ## Identyfikator instalacji
 
 Zainstaluj `odumcp` jako nowy moduł. Używa on modeli i ustawień `odumcp.*`, tras API `/odumcp/v1/`, pakietu Python `odumcp_server` oraz zmiennych serwera `ODUMCP_*`. Migracja wcześniejszej instalacji nie jest obsługiwana. Odinstaluj wcześniejszy moduł przed wdrożeniem tego kodu; odinstalowanie usuwa również moduły zależne i ich dane. Następnie zainstaluj ponownie potrzebne moduły zależne. Przed użyciem przykładu Compose zbuduj lokalnie obraz serwera o nowej nazwie (`docker compose -f docker-compose.example.yml up --build -d`); publikacja obrazu jest osobną operacją.
+
+## Zgodność z Odoo 16
+
+Do nowej instalacji na Odoo 16 użyj gałęzi `16.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.

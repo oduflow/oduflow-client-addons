@@ -280,21 +280,20 @@ wizard exposes `scope_mode` and passes `odumcp_api_key_scope` into
 OduPilot issues signed session tokens and does not create temporary API-key
 rows. Session validation is provided by the OduPilot authentication extension.
 Personal MCP keys are checked against their expiration date both when matching
-a specific key and when authenticating the MCP endpoint. `_generate` forwards
-the mandatory Odoo 19 expiration argument to the core implementation.
+a specific key and when authenticating the MCP endpoint. `_generate` accepts an optional expiration date stored by this extension; the core generator receives only scope and name.
 
-## Odoo 19 port
+## Odoo 16 port
 
-The module installs on Odoo 19 alongside its accompanying MCP server. It does
-not migrate existing Odoo 15 data. Groups use `res.groups.privilege` and
-`res.users.group_ids`; views use list roots, inline modifiers and Settings apps.
-ORM domains use `fields.Domain`, access checks use `check_access`, and database
-constraints use `models.Constraint`.
+The module installs on Odoo 16 alongside its accompanying MCP server. It does
+not migrate existing Odoo 15 data. Groups use `ir.module.category` and
+`res.users.groups_id`; views use tree roots and version-specific modifiers and Settings layouts.
+ORM domains use `odoo.osv.expression`, access checks use `check_access_rights` and `check_access_rule`, and database
+constraints use `_sql_constraints`.
 
 The events controller polls `bus.bus._poll` on the authenticated ticket's
 private channel without closing the request cursor. The MCP server waits one
 second after an empty response. It does not require Odoo 15's event dispatch
-long-polling API. Completed activities may be archived by Odoo 19 while their
+long-polling API. Completed activities are removed by Odoo 16 while their
 feedback remains in the chatter.
 
 ## YAML Snapshot Preview
@@ -324,3 +323,9 @@ the two fields. No separate MCP page is introduced.
 ## Installation identity
 
 The technical addon name is `odumcp`, the model namespace is `odumcp.*`, and HTTP routes begin with `/odumcp/v1/`. The standalone server package is `odumcp_server`, its CLI is `odumcp-server`, and its environment variables use `ODUMCP_*`. This is a fresh installation with no compatibility aliases or migration scripts. OduPilot depends on `odumcp`. Upstream contributor attribution is retained.
+
+## Branch installation contract
+
+Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database. SQL constraints use `_sql_constraints`; security groups use categories. Controller JSON routes use `type="json"`.
+
+The API-key extension adds an expiration column to the core-managed table and checks it for MCP and ordinary API authentication. Native key creation without an expiration remains supported.

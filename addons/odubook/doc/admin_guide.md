@@ -153,3 +153,7 @@ work for a language that is not installed in the database at all.
 Unreadable, invalid UTF-8 or oversized documentation files are skipped and
 logged without breaking the complete Book. Rendered HTML is cached per worker
 and refreshed when a file's modification time changes.
+
+## Odoo 16 compatibility
+
+Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.
