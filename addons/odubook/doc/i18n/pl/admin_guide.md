@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=854623e50ea9 lang=pl -->
+<!-- i18n source=admin_guide.md sha=a626ae271248 lang=pl -->
 # Administracja księgą dokumentacji
 
 Księga jest oparta na plikach. Podręczniki modułów i archiwum zmian nie
@@ -160,3 +160,23 @@ Nieczytelne, nieprawidłowo zakodowane w UTF-8 lub zbyt duże pliki dokumentacji
 są pomijane i zapisywane w logu bez przerywania działania całej Księgi.
 Wyrenderowany HTML jest buforowany dla każdego workera i odświeżany po zmianie
 czasu modyfikacji pliku.
+
+## Raporty z audytu modułów
+
+Otwórz **Księga → Audyt**, aby przeczytać `doc/module-audit.md` z zainstalowanych
+modułów. Tylko członkowie `base.group_system` mogą czytać raporty, również przez
+bezpośrednie wywołania RPC i eksport PDF. Moduły bez raportu są pomijane; jeśli
+żaden zainstalowany moduł nie ma raportu, sekcja jest pusta. Raporty są technicznymi
+dokumentami źródłowymi w języku angielskim; tłumaczenia są ignorowane.
+
+Użyj `$audit-modules` ze skilem repozytorium w
+`.agents/skills/audit-modules/SKILL.md`, aby przeprowadzić audyt wszystkich modułów
+w `addons/` i zapisać raport w każdym module. Obejmuje to moduły niezainstalowane
+w bieżącej bazie; ich raporty pojawią się po instalacji. Skil zapisuje dowody,
+wagę problemów, zakres i pominięte kontrole. Nie naprawia automatycznie problemów
+ani nie zmienia usług. Raporty opisują stan z chwili audytu, a nie bieżący stan usług.
+
+Przeglądarka obsługuje wyszukiwanie tytułów, odnośniki do sekcji oraz pojedynczy
+i łączony eksport PDF. Wybór sekcji audytu jest zapisywany oddzielnie od wyboru
+w podręcznikach. Odśwież widok po aktualizacji raportów. Zaktualizuj `odubook`
+po wdrożeniu tej funkcji, aby zarejestrować menu i załadować zasoby interfejsu.

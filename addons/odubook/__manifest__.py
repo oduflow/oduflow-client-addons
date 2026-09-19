@@ -29,6 +29,7 @@ shown to the user in a single click.
             "odubook/static/src/book/book.scss",
             "odubook/static/src/book/book.js",
             "odubook/static/src/admin/adminbook.js",
+            "odubook/static/src/audit/auditbook.js",
             "odubook/static/src/changes/changes.js",
             "odubook/static/src/manuals/manuals.js",
             "odubook/static/src/user_menu/language.js",

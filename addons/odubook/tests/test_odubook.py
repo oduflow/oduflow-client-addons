@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from odoo import fields
 from odoo.exceptions import AccessError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, new_test_user
 
 from ..models import odubook
 
@@ -153,6 +153,56 @@ class TestOduBook(TransactionCase):
         )
         self.assertEqual(parameter, str(language.id))
         self.assertEqual(self.env.user.odubook_lang_id, language)
+
+    def test_audit_book_reads_source_and_skips_missing_reports(self):
+        self._write("doc/module-audit.md", "# Base audit\n\n## Findings\n\nAudit evidence.")
+        self._write("doc/i18n/en/module-audit.md", "# Wrong mirror")
+        self._write("doc/i18n/pl/module-audit.md", "# Wrong translation")
+        with patch.object(odubook, "get_module_path", side_effect=self._module_path):
+            book = self.env["odubook"].get_audit_book(lang="pl")
+            self.assertEqual(book["lang"], "en")
+            self.assertEqual([lang["code"] for lang in book["languages"]], ["en"])
+            self.assertEqual([page["module"] for page in book["pages"]], ["base"])
+            self.assertIn("Audit evidence.", book["pages"][0]["html"])
+            self.assertNotIn("Wrong", book["pages"][0]["html"])
+            self.assertEqual(self.env["odubook"].get_book()["pages"], [])
+            self.assertEqual(self.env["odubook"].get_admin_book()["pages"], [])
+            os.remove(os.path.join(self.doc_path, "module-audit.md"))
+            self.assertEqual(self.env["odubook"].get_audit_book()["pages"], [])
+
+    def test_audit_access_includes_rpc_and_both_pdf_exports(self):
+        reader = new_test_user(self.env, login="audit_reader", groups="base.group_user")
+        portal = new_test_user(self.env, login="audit_portal", groups="base.group_portal")
+        for user in (reader, portal, self.user):
+            book = self.env["odubook"].with_user(user)
+            with self.subTest(user=user.login):
+                with self.assertRaises(AccessError):
+                    book.get_audit_book()
+                with self.assertRaises(AccessError):
+                    book.guide_pdf("base", book="audit")
+                with self.assertRaises(AccessError):
+                    book.guide_bundle_pdf([{"module": "base"}], book="audit")
+
+    def test_audit_pdf_uses_report_for_single_and_bundle_exports(self):
+        self._write("doc/module-audit.md", "# Base audit\n\n## Findings\n\nAudit evidence.")
+        self._write("doc/user_guide.md", "# User guide\n\nUnrelated guide.")
+        report = type(self.env["ir.actions.report"])
+        bodies = []
+
+        def fake_pdf(record, htmls, **kwargs):
+            bodies.extend(htmls)
+            return b"%PDF-audit"
+
+        with patch.object(odubook, "get_module_path", side_effect=self._module_path), \
+                patch.object(report, "_run_wkhtmltopdf", fake_pdf):
+            book = self.env["odubook"]
+            single = book.guide_pdf("base", book="audit", section="findings")
+            bundle = book.guide_bundle_pdf([{"module": "base"}], book="audit")
+        self.assertEqual(single["pdf"], b"%PDF-audit")
+        self.assertEqual(bundle["pdf"], b"%PDF-audit")
+        for body in bodies:
+            self.assertIn("Audit evidence.", body)
+            self.assertNotIn("Unrelated guide.", body)
 
     def test_admin_book_requires_system_group(self):
         with self.assertRaises(AccessError):

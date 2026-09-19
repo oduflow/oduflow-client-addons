@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=f6fab75496b1 lang=pl -->
+<!-- i18n source=user_guide.md sha=092b262be12e lang=pl -->
 # Księga dokumentacji
 
 Aplikacja **Odubook** gromadzi w jednym miejscu dokumentację zainstalowanych
@@ -227,3 +227,9 @@ ręcznie przyciskami języków nad nimi.
 
 Podręcznik użytkownika odpowiada na pytanie „co obowiązuje teraz”. Archiwum
 zmian odpowiada na pytanie „co i kiedy się zmieniło”.
+
+## Audyty modułów
+
+Administratorzy mogą otworzyć **Księga → Audyt**, aby przeczytać raporty z audytu
+modułów. Sekcja jest ukryta przed zwykłymi użytkownikami. Raporty opisują badaną
+rewizję, ustalenia i ograniczenia weryfikacji; otwarcie sekcji nie uruchamia audytu.

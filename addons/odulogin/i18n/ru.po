@@ -1,0 +1,65 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* odulogin
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-17 00:00+0000\n"
+"PO-Revision-Date: 2026-09-17 00:00+0000\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Actions performed after switching are recorded as the selected user."
+msgstr "Действия после переключения учитываются от имени выбранного пользователя."
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "OduLogin Session Service"
+msgstr "Сервис сессии OduLogin"
+
+msgid "Only active internal users can be selected."
+msgstr "Можно выбирать только активных внутренних пользователей."
+
+msgid "Only settings administrators can switch users."
+msgstr "Переключать пользователей могут только администраторы Настроек."
+
+msgid "Return to your administrator account before switching again."
+msgstr "Перед новым переключением вернитесь к учётной записи администратора."
+
+msgid "Return to %s"
+msgstr "Вернуться к %s"
+
+msgid "Return to administrator"
+msgstr "Вернуться к администратору"
+
+msgid "Select a user other than yourself."
+msgstr "Выберите пользователя, отличного от текущего."
+
+msgid "Select an existing user."
+msgstr "Выберите существующего пользователя."
+
+msgid "The original administrator account is no longer active."
+msgstr "Исходная учётная запись администратора больше не активна."
+
+msgid "The technical superuser cannot be selected."
+msgstr "Технического суперпользователя выбрать нельзя."
+
+msgid "This session is not switched to another user."
+msgstr "Эта сессия не переключена на другого пользователя."
+
+msgid "Switch User"
+msgstr "Сменить пользователя"
+
+msgid "Switch to Another User"
+msgstr "Переключиться на другого пользователя"
+
+msgid "User switching is only available in an authenticated web session."
+msgstr "Переключение пользователя доступно только в аутентифицированной веб-сессии."
+
+msgid "User"
+msgstr "Пользователь"
