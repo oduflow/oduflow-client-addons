@@ -411,8 +411,7 @@ class TestAiChat(TransactionCase):
                        for message in update.get('mail.message', [])
                        if message['id'] == command.source_message_id.id and 'body' in message]
         self.assertTrue(note_bodies)
-        self.assertEqual(note_bodies[-1][0], 'markup')
-        self.assertIn('three orders', note_bodies[-1][1])
+        self.assertIn('three orders', note_bodies[-1])
         # Общий канал перезагрузил бы форму этой модели у всех, кто держит
         # её открытой, вместе с чужими несохранёнными правками.
         self.assertNotIn(
@@ -2136,9 +2135,8 @@ class TestAiChat(TransactionCase):
                 message.body or ''))
         self.assertEqual(len(usage_notices), 1)
         notice_body = usage_notices.body.replace('\u202f', ' ')
-        language = self.env['res.lang']._lang_get('en_US')
-        expected = datetime(2026, 8, 20, 5, 38, 44).strftime(
-            language.date_format + ' ' + language.time_format)
+        from odoo.tools import format_datetime
+        expected = format_datetime(self.env, datetime(2026, 8, 20, 3, 38, 44), tz='Europe/Warsaw', lang_code='en_US').replace('\u202f', ' ')
         self.assertIn(expected, notice_body)
         self.assertIn('Europe/Warsaw', usage_notices.body)
         self.assertNotIn('resets_at', usage_notices.body)

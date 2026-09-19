@@ -163,7 +163,7 @@ class TestOduMcp(TransactionCase):
 
         self.assertEqual(view.inherit_id, self.env.ref("base.view_users_form"))
         self.assertEqual(
-            arch.xpath("//xpath[@expr=\"//page[@name='page_security']\"]/@position"),
+            arch.xpath("//xpath[@expr=\"//page[@name='access_rights']\"]/@position"),
             ["inside"],
         )
         self.assertEqual(
@@ -1637,7 +1637,7 @@ class TestOduMcpActivities(TransactionCase):
 
         self.assertEqual(status, 200, body)
         self.assertEqual(body["data"]["state"], "executed")
-        self.assertFalse(activity.active)
+        self.assertFalse(activity.exists())
         self.assertEqual(activity.state, "done")
         posted = self.partner.message_ids - before
         self.assertTrue(posted)

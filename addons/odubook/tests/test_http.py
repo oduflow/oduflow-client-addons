@@ -1,3 +1,4 @@
+import json
 import base64
 
 from odoo.tests import HttpCase, tagged
@@ -21,9 +22,9 @@ class TestOdubookHttp(HttpCase):
         })
 
     def _rpc(self, route, params=None):
-        response = self.url_open(route, json={
+        response = self.url_open(route, data=json.dumps({
             "jsonrpc": "2.0", "method": "call", "id": 1, "params": params or {},
-        })
+        }), headers={"Content-Type": "application/json"})
         self.assertEqual(response.status_code, 200)
         return response.json()
 

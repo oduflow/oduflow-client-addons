@@ -80,3 +80,7 @@ Creation succeeded in 60.8s; base initialized, requirements installed. URL https
 ### 21:58 UTC — Second installation failed
 
 Apply output `a215a7a9`, exit 255: ir.ui.view uses `groups_id`, not the Odoo 19 `group_ids`. Corrected restricted agent and wizard views.
+
+### 21:59–22:00 UTC — Installed; initial tests failed
+
+Apply `93db0bef` exited 0, all four modules installed. `run_odoo_tests(env_name="client-addons-18", modules="odubook,odumcp,odupilot,oduscale", summary_only=true)` returned 14 failures and 5 errors / 265, output `a707c755`. Correcting field access API and tests for HTTP helper, view XPath, completed activity deletion, HTML bus encoding, locale formatting, and missing fixture email.

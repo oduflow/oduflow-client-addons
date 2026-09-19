@@ -13,7 +13,7 @@ class TestOduscale(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.manager = cls.env["res.users"].create({
-            "name": "VPN Manager", "login": "oduscale-test-manager",
+            "name": "VPN Manager", "login": "oduscale-test-manager", "email": "manager@example.test",
             "groups_id": [Command.set([cls.env.ref("oduscale.group_manager").id])],
         })
         cls.employee_user = cls.env["res.users"].create({

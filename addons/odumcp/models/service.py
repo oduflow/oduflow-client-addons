@@ -1299,7 +1299,7 @@ class OduMcpService(models.AbstractModel):
         self._check_field_names(Model, list(values), allowed)
         readonly = []
         for name in values:
-            Model._check_field_access(Model._fields[name], "write")
+            Model.check_field_access_rights("write", [name])
             if Model._fields[name].readonly:
                 readonly.append(name)
         if readonly:
