@@ -78,3 +78,7 @@ Creation succeeded (63.8s), base and requirements installed. Team_1; URL https:/
 ### 22:04–22:08 UTC — Installation passed; test compatibility fixes
 
 Apply `ffa26edd` exited 0. Test output `66adc438` reported 0/0 of 45 but **was not a complete pass**: asset pregeneration crashed on missing mail.Message.bodyAsNotification. Removed that obsolete inheritance, retaining decision cards in mail.Message. After restart, tests `210fcf2a` reported 0 failures, 13 errors / 163; errors: has_access unavailable, XPath list instead of tree in test, env._ unavailable. Ported these APIs and fixtures.
+
+### 22:12 UTC — Full test pass still pending
+
+Output `f7659070`: 2 failures and 1 error / 265. Correcting bot-message classification against the native author format; adapting event and channel serialization assertions to legacy mail.message/updated and channel_info.

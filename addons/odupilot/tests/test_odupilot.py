@@ -402,14 +402,13 @@ class TestAiChat(TransactionCase):
         # Тело заметки обновляется адресно у автора вопроса.
         self.assertIn(
             (('res.partner', self.owner.partner_id.id),
-             'mail.record/insert'),
+             'mail.message/updated'),
             notifications)
         updates = [json.loads(event.message)['payload']
                    for event in self.env['bus.bus'].sudo().search([('id', '>', marker)])
-                   if json.loads(event.message)['type'] == 'mail.record/insert']
-        note_bodies = [message['body'] for update in updates
-                       for message in update.get('mail.message', [])
-                       if message['id'] == command.source_message_id.id and 'body' in message]
+                   if json.loads(event.message)['type'] == 'mail.message/updated']
+        note_bodies = [update['body'] for update in updates
+                       if update['id'] == command.source_message_id.id and 'body' in update]
         self.assertTrue(note_bodies)
         self.assertIn('three orders', note_bodies[-1])
         # Общий канал перезагрузил бы форму этой модели у всех, кто держит
@@ -3271,10 +3270,8 @@ class TestAiChat(TransactionCase):
         self.assertFalse(cleanup.session_id)
 
     def test_store_serializes_session_status_and_blocks_outsiders(self):
-        from odoo.addons.mail.tools.discuss import Store
         session = self._new_session()
-        data = Store().add(session.channel_id.with_user(self.owner)).get_result()
-        channel = data['discuss.channel'][0]
+        channel = session.channel_id.with_user(self.owner).channel_info()[0]
         self.assertTrue(channel['is_odupilot'])
         self.assertEqual(channel['odupilot_session']['session_id'], session.id)
         with self.assertRaises(AccessError):
