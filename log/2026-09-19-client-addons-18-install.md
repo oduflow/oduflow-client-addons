@@ -94,3 +94,7 @@ Cleanup planned: delete_environment(env_name="client-addons-18") to release our 
 ### 22:09 UTC — Cleanup completed
 
 `delete_environment(env_name="client-addons-18")` returned torn down. All application tests passed before teardown. Branch remains on origin; temporary worktree retained for code review.
+
+### 22:24 UTC — Static browser import correction
+
+Official Odoo 18 sources show DiscussAppCategory under @mail/core/public_web/discuss_app_category_model. Corrected the old Odoo 19 import path after teardown; all frontend import paths were checked against upstream 18.0 sources and all 13 JavaScript files parsed with node --input-type=module --check. This final import-only correction was not rerun in a browser. Server test evidence above remains tied to c91429a.

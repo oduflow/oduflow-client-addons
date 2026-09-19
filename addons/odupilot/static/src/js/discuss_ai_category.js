@@ -2,7 +2,7 @@
 import { Thread } from "@mail/core/common/thread_model";
 import { Message } from "@mail/core/common/message_model";
 import { DiscussApp } from "@mail/core/public_web/discuss_app_model";
-import { DiscussAppCategory } from "@mail/discuss/core/public_web/discuss_app_category_model";
+import { DiscussAppCategory } from "@mail/core/public_web/discuss_app_category_model";
 import { Settings } from "@mail/core/common/settings_model";
 import { fields } from "@mail/core/common/record";
 import { patch } from "@web/core/utils/patch";
