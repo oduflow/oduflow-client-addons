@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=854623e50ea9 lang=pl -->
+<!-- i18n source=admin_guide.md sha=eddebb303f0d lang=pl -->
 # Administracja księgą dokumentacji
 
 Księga jest oparta na plikach. Podręczniki modułów i archiwum zmian nie
@@ -160,3 +160,7 @@ Nieczytelne, nieprawidłowo zakodowane w UTF-8 lub zbyt duże pliki dokumentacji
 są pomijane i zapisywane w logu bez przerywania działania całej Księgi.
 Wyrenderowany HTML jest buforowany dla każdego workera i odświeżany po zmianie
 czasu modyfikacji pliku.
+
+## Zgodność z Odoo 17
+
+Do nowej instalacji na Odoo 17 użyj gałęzi `17.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.

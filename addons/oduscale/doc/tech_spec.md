@@ -2,7 +2,7 @@
 
 ## Scope and Dependencies
 
-Odoo 19 application, version `19.0.1.0.0`, depending on `hr`, `mail` and Python
+Odoo 17 application, version `17.0.1.0.0`, depending on `hr`, `mail` and Python
 `requests`. The module uses standard Odoo list/form views and object actions;
 it has no custom HTTP controllers or frontend assets. Headscale, the Tailscale
 client, VPN ACL policy and gateway are external infrastructure.
@@ -115,3 +115,9 @@ and `addons/oduscale/deploy/gateway/`; they contain deployment-specific values a
 Concrete hosts, image versions, applied revisions and verification evidence belong
 in `log/`, following the repository agent rules. Historical journal entries
 do not define the current runtime state or supported image-version range.
+
+## Branch installation contract
+
+Use branch `17.0` for a fresh installation on Odoo 17. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database. SQL constraints use `_sql_constraints`; security groups use categories. Controller JSON routes use `type="json"`.
+
+The API-key extension adds an expiration column to the core-managed table and checks it for MCP and ordinary API authentication. Native key creation without an expiration remains supported.

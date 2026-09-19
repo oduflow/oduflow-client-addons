@@ -221,3 +221,7 @@ by hand with the language buttons above them.
 
 The User Guide answers “what is true now”. The Changes archive answers “what
 changed and when”.
+
+## Odoo 17 compatibility
+
+Use branch `17.0` for a fresh installation on Odoo 17. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

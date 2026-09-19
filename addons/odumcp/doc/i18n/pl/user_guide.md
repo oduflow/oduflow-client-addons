@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=05f6663760c8 lang=pl -->
+<!-- i18n source=user_guide.md sha=f8c8f0170159 lang=pl -->
 # Podręcznik użytkownika OduMCP
 
 ## Zanim zaczniesz
@@ -147,3 +147,7 @@ rekordu, dzięki czemu klient nie musi czytać wszystkiego od nowa.
 
 
 Tworząc klucz, wybierz termin ważności dozwolony przez Twoje grupy Odoo. Wygasłe klucze są odrzucane także przy włączonym dostępie MCP.
+
+## Zgodność z Odoo 17
+
+Do nowej instalacji na Odoo 17 użyj gałęzi `17.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.
