@@ -27,11 +27,11 @@ export class VoiceTextField extends Component {
             if (this.recorder) { this.recorder.handlers = {}; this.recorder.stop(); this.recorder.release(); }
         });
     }
-    get value() { return this.props.record.data[this.props.name] || ""; }
+    get value() { return this.props.value || ""; }
     get duration() {
         return String(Math.floor(this.state.duration / 60)).padStart(2, "0") + ":" + String(this.state.duration % 60).padStart(2, "0");
     }
-    onInput(event) { return this.props.record.update({ [this.props.name]: event.target.value }); }
+    onInput(event) { return this.props.update(event.target.value); }
     async onRecord() {
         this.state.error = ""; this.state.duration = 0;
         this.recorder = new VoiceRecorder({
@@ -58,11 +58,13 @@ export class VoiceTextField extends Component {
             const transcript = await this.orm.call("odupilot.developer.wizard", "transcribe_voice", [audio, VoiceRecorder.buildFileName(mimeType), mimeType, seconds]);
             if (!this.disposed) {
                 const current = this.value.trim();
-                await this.props.record.update({ [this.props.name]: current ? current + "\n\n" + transcript : transcript });
+                await this.props.update(current ? current + "\n\n" + transcript : transcript);
             }
         } catch (error) {
             this.state.error = error.data?.message || _t("Voice transcription failed. Try again or type the request.");
         } finally { this.state.transcribing = false; this.recorder = undefined; }
     }
 }
-registry.category("fields").add("ai_voice_text", { component: VoiceTextField, supportedTypes: ["text"], extractProps: ({ attrs }) => ({ placeholder: attrs.placeholder }) });
+VoiceTextField.supportedTypes = ["text"];
+VoiceTextField.extractProps = ({ attrs }) => ({ placeholder: attrs.placeholder });
+registry.category("fields").add("ai_voice_text", VoiceTextField);

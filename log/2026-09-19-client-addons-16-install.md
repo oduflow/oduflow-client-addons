@@ -82,3 +82,7 @@ After removing our Odoo 18 environment, creation succeeded in 48.2s; base and re
 ### 22:12 UTC — First installation failed
 
 Apply `e01d9f2e` exited 255: model import renamed without renaming the source file. Corrected models/__init__.py to import discuss_channel_member.py, which now extends mail.channel.member.
+
+### 22:15–22:22 UTC — Asset compatibility and passing tests
+
+Apply `bc0cedc5` exited 0: all four modules installed. Initial tests `8e15693a` stopped in asset generation after 45 tests (missing Odoo 19 chatter XPath), so the zero-error summary was incomplete. Ported mail components/templates, OWL markers, model patches and bus subscriptions; applied code `7b58be4`. Full tests `ed663726`: **0 failures, 0 errors / 265 tests**. Static import existence audit inside the container found no unresolved module paths. Additional review corrected Odoo 16 action props, field registration and chatter refresh; final rerun pending.

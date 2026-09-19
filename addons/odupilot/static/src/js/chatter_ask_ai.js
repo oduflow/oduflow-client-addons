@@ -8,7 +8,7 @@ patch(Chatter.prototype, "odupilot.chatter", {
     setup() {
         this._super(...arguments);
         useBus(this.env.bus, "odupilot/chatter", ({ detail }) => {
-            if (detail.model === this.chatter.thread.model && detail.id === this.chatter.thread.id) { this.chatter.thread.refresh(); }
+            if (detail.model === this.chatter.thread.model && detail.id === this.chatter.thread.id) { this.chatter.refresh(); }
         });
     },
     get hasAskAiButton() {
@@ -19,6 +19,6 @@ patch(Chatter.prototype, "odupilot.chatter", {
             type: "ir.actions.act_window", name: _t("Ask AI"),
             res_model: "odupilot.ask.wizard", views: [[false, "form"]], target: "new",
             context: { default_res_model: this.chatter.thread.model, default_res_id: this.chatter.thread.id },
-        }, { onClose: () => this.chatter.thread.refresh() });
+        }, { onClose: () => this.chatter.refresh() });
     },
 });

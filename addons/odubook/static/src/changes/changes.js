@@ -7,7 +7,6 @@ import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, onMounted, onPatched, onWillUnmount, useState, useRef, markup } from "@odoo/owl";
-import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 const { DateTime } = luxon;
 
 /** Ключ записи летописи: пара «модуль + дата». */
@@ -770,7 +769,7 @@ export class ChangesApp extends Component {
     }
 }
 
-ChangesApp.props = { ...standardActionServiceProps };
+ChangesApp.props = ["*"];
 ChangesApp.template = "odubook.ChangesApp";
 
 registry.category("actions").add("odubook.changes", ChangesApp);

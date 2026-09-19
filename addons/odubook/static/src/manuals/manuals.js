@@ -7,7 +7,6 @@ import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, useRef, useState, markup } from "@odoo/owl";
-import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 //: Полка рассчитана на документы; предел совпадает с серверным.
 const MAX_MANUAL_BYTES = 25 * 1024 * 1024;
@@ -323,7 +322,7 @@ export class ManualsApp extends Component {
     }
 }
 
-ManualsApp.props = { ...standardActionServiceProps };
+ManualsApp.props = ["*"];
 ManualsApp.template = "odubook.ManualsApp";
 
 registry.category("actions").add("odubook.manuals", ManualsApp);

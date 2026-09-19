@@ -6,7 +6,6 @@ import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, onMounted, onPatched, useState, useRef, markup } from "@odoo/owl";
-import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 //: Заголовки, у которых появляются кнопки: глубже третьего уровня раздел уже
 //: слишком мелок, чтобы выгружать его отдельным документом.
@@ -369,7 +368,7 @@ export class BookApp extends Component {
     }
 }
 
-BookApp.props = { ...standardActionServiceProps };
+BookApp.props = ["*"];
 BookApp.template = "odubook.BookApp";
 // JSON endpoint, тег действия и вид книги переопределяются в AdminBookApp;
 // остальная логика общая.
