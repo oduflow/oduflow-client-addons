@@ -77,10 +77,10 @@ class MailChannel(models.Model):
                     info['state'] = 'closed'
         return infos
 
-    def _to_store(self, store, fields):
-        super()._to_store(store, fields)
+    def _to_store(self, store):
+        super()._to_store(store)
         for info in self.sudo()._odupilot_channel_info():
-            store.add_records_fields(self.browse(info['id']), {
+            store.add(self.browse(info['id']), {
                 'is_odupilot': info['is_odupilot'],
                 'odupilot_session': info.get('odupilot_session'),
             })

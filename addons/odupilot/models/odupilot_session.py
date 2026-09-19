@@ -2549,7 +2549,7 @@ class AiChatSession(models.Model):
         """
         recipients = note.author_id | self.user_id.sudo().partner_id
         for partner in recipients:
-            Store(bus_channel=partner).add(note, ['body']).bus_send()
+            self.env['bus.bus']._sendone(partner, 'mail.record/insert', Store(note, fields=['body']).get_result())
 
     def _post_assistant_message(self, event, payload):
         self.ensure_one()
@@ -2685,4 +2685,4 @@ class AiChatSession(models.Model):
         """Показать дописанный шаг без перезагрузки Discuss."""
         self.ensure_one()
         for partner in self.channel_id.channel_partner_ids:
-            Store(bus_channel=partner).add(message, ['body']).bus_send()
+            self.env['bus.bus']._sendone(partner, 'mail.record/insert', Store(message, fields=['body']).get_result())

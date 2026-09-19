@@ -68,9 +68,9 @@ class MailMessage(models.Model):
                     item['odupilot_recovery'] = recovery._format_for_client()
         return values
 
-    def _to_store(self, store, fields, **kwargs):
-        super()._to_store(store, fields, **kwargs)
+    def _to_store(self, store, *, fields=None, **kwargs):
+        super()._to_store(store, fields=fields, **kwargs)
         for info in self.message_format():
-            store.add_records_fields(self.browse(info['id']), {
+            store.add(self.browse(info['id']), {
                 key: value for key, value in info.items() if key.startswith('odupilot_')
             })
