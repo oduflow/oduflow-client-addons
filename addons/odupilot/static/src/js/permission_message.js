@@ -169,7 +169,7 @@ registry.category("services").add("odupilot.live", {
         const getThread = (id) => store.Thread.get({ model: "discuss.channel", id });
         for (const kind of ["permission", "recovery"]) {
             bus.subscribe(`odupilot.${kind}/updated`, (data) => {
-                const message = store["mail.message"].get(data.message_id);
+                const message = store.Message.get(data.message_id);
                 if (message) { message[`odupilot_${kind}`] = data; }
             });
         }

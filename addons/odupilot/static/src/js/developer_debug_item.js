@@ -1,7 +1,5 @@
 /** @odoo-module **/
 
-import { user } from "@web/core/user";
-import { router as webRouter } from "@web/core/browser/router";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 
@@ -17,8 +15,8 @@ function jsonValue(value, fallback) {
 function currentDeveloperContext(env) {
     const controller = env.services.action.currentController || {};
     const action = controller.action || {};
-    const router = webRouter.current || {};
-    const hash = router;
+    const router = env.services.router.current || {};
+    const hash = router.hash || {};
     const props = controller.props || {};
     const viewType = hash.view_type || (controller.view && controller.view.type) || "";
     let viewId = hash.view_id || "";
@@ -54,7 +52,7 @@ function currentDeveloperContext(env) {
 }
 
 function aiDeveloperItem({ env }) {
-    if (!user.isAdmin) {
+    if (!env.services.user.isAdmin) {
         return null;
     }
     return {

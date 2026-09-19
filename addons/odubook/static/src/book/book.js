@@ -1,13 +1,11 @@
 /** @odoo-module **/
 
-import { router } from "@web/core/browser/router";
 import { browser } from "@web/core/browser/browser";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, onMounted, onPatched, useState, useRef, markup } from "@odoo/owl";
-import { rpc } from "@web/core/network/rpc";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 //: Заголовки, у которых появляются кнопки: глубже третьего уровня раздел уже
@@ -28,7 +26,7 @@ const TOOL_HEADINGS = "h1[id], h2[id], h3[id]";
 export class BookApp extends Component {
     setup() {
         this.root = useRef("root");
-        this.rpc = rpc;
+        this.rpc = useService("rpc");
         this.markup = markup;
         this.notification = useService("notification");
         // Ссылка, по которой книгу открыли: страница, раздел и язык.
@@ -65,7 +63,7 @@ export class BookApp extends Component {
      * строки, поэтому проверяются здесь, а не там, где применяются.
      */
     _linkParams() {
-        const params = { ...router.current, ...this.props.action?.params };
+        const params = { ...this.env.services.router.current.hash, ...this.props.action?.params };
         return {
             page: params.page ? String(params.page) : null,
             section: params.section ? String(params.section) : null,

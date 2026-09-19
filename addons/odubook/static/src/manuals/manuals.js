@@ -1,6 +1,5 @@
 /** @odoo-module **/
 
-import { user } from "@web/core/user";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { registry } from "@web/core/registry";
 import { sprintf } from "@web/core/utils/strings";
@@ -8,7 +7,6 @@ import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, useRef, useState, markup } from "@odoo/owl";
-import { rpc } from "@web/core/network/rpc";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 
 //: Полка рассчитана на документы; предел совпадает с серверным.
@@ -28,11 +26,11 @@ const MAX_MANUAL_BYTES = 25 * 1024 * 1024;
  */
 export class ManualsApp extends Component {
     setup() {
-        this.rpc = rpc;
+        this.rpc = useService("rpc");
         this.markup = markup;
         this.dialog = useService("dialog");
         this.notification = useService("notification");
-        this.user = user;
+        this.user = useService("user");
         this.fileInput = useRef("fileInput");
         // Язык и документ выбранного файла решаются до диалога выбора: в
         // обработчике change остаётся только прочитать байты.
