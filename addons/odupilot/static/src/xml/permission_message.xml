@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
 <templates xml:space="preserve">
-    <t t-inherit="mail.Message" t-inherit-mode="extension">
-        <xpath expr="//div[hasclass('o-mail-Message-body')]" position="after">
+    <t t-inherit="mail.Message" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('o_Message_content')]" position="after">
             <t t-call="odupilot.DecisionCards"/></xpath>
     </t>
 
-<t t-inherit="mail.Thread" t-inherit-mode="extension">
-<xpath expr="//div[hasclass('o-mail-Thread')]" position="before">
+<t t-inherit="mail.ThreadView" t-inherit-mode="extension" owl="1">
+<xpath expr="//div[hasclass('o_ThreadView')]" position="before">
 <div t-if="odupilotStatus" class="o_AiChatSessionStatus border-bottom px-3 py-2" role="status"><strong t-esc="odupilotStatus.label"/><span class="ms-2" t-esc="odupilotStatus.error"/></div>
 </xpath>
-<xpath expr="//div[hasclass('o-mail-Thread')]" position="inside">
+<xpath expr="//div[hasclass('o_ThreadView')]" position="inside">
 <div t-if="odupilotLiveBody" class="o_odupilot_live p-3" aria-live="polite" t-out="odupilotLiveBody"/>
-</xpath></t><t t-name="odupilot.DecisionCards"><t t-if="props.message.odupilot_permission">
-                <t t-set="permission" t-value="props.message.odupilot_permission"/>
+</xpath></t><t t-name="odupilot.DecisionCards" owl="1"><t t-if="props.record.message.odupilot_permission">
+                <t t-set="permission" t-value="props.record.message.odupilot_permission"/>
                 <div class="o_AiChatPermissionCard mt-2 mb-1">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
                         <strong class="o_AiChatPermissionCard_title">
@@ -53,8 +53,8 @@
                     </div>
                 </div>
             </t>
-            <t t-if="props.message.odupilot_recovery">
-                <t t-set="recovery" t-value="props.message.odupilot_recovery"/>
+            <t t-if="props.record.message.odupilot_recovery">
+                <t t-set="recovery" t-value="props.record.message.odupilot_recovery"/>
                 <div class="o_AiChatRecoveryCard mt-2 mb-1">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
                         <strong class="o_AiChatRecoveryCard_title">
@@ -80,4 +80,7 @@
                     </div>
                 </div>
             </t>
-        </t></templates>
+        </t><t t-inherit="mail.DiscussSidebar" t-inherit-mode="extension" owl="1">
+<xpath expr="//t[@name='beforeCategoryChat']" position="before">
+<DiscussSidebarCategory t-if="discussView.discuss.categoryAI" record="discussView.discuss.categoryAI" className="'o_DiscussSidebar_category'"/>
+</xpath></t></templates>

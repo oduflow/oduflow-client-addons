@@ -1,6 +1,5 @@
 /** @odoo-module **/
 
-import { router } from "@web/core/browser/router";
 import { browser } from "@web/core/browser/browser";
 import { registry } from "@web/core/registry";
 import { sprintf } from "@web/core/utils/strings";
@@ -8,7 +7,6 @@ import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, onMounted, onPatched, onWillUnmount, useState, useRef, markup } from "@odoo/owl";
-import { rpc } from "@web/core/network/rpc";
 import { standardActionServiceProps } from "@web/webclient/actions/action_service";
 const { DateTime } = luxon;
 
@@ -60,7 +58,7 @@ function barPath(x, y, width, height) {
 export class ChangesApp extends Component {
     setup() {
         this.root = useRef("root");
-        this.rpc = rpc;
+        this.rpc = useService("rpc");
         this.markup = markup;
         this.notification = useService("notification");
         // Ссылка, по которой архив открыли: режим, группа и запись в ней.
@@ -466,7 +464,7 @@ export class ChangesApp extends Component {
      * там, где применяются.
      */
     _linkParams() {
-        const params = { ...router.current, ...this.props.action?.params };
+        const params = { ...this.env.services.router.current.hash, ...this.props.action?.params };
         return {
             groupBy: GROUP_MODES.includes(params.group_by) ? params.group_by : null,
             group: params.group ? String(params.group) : null,

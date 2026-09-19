@@ -1,7 +1,7 @@
 /** @odoo-module **/
 import { markup, useState, onWillStart, onWillUpdateProps } from "@odoo/owl";
-import { Message } from "@mail/core/common/message";
-import { Thread } from "@mail/core/common/thread";
+import { Message } from "@mail/components/message/message";
+import { ThreadView as Thread } from "@mail/components/thread_view/thread_view";
 import { patch } from "@web/core/utils/patch";
 import { registry } from "@web/core/registry";
 import { _t } from "@web/core/l10n/translation";
@@ -120,17 +120,17 @@ function renderStreamBody(stream) {
 }
 
 
-patch(Message.prototype, {
-    setup() { super.setup(...arguments); this.odupilotState = useState({ submitting: false }); },
+patch(Message.prototype, "odupilot.message", {
+    setup() { this._super(...arguments); this.odupilotState = useState({ submitting: false }); },
     async replyOduPilot(event) {
         const kind = event.currentTarget.dataset.kind;
-        const data = this.props.message[`odupilot_${kind}`];
+        const data = this.props.record.message[`odupilot_${kind}`];
         if (this.odupilotState.submitting || data?.status !== "pending") { return; }
         const response = event.currentTarget.dataset.response;
         this.odupilotState.submitting = true;
         try {
-            this.props.message[`odupilot_${kind}`] = await this.env.services.orm.call(
-                `odupilot.${kind}`, "action_reply", [[data.id], response]);
+            this.props.record.message.update({ [`odupilot_${kind}`]: await this.env.services.orm.call(
+                `odupilot.${kind}`, "action_reply", [[data.id], response]) });
         } finally { this.odupilotState.submitting = false; }
     },
 });
@@ -140,52 +140,58 @@ async function refreshStream(orm, thread) {
     const snapshot = await orm.call("odupilot.session", "stream_snapshot", [thread.id]);
     // A newer event (especially done/error) wins over an in-flight snapshot.
     if ((streamVersions.get(thread) || 0) === version) {
-        thread.odupilot_stream = snapshot ? streamStateFromSnapshot(snapshot) : null;
+        thread.update({ odupilot_stream: snapshot ? streamStateFromSnapshot(snapshot) : null });
     }
 }
-patch(Thread.prototype, {
+patch(Thread.prototype, "odupilot.thread", {
     setup() {
-        super.setup(...arguments);
+        this._super(...arguments);
         const load = (thread) => thread.is_odupilot ? refreshStream(this.env.services.orm, thread) : undefined;
-        onWillStart(() => load(this.props.thread));
+        onWillStart(() => load(this.props.record.thread));
         onWillUpdateProps((next) => {
-            if (next.thread.id !== this.props.thread.id) { return load(next.thread); }
+            if (next.record.thread.id !== this.props.record.thread.id) { return load(next.record.thread); }
         });
     },
     get odupilotStatus() {
-        const status = this.props.thread.odupilot_session;
+        const status = this.props.record.thread.odupilot_session;
         if (!status) { return null; }
         const labels = { init: _t("Initializing AI session…"), ready: _t("AI session is ready"), busy: _t("AI is working…"), waiting_approval: _t("Waiting for approval"), error: _t("AI session failed"), closed: _t("AI session is closed") };
         return { ...status, label: labels[status.state] || status.state };
     },
     get odupilotLiveBody() {
-        return this.props.thread.odupilot_stream ? markup(renderStreamBody(this.props.thread.odupilot_stream)) : "";
+        return this.props.record.thread.odupilot_stream ? markup(renderStreamBody(this.props.record.thread.odupilot_stream)) : "";
     },
 });
 registry.category("services").add("odupilot.live", {
-    dependencies: ["bus_service", "mail.store", "orm", "notification", "action"],
-    start(env, { bus_service: bus, "mail.store": store, orm, notification, action }) {
+    dependencies: ["bus_service", "messaging", "orm", "notification", "action"],
+    async start(env, { bus_service, messaging, orm, notification, action }) {
+        const store = await messaging.get();
+        const bus = { subscribe(type, callback) {
+            bus_service.addEventListener("notification", ({ detail }) => {
+                for (const event of detail) { if (event.type === type) { callback(event.payload); } }
+            });
+        } };
         bus.subscribe("odupilot/chatter", (data) => env.bus.trigger("odupilot/chatter", data));
-        const getThread = (id) => store.Thread.get({ model: "discuss.channel", id });
+        const getThread = (id) => store.models.Thread.findFromIdentifyingData({ model: "mail.channel", id });
         for (const kind of ["permission", "recovery"]) {
             bus.subscribe(`odupilot.${kind}/updated`, (data) => {
-                const message = store["mail.message"].get(data.message_id);
-                if (message) { message[`odupilot_${kind}`] = data; }
+                const message = store.models.Message.findFromIdentifyingData({ id: data.message_id });
+                if (message) { message.update({ [`odupilot_${kind}`]: data }); }
             });
         }
         bus.subscribe("odupilot.session/status", (status) => {
             const thread = getThread(status.channel_id);
-            if (thread) { thread.odupilot_session = status; }
+            if (thread) { thread.update({ odupilot_session: status }); }
         });
         bus.subscribe("odupilot_stream/update", async (stream) => {
             const thread = getThread(stream.channel_id);
             if (!thread) { return; }
             streamVersions.set(thread, (streamVersions.get(thread) || 0) + 1);
             if (["done", "error"].includes(stream.state)) {
-                thread.odupilot_stream = null;
+                thread.update({ odupilot_stream: null });
                 return;
             }
-            if (stream.state === "start") { thread.odupilot_stream = streamStateFromSnapshot(stream); }
+            if (stream.state === "start") { thread.update({ odupilot_stream: streamStateFromSnapshot(stream) }); }
             else if (!applyStreamUpdate(thread.odupilot_stream, stream)) {
                 await refreshStream(orm, thread);
             }

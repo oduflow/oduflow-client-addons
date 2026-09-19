@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <templates xml:space="preserve">
-    <t t-name="odupilot.VoiceTextField">
+    <t t-name="odupilot.VoiceTextField" owl="1">
         <div class="o_ai_voice_text_field">
             <t t-if="!props.readonly">
                 <textarea class="o_input o_ai_voice_text_input" t-att-placeholder="props.placeholder" t-att-value="value" t-on-input="onInput"/>

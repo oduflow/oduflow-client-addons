@@ -1,33 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <templates xml:space="preserve">
-    <t t-name="odubook.ChangesApp">
+    <t t-name="odubook.ChangesApp" owl="1">
         <div t-ref="root" class="o_odubook o_odu_changes d-flex h-100">
             <div class="o_odubook_sidebar d-flex flex-column">
                 <div class="o_odu_changes_title p-2">
                     <span>Change archive</span>
-                    <button type="button"
-                            class="btn btn-sm o_odu_changes_chart_toggle"
-                            t-if="groupedByFeed"
-                            t-att-class="{ active: state.showChart }"
-                            t-att-aria-pressed="state.showChart ? 'true' : 'false'"
-                            t-on-click="toggleChart">Chart</button>
+                    <button type="button" class="btn btn-sm o_odu_changes_chart_toggle" t-if="groupedByFeed" t-att-class="{ active: state.showChart }" t-att-aria-pressed="state.showChart ? 'true' : 'false'" t-on-click="toggleChart">Chart</button>
                 </div>
                 <div class="o_odu_changes_toolbar p-2">
                     <div class="btn-group btn-group-sm w-100 o_odu_changes_switch" role="group">
-                        <button type="button" class="btn btn-outline-secondary"
-                                t-att-class="{ active: groupedByFeed }"
-                                t-on-click="() => this.setGroupBy('date')">By date</button>
-                        <button type="button" class="btn btn-outline-secondary"
-                                t-att-class="{ active: groupedByModule }"
-                                t-on-click="() => this.setGroupBy('module')">By module</button>
-                        <button type="button" class="btn btn-outline-secondary"
-                                t-att-class="{ active: groupedByDate }"
-                                t-on-click="() => this.setGroupBy('module_date')">By module &amp; date</button>
+                        <button type="button" class="btn btn-outline-secondary" t-att-class="{ active: groupedByFeed }" t-on-click="() =&gt; this.setGroupBy('date')">By date</button>
+                        <button type="button" class="btn btn-outline-secondary" t-att-class="{ active: groupedByModule }" t-on-click="() =&gt; this.setGroupBy('module')">By module</button>
+                        <button type="button" class="btn btn-outline-secondary" t-att-class="{ active: groupedByDate }" t-on-click="() =&gt; this.setGroupBy('module_date')">By module &amp; date</button>
                     </div>
-                    <button type="button"
-                            class="btn btn-link btn-sm o_odu_changes_read_all p-0 mt-1"
-                            t-if="unreadCount"
-                            t-on-click="markAllRead">
+                    <button type="button" class="btn btn-link btn-sm o_odu_changes_read_all p-0 mt-1" t-if="unreadCount" t-on-click="markAllRead">
                         <span>Mark all as read</span>
                         <span class="o_odu_changes_count" t-esc="unreadCount"/>
                     </button>
@@ -42,20 +28,10 @@
                     <t t-foreach="archive" t-as="group" t-key="group.key">
                         <div class="o_odu_changes_month" t-if="group.label" t-esc="group.label"/>
                         <t t-foreach="group.items" t-as="item" t-key="item.key">
-                            <div class="o_odubook_page_link o_odu_changes_day"
-                                 t-att-class="{
-                                     o_active: item.key === state.activeKey,
-                                     o_odu_changes_unread: item.unread,
-                                 }"
-                                 t-on-click="() => this.selectGroup(item.key)">
+                            <div class="o_odubook_page_link o_odu_changes_day" t-att-class="{                                      o_active: item.key === state.activeKey,                                      o_odu_changes_unread: item.unread,                                  }" t-on-click="() =&gt; this.selectGroup(item.key)">
                                 <span class="text-truncate" t-esc="item.label"/>
-                                <span class="o_odu_changes_count o_unread"
-                                      t-if="item.unread"
-                                      t-att-title="unreadTitle(item)"
-                                      t-esc="item.unread"/>
-                                <span class="o_odu_changes_count"
-                                      t-att-title="countTitle(item)"
-                                      t-esc="item.count"/>
+                                <span class="o_odu_changes_count o_unread" t-if="item.unread" t-att-title="unreadTitle(item)" t-esc="item.unread"/>
+                                <span class="o_odu_changes_count" t-att-title="countTitle(item)" t-esc="item.count"/>
                             </div>
                         </t>
                     </t>
@@ -73,37 +49,19 @@
                         </span>
                     </div>
                     <div class="o_odu_chart_scroll">
-                        <svg class="o_odu_chart_svg"
-                             t-att-width="chart.width" t-att-height="chart.height">
+                        <svg class="o_odu_chart_svg" t-att-width="chart.width" t-att-height="chart.height">
                             <t t-foreach="chart.bars" t-as="bar" t-key="bar.key">
-                                <g class="o_odu_chart_bar"
-                                   t-att-class="{ o_active: bar.active }"
-                                   t-on-click="() => this.selectGroup(bar.key)">
+                                <g class="o_odu_chart_bar" t-att-class="{ o_active: bar.active }" t-on-click="() =&gt; this.selectGroup(bar.key)">
                                     <title t-esc="bar.title"/>
-                                    <rect class="o_odu_chart_hit"
-                                          t-att-x="bar.x" t-att-y="bar.hitY"
-                                          t-att-width="bar.w" t-att-height="bar.hitH"/>
-                                    <rect class="o_odu_chart_read"
-                                          t-if="bar.bottomH"
-                                          t-att-x="bar.x" t-att-y="bar.bottomY"
-                                          t-att-width="bar.w" t-att-height="bar.bottomH"/>
-                                    <path t-att-class="bar.unread ? 'o_odu_chart_unread' : 'o_odu_chart_read'"
-                                          t-att-d="bar.top"/>
-                                    <text class="o_odu_chart_value"
-                                          t-att-class="{ o_shown: bar.active || bar.peak }"
-                                          t-att-x="bar.centerX" t-att-y="bar.valueY"
-                                          t-esc="bar.count"/>
-                                    <text class="o_odu_chart_month"
-                                          t-att-x="bar.centerX" t-att-y="bar.labelY"
-                                          t-esc="bar.label"/>
-                                    <text class="o_odu_chart_year" t-if="bar.year"
-                                          t-att-x="bar.centerX" t-att-y="bar.yearY"
-                                          t-esc="bar.year"/>
+                                    <rect class="o_odu_chart_hit" t-att-x="bar.x" t-att-y="bar.hitY" t-att-width="bar.w" t-att-height="bar.hitH"/>
+                                    <rect class="o_odu_chart_read" t-if="bar.bottomH" t-att-x="bar.x" t-att-y="bar.bottomY" t-att-width="bar.w" t-att-height="bar.bottomH"/>
+                                    <path t-att-class="bar.unread ? 'o_odu_chart_unread' : 'o_odu_chart_read'" t-att-d="bar.top"/>
+                                    <text class="o_odu_chart_value" t-att-class="{ o_shown: bar.active || bar.peak }" t-att-x="bar.centerX" t-att-y="bar.valueY" t-esc="bar.count"/>
+                                    <text class="o_odu_chart_month" t-att-x="bar.centerX" t-att-y="bar.labelY" t-esc="bar.label"/>
+                                    <text class="o_odu_chart_year" t-if="bar.year" t-att-x="bar.centerX" t-att-y="bar.yearY" t-esc="bar.year"/>
                                 </g>
                             </t>
-                            <line class="o_odu_chart_axis"
-                                  x1="0" t-att-x2="chart.width"
-                                  t-att-y1="chart.axisY" t-att-y2="chart.axisY"/>
+                            <line class="o_odu_chart_axis" x1="0" t-att-x2="chart.width" t-att-y1="chart.axisY" t-att-y2="chart.axisY"/>
                         </svg>
                     </div>
                 </div>
@@ -111,72 +69,44 @@
                     <div class="o_odubook_head o_odu_changes_head">
                         <h1 class="o_odu_changes_date" t-esc="activeTitle"/>
                         <span class="o_odu_changes_tools">
-                            <button type="button" class="btn btn-sm o_odu_changes_tool"
-                                    title="Download these entries as PDF"
-                                    aria-label="Download these entries as PDF"
-                                    t-on-click="() => this.exportGroupPdf()">
+                            <button type="button" class="btn btn-sm o_odu_changes_tool" title="Download these entries as PDF" aria-label="Download these entries as PDF" t-on-click="() =&gt; this.exportGroupPdf()">
                                 <i class="fa fa-file-pdf-o"/>
                             </button>
-                            <button type="button" class="btn btn-sm o_odu_changes_tool"
-                                    title="Copy a link to this heading"
-                                    aria-label="Copy a link to this heading"
-                                    t-on-click="() => this.copyGroupLink()">
+                            <button type="button" class="btn btn-sm o_odu_changes_tool" title="Copy a link to this heading" aria-label="Copy a link to this heading" t-on-click="() =&gt; this.copyGroupLink()">
                                 <i class="fa fa-link"/>
                             </button>
                         </span>
                         <span class="o_odubook_picked" t-if="state.selection.length">
-                            <button type="button" class="btn btn-sm btn-primary o_odubook_export_picked"
-                                    t-on-click="exportSelection">
+                            <button type="button" class="btn btn-sm btn-primary o_odubook_export_picked" t-on-click="exportSelection">
                                 Export selected entries
-                                <span class="badge rounded-pill o_odubook_picked_count"
-                                      t-esc="state.selection.length"/>
+                                <span class="badge rounded-pill o_odubook_picked_count" t-esc="state.selection.length"/>
                             </button>
-                            <button type="button" class="btn btn-sm btn-link o_odubook_clear_picked"
-                                    t-on-click="clearSelection">
+                            <button type="button" class="btn btn-sm btn-link o_odubook_clear_picked" t-on-click="clearSelection">
                                 Clear the selection
                             </button>
                         </span>
-                        <span class="o_odubook_langs" t-if="languages.length > 1">
+                        <span class="o_odubook_langs" t-if="languages.length &gt; 1">
                             <t t-foreach="languages" t-as="language" t-key="language.code">
-                                <button type="button" class="btn btn-sm o_odubook_lang"
-                                        t-att-class="{ o_active: language.active }"
-                                        t-att-title="language.name"
-                                        t-on-click="() => this.selectLanguage(language.code)"
-                                        t-esc="language.label"/>
+                                <button type="button" class="btn btn-sm o_odubook_lang" t-att-class="{ o_active: language.active }" t-att-title="language.name" t-on-click="() =&gt; this.selectLanguage(language.code)" t-esc="language.label"/>
                             </t>
                         </span>
                     </div>
                     <t t-foreach="activeEntries" t-as="entry" t-key="entry.key">
                         <div class="o_odu_changes_entry" t-att-data-key="entry.key">
-                            <div class="o_odu_changes_entry_head"
-                                 t-att-class="{ o_odu_changes_unread: entry.unread }">
-                                <input type="checkbox"
-                                       class="o_odubook_pick o_odu_changes_pick"
-                                       title="Add this entry to the PDF selection"
-                                       aria-label="Add this entry to the PDF selection"
-                                       t-att-checked="isPicked(entry)"
-                                       t-on-click="() => this.togglePick(entry)"/>
-                                <span class="o_odu_changes_entry_module"
-                                      t-esc="entryHeadIsModule ? entry.title : entry.label"/>
-                                <span class="o_odu_changes_entry_day"
-                                      t-if="entry.day" t-esc="entry.day"/>
-                                <span class="o_odu_changes_entry_time"
-                                      t-if="entry.stamp" t-esc="entry.stamp"/>
+                            <div class="o_odu_changes_entry_head" t-att-class="{ o_odu_changes_unread: entry.unread }">
+                                <input type="checkbox" class="o_odubook_pick o_odu_changes_pick" title="Add this entry to the PDF selection" aria-label="Add this entry to the PDF selection" t-att-checked="isPicked(entry)" t-on-click="() =&gt; this.togglePick(entry)"/>
+                                <span class="o_odu_changes_entry_module" t-esc="entryHeadIsModule ? entry.title : entry.label"/>
+                                <span class="o_odu_changes_entry_day" t-if="entry.day" t-esc="entry.day"/>
+                                <span class="o_odu_changes_entry_time" t-if="entry.stamp" t-esc="entry.stamp"/>
                                 <span class="o_odu_changes_new" t-if="entry.is_new">New</span>
                             </div>
                             <div class="o_odu_changes_entry_title" t-if="entry.heading">
                                 <h1 t-esc="entry.heading"/>
                                 <span class="o_odu_changes_tools">
-                                    <button type="button" class="btn btn-sm o_odu_changes_tool"
-                                            title="Download this entry as PDF"
-                                            aria-label="Download this entry as PDF"
-                                            t-on-click="() => this.exportEntryPdf(entry)">
+                                    <button type="button" class="btn btn-sm o_odu_changes_tool" title="Download this entry as PDF" aria-label="Download this entry as PDF" t-on-click="() =&gt; this.exportEntryPdf(entry)">
                                         <i class="fa fa-file-pdf-o"/>
                                     </button>
-                                    <button type="button" class="btn btn-sm o_odu_changes_tool"
-                                            title="Copy a link to this heading"
-                                            aria-label="Copy a link to this heading"
-                                            t-on-click="() => this.copyEntryLink(entry)">
+                                    <button type="button" class="btn btn-sm o_odu_changes_tool" title="Copy a link to this heading" aria-label="Copy a link to this heading" t-on-click="() =&gt; this.copyEntryLink(entry)">
                                         <i class="fa fa-link"/>
                                     </button>
                                 </span>

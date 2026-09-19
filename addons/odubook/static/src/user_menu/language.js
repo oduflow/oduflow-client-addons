@@ -7,8 +7,6 @@ import { useService } from "@web/core/utils/hooks";
 import { _t } from "@web/core/l10n/translation";
 
 import { Component, onWillStart, useState } from "@odoo/owl";
-import { rpc } from "@web/core/network/rpc";
-import { user } from "@web/core/user";
 
 /**
  * Выбор языка интерфейса: список установленных языков базы.
@@ -20,9 +18,9 @@ import { user } from "@web/core/user";
 export class LanguageDialog extends Component {
     setup() {
         this.title = _t("Language");
-        this.rpc = rpc;
+        this.rpc = useService("rpc");
         this.orm = useService("orm");
-        this.user = user;
+        this.user = useService("user");
         this.state = useState({
             languages: [],
             current: null,

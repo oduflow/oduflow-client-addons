@@ -1,13 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <templates xml:space="preserve">
-    <t t-name="odubook.ManualsApp">
+    <t t-name="odubook.ManualsApp" owl="1">
         <div class="o_odubook o_odu_manuals d-flex h-100">
             <div class="o_odubook_sidebar d-flex flex-column">
                 <div class="o_odubook_search p-2">
-                    <input type="text" class="form-control form-control-sm"
-                           placeholder="Search the manuals…"
-                           t-att-value="state.search"
-                           t-on-input="onSearch"/>
+                    <input type="text" class="form-control form-control-sm" placeholder="Search the manuals…" t-att-value="state.search" t-on-input="onSearch"/>
                 </div>
                 <div class="o_odubook_toc flex-grow-1 overflow-auto">
                     <t t-if="!state.loaded">
@@ -17,44 +14,29 @@
                         <div class="text-muted p-3">No manuals yet.</div>
                     </t>
                     <t t-foreach="filteredManuals" t-as="manual" t-key="manual.id">
-                        <div class="o_odubook_page_link o_odu_manuals_link"
-                             t-att-class="{ o_active: manual.id === state.activeId }"
-                             t-on-click="() => this.selectManual(manual.id)">
+                        <div class="o_odubook_page_link o_odu_manuals_link" t-att-class="{ o_active: manual.id === state.activeId }" t-on-click="() =&gt; this.selectManual(manual.id)">
                             <span class="text-truncate" t-esc="manual.name"/>
                             <span class="o_odu_manuals_kind" t-esc="manual.format"/>
                         </div>
                     </t>
                 </div>
                 <div class="o_odu_manuals_upload p-2" t-if="state.canEdit">
-                    <input type="file" class="d-none" t-ref="fileInput"
-                           t-on-change="onFileSelected"/>
+                    <input type="file" class="d-none" t-ref="fileInput" t-on-change="onFileSelected"/>
                     <t t-if="state.pending">
-                        <input type="text" class="form-control form-control-sm"
-                               placeholder="Title"
-                               t-att-value="state.pending.name"
-                               t-att-disabled="state.pending.manualId ? 'disabled' : false"
-                               t-on-input="onPendingNameInput"/>
-                        <select class="form-control form-control-sm mt-1"
-                                t-on-change="onPendingLangChange">
+                        <input type="text" class="form-control form-control-sm" placeholder="Title" t-att-value="state.pending.name" t-att-disabled="state.pending.manualId ? 'disabled' : false" t-on-input="onPendingNameInput"/>
+                        <select class="form-control form-control-sm mt-1" t-on-change="onPendingLangChange">
                             <t t-foreach="state.languages" t-as="language" t-key="language.code">
-                                <option t-att-value="language.code"
-                                        t-att-selected="language.code === state.pending.lang"
-                                        t-esc="language.name"/>
+                                <option t-att-value="language.code" t-att-selected="language.code === state.pending.lang" t-esc="language.name"/>
                             </t>
                         </select>
-                        <div class="text-muted text-truncate mt-1 o_odu_manuals_file"
-                             t-esc="state.pending.fileName"/>
+                        <div class="text-muted text-truncate mt-1 o_odu_manuals_file" t-esc="state.pending.fileName"/>
                         <div class="d-flex mt-1">
-                            <button type="button" class="btn btn-primary btn-sm flex-grow-1"
-                                    t-att-disabled="state.uploading ? 'disabled' : false"
-                                    t-on-click="confirmUpload">Add to shelf</button>
-                            <button type="button" class="btn btn-link btn-sm"
-                                    t-on-click="cancelUpload">Cancel</button>
+                            <button type="button" class="btn btn-primary btn-sm flex-grow-1" t-att-disabled="state.uploading ? 'disabled' : false" t-on-click="confirmUpload">Add to shelf</button>
+                            <button type="button" class="btn btn-link btn-sm" t-on-click="cancelUpload">Cancel</button>
                         </div>
                     </t>
                     <t t-else="">
-                        <button type="button" class="btn btn-secondary btn-sm w-100"
-                                t-on-click="openFilePicker">Add a document</button>
+                        <button type="button" class="btn btn-secondary btn-sm w-100" t-on-click="openFilePicker">Add a document</button>
                     </t>
                 </div>
             </div>
@@ -63,23 +45,13 @@
                     <div class="o_odu_manuals_head">
                         <h1 class="o_odu_manuals_title" t-esc="activeManual.name"/>
                         <div class="o_odu_manuals_actions">
-                            <span class="o_odubook_langs" t-if="activeLanguages.length > 1">
+                            <span class="o_odubook_langs" t-if="activeLanguages.length &gt; 1">
                                 <t t-foreach="activeLanguages" t-as="language" t-key="language.code">
-                                    <button type="button" class="btn btn-sm o_odubook_lang"
-                                            t-att-class="{
-                                                o_active: language.active,
-                                                o_missing: language.missing,
-                                            }"
-                                            t-att-title="language.name"
-                                            t-on-click="() => this.selectLanguage(language)"
-                                            t-esc="language.label"/>
+                                    <button type="button" class="btn btn-sm o_odubook_lang" t-att-class="{                                                 o_active: language.active,                                                 o_missing: language.missing,                                             }" t-att-title="language.name" t-on-click="() =&gt; this.selectLanguage(language)" t-esc="language.label"/>
                                 </t>
                             </span>
-                            <a class="btn btn-link btn-sm"
-                               t-att-href="activeManual.download_url">Download</a>
-                            <button type="button" class="btn btn-link btn-sm text-danger"
-                                    t-if="state.canEdit"
-                                    t-on-click="() => this.askRemove(activeManual)">Remove</button>
+                            <a class="btn btn-link btn-sm" t-att-href="activeManual.download_url">Download</a>
+                            <button type="button" class="btn btn-link btn-sm text-danger" t-if="state.canEdit" t-on-click="() =&gt; this.askRemove(activeManual)">Remove</button>
                         </div>
                     </div>
                     <t t-if="activeManual.kind === 'markdown' or activeManual.kind === 'text'">
@@ -99,17 +71,13 @@
                         <!-- Вложенный HTML исполняется в собственном origin:
                              sandbox без allow-same-origin отрезает его от
                              сессии читателя. -->
-                        <iframe class="o_odu_manuals_frame flex-grow-1"
-                                sandbox="allow-scripts allow-popups allow-forms allow-modals"
-                                t-att-src="activeManual.url"/>
+                        <iframe class="o_odu_manuals_frame flex-grow-1" sandbox="allow-scripts allow-popups allow-forms allow-modals" t-att-src="activeManual.url"/>
                     </t>
                     <t t-elif="activeManual.kind === 'pdf'">
-                        <iframe class="o_odu_manuals_frame flex-grow-1"
-                                t-att-src="activeManual.url"/>
+                        <iframe class="o_odu_manuals_frame flex-grow-1" t-att-src="activeManual.url"/>
                     </t>
                     <t t-elif="activeManual.kind === 'image'">
-                        <img class="o_odu_manuals_image" t-att-src="activeManual.url"
-                             t-att-alt="activeManual.name"/>
+                        <img class="o_odu_manuals_image" t-att-src="activeManual.url" t-att-alt="activeManual.name"/>
                     </t>
                     <t t-else="">
                         <div class="text-muted">

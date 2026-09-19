@@ -1,5 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
 <templates xml:space="preserve">
-<t t-inherit="mail.Chatter" t-inherit-mode="extension">
-<xpath expr="//button[hasclass('o-mail-Chatter-activity')]" position="before">
+<t t-inherit="mail.Chatter" t-inherit-mode="extension" owl="1">
+<xpath expr="//ChatterTopbar" position="before">
 <button t-if="hasAskAiButton" class="btn btn-secondary text-nowrap o_odupilot_ask" type="button" t-on-click="onClickAskAi" title="Ask AI about this record"><i class="fa fa-magic me-1"/>Ask AI</button>
 </xpath></t></templates>
