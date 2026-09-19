@@ -70,3 +70,7 @@ tests and end-to-end VPN access/revocation where applicable. Mark checks not run
 Scope: install odubook, odumcp, odupilot and oduscale in a fresh Odoo 16 database through mcp__odusfera, authorized by the user. Repository https://github.com/oduflow/oduflow-client-addons; branch 16.0. Team, URLs, containers, network, volumes and image digest unknown until provisioning returns. No backup or rollback performed. No secrets recorded.
 
 Planned: `create_environment(env_name="client-addons-16", branch="16.0", repo_url="https://github.com/oduflow/oduflow-client-addons", odoo_image="odoo:16.0", template_name="none")`.
+
+### 22:01–22:02 UTC — Provisioning blocked
+
+Two create_environment attempts returned no free environment slots (configured: 5). No Odoo 16 environment created. Will release our Odoo 18 test environment after verification; existing unrelated environments are untouched.

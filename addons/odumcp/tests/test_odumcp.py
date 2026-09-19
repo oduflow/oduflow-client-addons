@@ -135,7 +135,7 @@ class TestOduMcp(TransactionCase):
         }
         for relation_name, expected_fields in expected_form_fields.items():
             relation = arch.xpath("//field[@name='%s']" % relation_name)[0]
-            tree = relation.xpath("./list")[0]
+            tree = relation.xpath("./tree")[0]
             form = relation.xpath("./form")[0]
             form_fields = set(form.xpath(".//field/@name"))
 
@@ -163,7 +163,7 @@ class TestOduMcp(TransactionCase):
 
         self.assertEqual(view.inherit_id, self.env.ref("base.view_users_form"))
         self.assertEqual(
-            arch.xpath("//xpath[@expr=\"//page[@name='page_security']\"]/@position"),
+            arch.xpath("//xpath[@expr=\"//page[@name='access_rights']\"]/@position"),
             ["inside"],
         )
         self.assertEqual(
@@ -1425,7 +1425,7 @@ class TestOduMcpActivities(TransactionCase):
         cls.mcp_user = cls.env["res.users"].create(
             {
                 "name": "Activity MCP User",
-                "login": "mcp-activity-user@example.com",
+                "login": "mcp-activity-user@example.com", "email": "mcp-activity-user@example.com",
                 "groups_id": [
                     Command.set(
                         [
@@ -1439,7 +1439,7 @@ class TestOduMcpActivities(TransactionCase):
         cls.other_user = cls.env["res.users"].create(
             {
                 "name": "Activity Other User",
-                "login": "mcp-activity-other@example.com",
+                "login": "mcp-activity-other@example.com", "email": "mcp-activity-other@example.com",
                 "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
@@ -1637,8 +1637,7 @@ class TestOduMcpActivities(TransactionCase):
 
         self.assertEqual(status, 200, body)
         self.assertEqual(body["data"]["state"], "executed")
-        self.assertFalse(activity.active)
-        self.assertEqual(activity.state, "done")
+        self.assertFalse(activity.exists())
         posted = self.partner.message_ids - before
         self.assertTrue(posted)
         self.assertIn("Called the customer", posted[0].body)

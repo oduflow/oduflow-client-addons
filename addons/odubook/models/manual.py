@@ -92,7 +92,7 @@ class OduBookManual(models.Model):
 
     def _can_edit(self):
         """Полку ведёт администратор: остальные её только читают."""
-        return self.has_access("create")
+        return self.check_access_rights("create", raise_exception=False)
 
     @api.model
     def _reader_lang(self):
