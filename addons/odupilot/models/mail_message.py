@@ -47,11 +47,11 @@ class MailMessage(models.Model):
             lambda message: message.odupilot_is_answer
             or message.odupilot_is_request).ids)
         bot = self.env.ref('odupilot.partner_ai_bot', raise_if_not_found=False)
+        bot_message_ids = set(self.sudo().filtered(lambda message: message.author_id == bot).ids) if bot else set()
         for item in values:
             if item['id'] in attention_ids:
                 item['odupilot_assistant'] = True
-            elif (bot and item.get('author_id')
-                    and item['author_id'][0] == bot.id):
+            elif item['id'] in bot_message_ids:
                 # Служебный шаг агента: клиент по этому признаку не поднимает
                 # ни докированное окно, ни уведомление вне фокуса.
                 item['odupilot_step'] = True

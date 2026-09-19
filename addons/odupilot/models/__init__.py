@@ -16,4 +16,4 @@ from . import odupilot_agent_log
 from . import mail_channel
 from . import mail_message
 from . import res_users_settings
-from . import mail_channel_member
+from . import discuss_channel_member

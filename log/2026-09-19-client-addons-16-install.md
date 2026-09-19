@@ -74,3 +74,11 @@ Planned: `create_environment(env_name="client-addons-16", branch="16.0", repo_ur
 ### 22:01–22:02 UTC — Provisioning blocked
 
 Two create_environment attempts returned no free environment slots (configured: 5). No Odoo 16 environment created. Will release our Odoo 18 test environment after verification; existing unrelated environments are untouched.
+
+### 22:09–22:12 UTC — Provisioned
+
+After removing our Odoo 18 environment, creation succeeded in 48.2s; base and requirements installed. URL https://client-addons-16.oduflow.odusfera.pl; team_1; container oduflow-1-client-addons-16-odoo; database oduflow_1_client-addons-16; workspace /srv/oduflow-data/team_1/workspaces/client-addons-16. Next: `pull_and_apply(env_name="client-addons-16", install="odubook,odumcp,odupilot,oduscale", summary_only=true)`, code 8206dee.
+
+### 22:12 UTC — First installation failed
+
+Apply `e01d9f2e` exited 255: model import renamed without renaming the source file. Corrected models/__init__.py to import discuss_channel_member.py, which now extends mail.channel.member.
