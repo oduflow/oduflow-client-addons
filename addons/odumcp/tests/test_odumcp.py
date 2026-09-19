@@ -1425,7 +1425,7 @@ class TestOduMcpActivities(TransactionCase):
         cls.mcp_user = cls.env["res.users"].create(
             {
                 "name": "Activity MCP User",
-                "login": "mcp-activity-user@example.com",
+                "login": "mcp-activity-user@example.com", "email": "mcp-activity-user@example.com",
                 "groups_id": [
                     Command.set(
                         [
@@ -1439,7 +1439,7 @@ class TestOduMcpActivities(TransactionCase):
         cls.other_user = cls.env["res.users"].create(
             {
                 "name": "Activity Other User",
-                "login": "mcp-activity-other@example.com",
+                "login": "mcp-activity-other@example.com", "email": "mcp-activity-other@example.com",
                 "groups_id": [Command.set([cls.env.ref("base.group_user").id])],
             }
         )
@@ -1638,7 +1638,6 @@ class TestOduMcpActivities(TransactionCase):
         self.assertEqual(status, 200, body)
         self.assertEqual(body["data"]["state"], "executed")
         self.assertFalse(activity.exists())
-        self.assertEqual(activity.state, "done")
         posted = self.partner.message_ids - before
         self.assertTrue(posted)
         self.assertIn("Called the customer", posted[0].body)
