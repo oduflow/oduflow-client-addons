@@ -27,6 +27,6 @@
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_odupilot_developer_wizard_form"/>
         <field name="target">new</field>
-        <field name="group_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
     </record>
 </odoo>

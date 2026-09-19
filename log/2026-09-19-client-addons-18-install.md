@@ -76,3 +76,7 @@ Creation succeeded in 60.8s; base initialized, requirements installed. URL https
 ### 21:57 UTC — First installation failed
 
 `pull_and_apply` exited 255; output_id `5d75b984`. XML inheritance failed on `page_security` in odumcp/views/res_users_views.xml. Replaced the Odoo 19 XPath with the existing `access_rights` page in odumcp and odupilot. No installed-state claim is made from the misleading tool preamble.
+
+### 21:58 UTC — Second installation failed
+
+Apply output `a215a7a9`, exit 255: ir.ui.view uses `groups_id`, not the Odoo 19 `group_ids`. Corrected restricted agent and wizard views.
