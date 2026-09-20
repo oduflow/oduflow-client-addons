@@ -33,6 +33,10 @@ class OduBookController(http.Controller):
         # Группа дополнительно проверяется на сервере в get_admin_book.
         return request.env["odubook"].get_admin_book(lang=lang)
 
+    @http.route("/odubook/audit", type="jsonrpc", auth="user")
+    def audit_book(self, lang=None):
+        return request.env["odubook"].get_audit_book(lang=lang)
+
     @http.route("/odubook/changes", type="jsonrpc", auth="user")
     def changes(self, lang=None):
         return request.env["odubook"].get_changes(lang=lang)

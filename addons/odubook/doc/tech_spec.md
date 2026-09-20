@@ -11,7 +11,7 @@
 - Data: `security/ir.model.access.csv`, `security/odubook_security.xml`,
   `views/odubook_views.xml`, `views/odubook_users_views.xml`,
   with optional demo content in `data/odubook_manual_data.xml`.
-- Backend assets: the Book SCSS; Book, Admin Book, Manuals and Changes OWL 2
+- Backend assets: the Book SCSS; Book, Admin Book, Audit, Manuals and Changes OWL 2
   client actions and templates in `web.assets_backend`; the user-menu language dialog
   (`static/src/user_menu/language.js` and `language.xml`).
 - External Python dependencies: none; `markupsafe` is supplied by Odoo.
@@ -359,11 +359,11 @@
 ## Views & UI
 
 - Root menu `Book` contains `Changes` (sequence 1, so opening the application
-  lands on it), `User Guide`, `Manuals` and administrator-only `Admin Guide`.
+  lands on it), `User Guide`, `Manuals` and administrator-only `Admin Guide` and `Audit`.
   Its application icon is loaded from
   `odubook/static/description/icon.png` through the menu's `web_icon` field.
-- Four `ir.actions.client` records use tags `odubook.book`, `odubook.admin`,
-  `odubook.manuals` and `odubook.changes`.
+- Five `ir.actions.client` records use tags `odubook.book`, `odubook.admin`,
+  `odubook.manuals`, `odubook.changes` and `odubook.audit`.
 - `BookApp` is an OWL 2 component with the RPC helper, loading state, title search,
   automatic first-page selection and a two-pane layout. Language buttons above
   the document re-request the whole book in that language and keep the open
@@ -517,7 +517,7 @@
   title (`_pdf_filename`, non-word characters dropped, 80 characters, defaulting
   to `changes.pdf`). Unparsable or unknown entries answer 404.
 - `GET /odubook/guide/pdf`: `type="http"`, `auth="user"`; takes `module`, an
-  optional `book` (`user` / `admin`), an optional `section` anchor and an
+  optional `book` (`user` / `admin` / `audit`), an optional `section` anchor and an
   optional `lang`, and answers with `guide_pdf(...)` as an attachment named
   after the exported title (`_pdf_filename`). A missing module, document or
   anchor answers 404.
@@ -539,3 +539,25 @@
 - Client actions, menus and security records only. Documentation files are module
   resources read from disk; they are not database seed data. Read marks are
   created by readers at runtime, never seeded.
+
+## Module audit shelf
+
+- Source: `doc/module-audit.md` of installed modules only; modules without
+  readable reports are omitted. Reports are source-only English, including PDF
+  export; `doc/i18n/` mirrors are ignored. Existing rendering sanitisation,
+  file-size limits and mtime cache apply.
+- `get_audit_book(lang=None)` returns the existing book payload with `lang=en`
+  and English as the only available language. It requires `base.group_system`
+  before collecting or reading reports.
+- `POST /odubook/audit` uses authenticated JSON-RPC and delegates to
+  `get_audit_book`. Both guide PDF endpoints accept `book=audit`;
+  `_guide_filename` enforces the same administrator check before file access.
+- Client action `odubook.audit` uses `AuditBookApp`, inheriting `BookApp`,
+  with endpoint `/odubook/audit` and book key `audit`. Search, section links,
+  PDF selection and exports reuse the existing viewer. Local storage key
+  `odubook.selection.audit` isolates its selection.
+- Menu `menu_odubook_audit`, action `action_odubook_audit`, label `Audit`,
+  sequence 8 under the Book root, is restricted to `base.group_system`.
+- `.agents/skills/audit-modules/SKILL.md` defines the repository audit workflow.
+  Its scope includes all modules in `addons/`, even uninstalled ones; it writes
+  reports without automatically applying fixes. Viewing reports runs no audit.

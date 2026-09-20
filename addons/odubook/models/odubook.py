@@ -25,6 +25,8 @@ DOC_DIRNAME = "doc"
 GUIDE_FILENAME = "user_guide.md"
 #: Имя руководства администратора: настройки и привилегированные операции.
 ADMIN_GUIDE_FILENAME = "admin_guide.md"
+#: Source-only technical audit report.
+AUDIT_FILENAME = "module-audit.md"
 #: Каталог дневной истории изменений документации.
 CHANGES_DIRNAME = "changes"
 #: Файл истории именуется по дате: ``YYYY-MM-DD.md``.
@@ -210,6 +212,12 @@ class OduBook(models.AbstractModel):
             raise AccessError(_("Administrator access is required to read the Admin Book."))
         return self._book_data(ADMIN_GUIDE_FILENAME, lang)
 
+    @api.model
+    def get_audit_book(self, lang=None):
+        """Return module audit reports for system administrators only."""
+        filename = self._guide_filename("audit")
+        return self._book_data(filename, lang)
+
     def _book_data(self, filename, lang):
         """Собрать книгу по одному документу модулей на выбранном языке."""
         languages = self._doc_languages(filename)
@@ -248,6 +256,8 @@ class OduBook(models.AbstractModel):
             летопись, у которой зеркалится каталог, а не один файл.
         :return: ``[{"code", "name"}, ...]``, исходный язык первым.
         """
+        if filename == AUDIT_FILENAME:
+            return self._language_names([SOURCE_LANG])
         codes = set()
         for module in self._installed_modules():
             module_path = get_module_path(module.name)
@@ -358,6 +368,8 @@ class OduBook(models.AbstractModel):
             os.path.join(module_path, DOC_DIRNAME, I18N_DIRNAME, lang, filename),
             os.path.join(module_path, DOC_DIRNAME, filename),
         ]
+        if filename == AUDIT_FILENAME:
+            candidates = [os.path.join(module_path, DOC_DIRNAME, filename)]
         for filepath in candidates:
             if os.path.isfile(filepath):
                 return filepath
@@ -761,12 +773,12 @@ class OduBook(models.AbstractModel):
         всеми вложенными подразделами.
 
         :param module: техническое имя установленного модуля.
-        :param book: ``"admin"`` для книги администратора, иначе -- польз-ская.
+        :param book: ``"admin"`` or ``"audit"`` for restricted books; otherwise user.
         :param section: якорь заголовка (``id`` в отрендеренном HTML).
         :param lang: короткий код языка, выбранный читателем вручную.
         :return: ``{"title": ..., "pdf": ...}`` или ``None``, если документа
             или раздела нет.
-        :raise AccessError: when a non-administrator asks for the Admin Book.
+        :raise AccessError: when a non-administrator asks for a restricted book.
         """
         filename = self._guide_filename(book)
         selected = self._selected_lang(lang, self._doc_languages(filename))
@@ -792,12 +804,12 @@ class OduBook(models.AbstractModel):
 
         :param sections: ``[{"module": ..., "section": ...}, ...]``; пустой
             ``section`` означает руководство модуля целиком.
-        :param book: ``"admin"`` для книги администратора, иначе -- польз-ская.
+        :param book: ``"admin"`` or ``"audit"`` for restricted books; otherwise user.
         :param lang: короткий код языка, выбранный читателем вручную.
         :param title: заголовок обложки; по умолчанию общий.
         :return: ``{"title": ..., "pdf": ...}`` или ``None``, когда собирать
             нечего.
-        :raise AccessError: when a non-administrator asks for the Admin Book.
+        :raise AccessError: when a non-administrator asks for a restricted book.
         """
         filename = self._guide_filename(book)
         selected = self._selected_lang(lang, self._doc_languages(filename))
@@ -836,6 +848,10 @@ class OduBook(models.AbstractModel):
 
     def _guide_filename(self, book):
         """Имя файла запрошенной книги; книга администратора требует группы."""
+        if book == "audit":
+            if not self.env.user.has_group(ADMIN_GROUP):
+                raise AccessError(_("Administrator access is required to read module audits."))
+            return AUDIT_FILENAME
         if book == "admin":
             if not self.env.user.has_group(ADMIN_GROUP):
                 raise AccessError(

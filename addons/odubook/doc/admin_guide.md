@@ -153,3 +153,23 @@ work for a language that is not installed in the database at all.
 Unreadable, invalid UTF-8 or oversized documentation files are skipped and
 logged without breaking the complete Book. Rendered HTML is cached per worker
 and refreshed when a file's modification time changes.
+
+## Module audit reports
+
+Open **Book → Audit** to read `doc/module-audit.md` from installed modules.
+Only members of `base.group_system` can read reports, including through direct
+RPC calls and PDF exports. Modules without a report are omitted; if no installed
+module has a report, the section is empty. Reports are English source-only
+technical documents; language mirrors are ignored.
+
+Use `$audit-modules` with the repository skill at
+`.agents/skills/audit-modules/SKILL.md` to audit all modules under `addons/` and
+write a report in each module. This includes modules not installed in the current
+database; their reports become visible after installation. The skill records
+evidence, severity, coverage and skipped checks. It does not automatically fix
+findings or change services. Reports are snapshots, not live health checks.
+
+The viewer supports title search, section links and single or combined PDF
+exports. Audit selections are stored separately from guide selections. Refresh
+the view after updating report files. Upgrade `odubook` after deploying this
+feature to register the menu and load its backend assets.
