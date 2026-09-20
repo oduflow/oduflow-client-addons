@@ -20,3 +20,5 @@ and add an index row. Record unknown or inapplicable details explicitly.
 
 Journal entries describe observations at their recorded dates, not guaranteed
 current state. Secret values must never be included.
+
+- [2026-09-20 — client addon branch regression](2026-09-20-client-addons-regression-odoo.md)
