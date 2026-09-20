@@ -9,6 +9,7 @@
                 <field name="outcome"/>
                 <field name="status_code"/>
                 <field name="operation"/>
+                <field name="source"/>
                 <field name="model_name"/>
                 <field name="user_id"/>
                 <field name="duration_ms"/>
@@ -38,6 +39,7 @@
                             <field name="outcome"/>
                             <field name="status_code"/>
                             <field name="operation"/>
+                <field name="source"/>
                             <field name="model_name"/>
                             <field name="duration_ms"/>
                             <field name="error_code"/>
@@ -77,6 +79,7 @@
             <search>
                 <field name="request_id"/>
                 <field name="operation"/>
+                <field name="source"/>
                 <field name="model_name"/>
                 <field name="user_id"/>
                 <field name="error_code"/>

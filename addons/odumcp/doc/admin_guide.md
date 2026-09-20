@@ -280,7 +280,7 @@ fields on the user before investigating the server or the session API key. OduPi
 
 ## Odoo 16 deployment
 
-Install `odumcp` from `addons` together with its accompanying MCP server. The event endpoint `/odumcp/v1/events` uses authenticated short polling; the server waits one second after an empty response. Personal API keys may have an expiration date; expired keys are rejected. This port does not migrate an Odoo 15 database.
+Install `odumcp` from `addons`; use Oduflow or its accompanying MCP server. The event endpoint `/odumcp/v1/events` uses authenticated short polling; the server waits one second after an empty response. Personal API keys require valid Odoo 16 expiration dates. This port does not migrate an Odoo 15 database.
 
 ## Installation identity
 
@@ -289,3 +289,29 @@ Install `odumcp` as a new addon. The addon uses `odumcp.*` models and settings, 
 ## Odoo 16 compatibility
 
 Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.
+
+## Oduflow production integration
+
+Oduflow can call this module directly; a separate MCP server is optional.
+Oduflow installs the module when creating an Odoo 16 production and registers
+its configured production credential as an MCP-only API key on the administrator.
+The managed key is named **Oduflow production (managed)**. Only its password hash
+is stored in Odoo; the plaintext credential remains in Oduflow configuration.
+
+The local provisioning operation replaces only the managed key. Personal API
+keys remain valid. Existing MCP profiles, policies and suspended access remain
+unchanged. If the administrator has no profile, a read-only profile is created;
+configure write permissions explicitly before using business change plans.
+
+After changing the production credential and restarting Oduflow, use
+`sync_production_mcp` to synchronize one production or all productions in the
+team. Review every result and retry failed or stopped targets after recovery.
+Each database rotates independently; its old key remains valid until successful
+synchronization. Restoring a database backup can restore an old key, so synchronize
+after restoration as well. Removing the credential from Oduflow alone does not
+revoke it in Odoo; remove the managed API key when retiring the integration.
+
+Requests authenticated with the managed key record `source = oduflow` in the
+audit log. This identifies the credential, not a particular human or a verified
+network origin, and grants no policy bypass. Business approval remains in Odoo;
+production infrastructure operations are authorized separately by Oduflow.

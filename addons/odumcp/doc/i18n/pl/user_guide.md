@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=b6dedeb12eab lang=pl -->
+<!-- i18n source=user_guide.md sha=7839b1177694 lang=pl -->
 # Podręcznik użytkownika OduMCP
 
 ## Zanim zaczniesz
@@ -151,3 +151,11 @@ Tworząc klucz, wybierz termin ważności dozwolony przez Twoje grupy Odoo. Wyga
 ## Zgodność z Odoo 16
 
 Do nowej instalacji na Odoo 16 użyj gałęzi `16.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.
+
+## Żądania przez Oduflow
+
+Administratorzy mogą łączyć się przez Oduflow bez osobnego serwera MCP.
+Przeglądaj te same plany zatwierdzania w Odoo; istniejące polityki modeli i
+wymagania zatwierdzenia nadal obowiązują. Wpisy audytu korzystające z zarządzanego
+klucza integracji mają `source = oduflow` oraz administratora jako użytkownika
+Odoo. Wspólny klucz nie identyfikuje konkretnej osoby inicjującej żądanie.

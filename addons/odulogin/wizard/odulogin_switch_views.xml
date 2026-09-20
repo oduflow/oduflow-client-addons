@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_odulogin_switch_wizard_form" model="ir.ui.view">
+        <field name="name">odulogin.switch.wizard.form</field>
+        <field name="model">odulogin.switch.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Switch User">
+                <group>
+                    <field name="user_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                </group>
+                <div class="alert alert-warning" role="alert">
+                    Actions performed after switching are recorded as the selected user.
+                </div>
+                <footer>
+                    <button name="action_switch" type="object" string="Switch User" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_odulogin_switch_wizard" model="ir.actions.act_window">
+        <field name="name">Switch User</field>
+        <field name="res_model">odulogin.switch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_odulogin_switch_wizard_form"/>
+        <field name="target">new</field>
+        <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+    </record>
+
+    <record id="action_odulogin_switch_from_user" model="ir.actions.act_window">
+        <field name="name">Switch User</field>
+        <field name="res_model">odulogin.switch.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_odulogin_switch_wizard_form"/>
+        <field name="target">new</field>
+        <field name="context">{'default_user_id': active_id}</field>
+        <field name="group_ids" eval="[Command.link(ref('base.group_system'))]"/>
+        <field name="binding_model_id" ref="base.model_res_users"/>
+        <field name="binding_type">action</field>
+    </record>
+</odoo>

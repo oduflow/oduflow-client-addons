@@ -27,5 +27,21 @@
 
     <menuitem id="menu_odubook_manuals" name="Manuals" parent="menu_odubook_root" action="action_odubook_manuals" sequence="6"/>
 
-    <menuitem id="menu_odubook_admin" name="Admin Guide" parent="menu_odubook_root" action="action_odubook_admin" groups="base.group_system" sequence="7"/>
+    <menuitem id="menu_odubook_admin"
+              name="Admin Guide"
+              parent="menu_odubook_root"
+              action="action_odubook_admin"
+              groups="base.group_system"
+              sequence="7"/>
+    <record id="action_odubook_audit" model="ir.actions.client">
+        <field name="name">Audit</field>
+        <field name="tag">odubook.audit</field>
+    </record>
+
+    <menuitem id="menu_odubook_audit"
+              name="Audit"
+              parent="menu_odubook_root"
+              action="action_odubook_audit"
+              groups="base.group_system"
+              sequence="8"/>
 </odoo>

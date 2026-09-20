@@ -575,3 +575,14 @@ msgstr "Дата последнего обновления"
 #: model:ir.model,name:odubook.model_res_users
 msgid "Users"
 msgstr "Пользователи"
+
+#. module: odubook
+#: model:ir.actions.client,name:odubook.action_odubook_audit
+#: model:ir.ui.menu,name:odubook.menu_odubook_audit
+msgid "Audit"
+msgstr "Аудит"
+
+#. module: odubook
+#: code:addons/odubook/models/odubook.py:0
+msgid "Administrator access is required to read module audits."
+msgstr "Для чтения аудитов модулей требуются права администратора."

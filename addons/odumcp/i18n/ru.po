@@ -1297,3 +1297,8 @@ msgstr "Эти записи %(model)s не существуют: %(ids)s."
 #: code:addons/odumcp/models/service.py:0
 msgid "These fields on %(model)s are readonly and cannot be written: %(fields)s."
 msgstr "Эти поля модели %(model)s доступны только для чтения и не могут быть записаны: %(fields)s."
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__source
+msgid "Source"
+msgstr "Источник"

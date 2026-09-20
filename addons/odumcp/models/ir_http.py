@@ -33,7 +33,13 @@ class IrHttp(models.AbstractModel):
             )
 
         request.update_env(user=user_id)
-        request.update_context(**request.env["res.users"].context_get())
+        from .res_users_apikeys import ODUFLOW_KEY_NAME
+
+        api_key = request.env["res.users.apikeys"]._find_for_token(request.env.user, match.group(1))
+        request.update_context(
+            **request.env["res.users"].context_get(),
+            odumcp_source="oduflow" if api_key.name == ODUFLOW_KEY_NAME else "mcp",
+        )
 
     @classmethod
     def _auth_method_mcp_event(cls):
