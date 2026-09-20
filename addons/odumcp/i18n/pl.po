@@ -1295,3 +1295,8 @@ msgstr "Te rekordy %(model)s nie istnieją: %(ids)s."
 #: code:addons/odumcp/models/service.py:0
 msgid "These fields on %(model)s are readonly and cannot be written: %(fields)s."
 msgstr "Te pola modelu %(model)s są tylko do odczytu i nie można ich zapisać: %(fields)s."
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__source
+msgid "Source"
+msgstr "Źródło"
