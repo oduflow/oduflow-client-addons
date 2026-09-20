@@ -52,6 +52,7 @@ class TestOduLogin(TransactionCase):
         session.session_token = user._compute_session_token(session.sid)
         fake_request = SimpleNamespace(
             session=session, env=user_env, cookies={},
+            db=self.env.cr.dbname, registry=self.env.registry,
             httprequest=SimpleNamespace(cookies={}),
         )
 
