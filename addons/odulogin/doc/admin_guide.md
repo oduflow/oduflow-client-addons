@@ -28,3 +28,7 @@ Removing Settings administration access during an active switch does not stop
 the original operator from returning to their own active account. If that
 account is deactivated, the return attempt is rejected and the operator must
 sign out and authenticate with another account.
+
+## Odoo 16 compatibility
+
+Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.

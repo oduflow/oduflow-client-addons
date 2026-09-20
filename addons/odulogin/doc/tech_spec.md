@@ -61,3 +61,7 @@ replacement, authorization, invalid targets, nested switching, return
 preconditions, session information and the selectable-user domain.
 `tests/test_http.py` verifies that the changed identity persists between real
 JSON-RPC requests and that the original administrator can be restored.
+
+## Branch installation contract
+
+Use branch `16.0` for a fresh installation on Odoo 16. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database. Window actions use `groups_id`; HTTP tests use JSON request bodies and host-scoped cookies to follow session rotation.

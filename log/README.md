@@ -22,3 +22,5 @@ Journal entries describe observations at their recorded dates, not guaranteed
 current state. Secret values must never be included.
 
 - [Odoo 16 installation](2026-09-19-client-addons-16-install.md) — installed; 265 tests passed; temporary environment removed.
+
+- [2026-09-20 — client addon branch regression](2026-09-20-client-addons-regression-odoo.md)
