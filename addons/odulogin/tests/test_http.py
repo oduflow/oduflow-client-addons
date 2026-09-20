@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlparse
 
 from odoo.tests import HttpCase, tagged
 from odoo.tests.common import new_test_user
@@ -40,6 +41,12 @@ class TestOduLoginHttp(HttpCase):
 
     def test_jsonrpc_switch_persists_across_requests(self):
         self.authenticate(self.admin.login, self.admin.login)
+        # Scope the test cookie like a browser so session rotation replaces it.
+        self.opener.cookies.clear(domain="", path="/", name="session_id")
+        self.opener.cookies.set(
+            "session_id", self.session.sid,
+            domain=urlparse(self.base_url()).hostname, path="/",
+        )
         wizard_id = self._rpc(
             "/web/dataset/call_kw/odulogin.switch.wizard/create",
             {
