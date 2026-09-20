@@ -19,6 +19,7 @@ class OduMcpAuditLog(models.Model):
     )
     user_id = fields.Many2one("res.users", ondelete="set null", readonly=True, index=True)
     approval_id = fields.Many2one("odumcp.approval", ondelete="set null", readonly=True, index=True)
+    source = fields.Char(readonly=True, default="mcp", index=True)
     operation = fields.Char(required=True, readonly=True, index=True)
     model_name = fields.Char(readonly=True, index=True)
     input_hash = fields.Char(readonly=True)

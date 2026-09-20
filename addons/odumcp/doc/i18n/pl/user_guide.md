@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=05f6663760c8 lang=pl -->
+<!-- i18n source=user_guide.md sha=bf97a8c6e08e lang=pl -->
 # Podręcznik użytkownika OduMCP
 
 ## Zanim zaczniesz
@@ -147,3 +147,11 @@ rekordu, dzięki czemu klient nie musi czytać wszystkiego od nowa.
 
 
 Tworząc klucz, wybierz termin ważności dozwolony przez Twoje grupy Odoo. Wygasłe klucze są odrzucane także przy włączonym dostępie MCP.
+
+## Żądania przez Oduflow
+
+Administratorzy mogą łączyć się przez Oduflow bez osobnego serwera MCP.
+Przeglądaj te same plany zatwierdzania w Odoo; istniejące polityki modeli i
+wymagania zatwierdzenia nadal obowiązują. Wpisy audytu korzystające z zarządzanego
+klucza integracji mają `source = oduflow` oraz administratora jako użytkownika
+Odoo. Wspólny klucz nie identyfikuje konkretnej osoby inicjującej żądanie.

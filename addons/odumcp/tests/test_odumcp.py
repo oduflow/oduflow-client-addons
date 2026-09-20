@@ -1869,3 +1869,59 @@ class TestOduMcpMassApproval(TransactionCase):
             pending.with_user(self.mcp_user).action_mass_delete_expired()
         with self.assertRaises(UserError):
             pending.with_user(self.manager).action_mass_delete_expired()
+
+
+@tagged("post_install", "-at_install")
+class TestOduflowManagedKey(TransactionCase):
+    def test_provision_rotate_and_preserve_personal_keys(self):
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        personal = keys.with_user(admin).sudo()._generate("mcp", "Personal test", False)
+        first, second = "a" * 40, "b" * 40
+        result = keys._set_oduflow_key(first)
+        self.assertTrue(result["changed"])
+        self.assertEqual(keys._check_mcp_credentials(first), admin.id)
+        self.assertFalse(keys._set_oduflow_key(first)["changed"])
+        self.assertTrue(keys._set_oduflow_key(second)["changed"])
+        self.assertFalse(keys._check_mcp_credentials(first))
+        self.assertEqual(keys._check_mcp_credentials(second), admin.id)
+        self.assertEqual(keys._check_mcp_credentials(personal), admin.id)
+        self.env.cr.execute("SELECT key FROM res_users_apikeys WHERE user_id = %s", [admin.id])
+        self.assertNotIn(second, [row[0] for row in self.env.cr.fetchall()])
+
+    def test_requires_superuser_environment(self):
+        admin = self.env.ref("base.user_admin")
+        with self.assertRaises(AccessError):
+            self.env["res.users.apikeys"].with_user(admin)._set_oduflow_key("a" * 40)
+
+    def test_existing_profile_and_suspension_are_preserved(self):
+        admin = self.env.ref("base.user_admin")
+        profile = self.env["odumcp.profile"].create({"name": "Restricted", "code": "restricted_oduflow"})
+        admin.write({"mcp_profile_id": profile.id, "mcp_active": False})
+        self.env["res.users.apikeys"].sudo()._set_oduflow_key("a" * 40)
+        self.assertEqual(admin.mcp_profile_id, profile)
+        self.assertFalse(admin.mcp_active)
+        self.assertEqual(profile.default_model_access, "explicit")
+
+    def test_new_profile_is_read_only_and_audit_has_source(self):
+        admin = self.env.ref("base.user_admin")
+        admin.write({"mcp_active": False, "mcp_profile_id": False})
+        self.env["res.users.apikeys"].sudo()._set_oduflow_key("a" * 40)
+        self.assertEqual(admin.mcp_profile_id.default_model_access, "read")
+        self.assertFalse(admin.mcp_profile_id.allow_global_create)
+        self.assertFalse(admin.mcp_profile_id.allow_global_unlink)
+        request_id = str(uuid.uuid4())
+        self.env["odumcp.service"].with_context(odumcp_source="oduflow").execute_request(
+            admin, "identity.whoami", {}, request_id)
+        audit = self.env["odumcp.audit.log"].search([("request_id", "=", request_id)])
+        self.assertEqual(audit.source, "oduflow")
+
+    def test_reprovision_after_profile_detached(self):
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        keys._set_oduflow_key("a" * 40)
+        previous = admin.mcp_profile_id
+        admin.write({"mcp_profile_id": False, "mcp_active": False})
+        keys._set_oduflow_key("a" * 40)
+        self.assertNotEqual(admin.mcp_profile_id, previous)
+        self.assertEqual(admin.mcp_profile_id.default_model_access, "read")

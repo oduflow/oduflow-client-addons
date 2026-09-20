@@ -146,3 +146,11 @@ client can refresh without re-reading everything.
 
 
 Choose an expiration date permitted by your Odoo groups when creating a key. Expired keys are rejected even when MCP access remains enabled.
+
+## Requests through Oduflow
+
+Administrators can connect through Oduflow without a separate MCP server.
+Review the same approval plans in Odoo; existing model policies and approval
+requirements still apply. Audit entries using the managed integration credential
+show `source = oduflow` and the administrator as the Odoo user. A shared credential
+does not identify the individual person who initiated the request.

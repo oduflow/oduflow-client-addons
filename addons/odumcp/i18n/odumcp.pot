@@ -1273,3 +1273,8 @@ msgstr ""
 #: code:addons/odumcp/models/service.py:0
 msgid "These fields on %(model)s are readonly and cannot be written: %(fields)s."
 msgstr ""
+
+#. module: odumcp
+#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__source
+msgid "Source"
+msgstr ""

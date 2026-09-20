@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=6c375ca67b95 lang=pl -->
+<!-- i18n source=admin_guide.md sha=23bf6030f2ed lang=pl -->
 # Podręcznik administratora OduMCP
 
 ## Role bezpieczeństwa
@@ -297,8 +297,34 @@ tworzy i unieważnia osobny klucz.
 
 ## Wdrożenie na Odoo 19
 
-Zainstaluj `odumcp` z `addons` wraz z dołączonym serwerem MCP. Adres zdarzeń `/odumcp/v1/events` używa uwierzytelnionego krótkiego odpytywania; serwer czeka sekundę po pustej odpowiedzi. Osobiste klucze API wymagają prawidłowych terminów ważności Odoo 19. Ten port nie przenosi bazy Odoo 15.
+Zainstaluj `odumcp` z `addons`; użyj Oduflow lub dołączonego serwera MCP. Adres zdarzeń `/odumcp/v1/events` używa uwierzytelnionego krótkiego odpytywania; serwer czeka sekundę po pustej odpowiedzi. Osobiste klucze API wymagają prawidłowych terminów ważności Odoo 19. Ten port nie przenosi bazy Odoo 15.
 
 ## Identyfikator instalacji
 
 Zainstaluj `odumcp` jako nowy moduł. Używa on modeli i ustawień `odumcp.*`, tras API `/odumcp/v1/`, pakietu Python `odumcp_server` oraz zmiennych serwera `ODUMCP_*`. Migracja wcześniejszej instalacji nie jest obsługiwana. Odinstaluj wcześniejszy moduł przed wdrożeniem tego kodu; odinstalowanie usuwa również moduły zależne i ich dane. Następnie zainstaluj ponownie potrzebne moduły zależne. Przed użyciem przykładu Compose zbuduj lokalnie obraz serwera o nowej nazwie (`docker compose -f docker-compose.example.yml up --build -d`); publikacja obrazu jest osobną operacją.
+
+## Integracja produkcyjna z Oduflow
+
+Oduflow może wywoływać moduł bezpośrednio; osobny serwer MCP jest opcjonalny.
+Przy tworzeniu środowiska produkcyjnego Odoo 19 Oduflow instaluje moduł i
+rejestruje poświadczenie z konfiguracji jako klucz API administratora tylko do MCP.
+Zarządzany klucz ma nazwę **Oduflow production (managed)**. Odoo przechowuje tylko
+skrót hasła klucza; jawna wartość pozostaje w konfiguracji Oduflow.
+
+Lokalna operacja konfiguracji zastępuje wyłącznie zarządzany klucz. Osobiste klucze
+API pozostają ważne. Istniejące profile MCP, polityki i zawieszony dostęp nie są
+zmieniane. Administrator bez profilu otrzymuje profil tylko do odczytu; przed
+użyciem planów zmian biznesowych jawnie skonfiguruj uprawnienia zapisu.
+
+Po zmianie poświadczenia produkcyjnego i ponownym uruchomieniu Oduflow użyj
+`sync_production_mcp`, aby zsynchronizować jedno lub wszystkie środowiska
+produkcyjne zespołu. Sprawdź każdy wynik i ponów nieudane operacje po naprawie
+lub uruchomieniu środowisk. Każda baza rotuje klucz osobno; stary klucz pozostaje
+ważny do pomyślnej synchronizacji. Przywrócenie kopii bazy może przywrócić stary
+klucz, więc po nim również wykonaj synchronizację. Usunięcie poświadczenia tylko
+z Oduflow nie unieważnia go w Odoo; usuń zarządzany klucz API, wycofując integrację.
+
+Żądania uwierzytelnione zarządzanym kluczem zapisują `source = oduflow` w dzienniku
+audytu. Oznacza to poświadczenie, a nie konkretną osobę ani zweryfikowane źródło
+sieciowe, i nie pozwala omijać polityk. Zatwierdzanie zmian biznesowych pozostaje
+w Odoo; operacje infrastruktury produkcyjnej autoryzuje osobno Oduflow.

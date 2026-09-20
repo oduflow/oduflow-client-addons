@@ -324,3 +324,19 @@ the two fields. No separate MCP page is introduced.
 ## Installation identity
 
 The technical addon name is `odumcp`, the model namespace is `odumcp.*`, and HTTP routes begin with `/odumcp/v1/`. The standalone server package is `odumcp_server`, its CLI is `odumcp-server`, and its environment variables use `ODUMCP_*`. This is a fresh installation with no compatibility aliases or migration scripts. OduPilot depends on `odumcp`. Upstream contributor attribution is retained.
+
+## Oduflow managed keys
+
+`res.users.apikeys._set_oduflow_key(key)` is a private, superuser-only provisioning
+method. It accepts 32..512 ASCII characters without whitespace, serializes on the
+administrator user row and replaces only MCP-scoped keys with the reserved
+managed name. Reapplying the same key returns `changed = false`. Personal keys
+and existing profiles/suspension are preserved. An absent profile receives read
+access without global create/delete or auto-approval. Keys use the native Odoo
+password hash and index; their plaintext is neither persisted nor returned.
+
+Authentication annotates the request context from the matched API-key record.
+`odumcp.audit.log.source` is `oduflow` for the managed key and `mcp` otherwise.
+This metadata labels the credential and is not an additional authorization grant
+or proof of network origin. Rotation and revocation remain explicit across
+independent databases. Infrastructure authorization belongs to Oduflow.
