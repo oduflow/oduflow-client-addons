@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=37fb09984db8 lang=pl -->
+<!-- i18n source=user_guide.md sha=ee4232589251 lang=pl -->
 # Podręcznik użytkownika OduLogin
 
 OduLogin pomaga administratorowi odtworzyć widok użytkownika wewnętrznego bez
@@ -28,3 +28,7 @@ W jednej sesji przeglądarki może być aktywne tylko jedno przełączenie. Prze
 wybraniem kolejnego użytkownika wróć do konta administratora. Nie można wybrać
 użytkowników portalu, użytkowników nieaktywnych, bieżącego administratora ani
 superużytkownika technicznego.
+
+## Zgodność z Odoo 17
+
+Do nowej instalacji na Odoo 17 użyj gałęzi `17.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.
