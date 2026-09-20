@@ -25,3 +25,7 @@ with the original administrator account.
 Only one switch can be active in a browser session. Return to the administrator
 account before choosing another user. Portal users, inactive users, the current
 administrator and the technical superuser cannot be selected.
+
+## Odoo 18 compatibility
+
+Use branch `18.0` for a fresh installation on Odoo 18. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.
