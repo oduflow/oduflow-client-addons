@@ -2,7 +2,7 @@
     "name": "OduMCP",
     "summary": "Secure policy, approval, and audit layer for external MCP servers",
     "description": "Connect external MCP clients to Odoo through explicit policies, approvals, and audit logging.",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.1.0",
     "category": "Technical",
     "website": "https://github.com/oduist/connect_addons_ng",
     "author": "Connect MCP Contributors",

@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=eddebb303f0d lang=pl -->
+<!-- i18n source=admin_guide.md sha=2b22271d9d3b lang=pl -->
 # Administracja księgą dokumentacji
 
 Księga jest oparta na plikach. Podręczniki modułów i archiwum zmian nie
@@ -164,3 +164,23 @@ czasu modyfikacji pliku.
 ## Zgodność z Odoo 17
 
 Do nowej instalacji na Odoo 17 użyj gałęzi `17.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.
+
+## Raporty z audytu modułów
+
+Otwórz **Księga → Audyt**, aby przeczytać `doc/module-audit.md` z zainstalowanych
+modułów. Tylko członkowie `base.group_system` mogą czytać raporty, również przez
+bezpośrednie wywołania RPC i eksport PDF. Moduły bez raportu są pomijane; jeśli
+żaden zainstalowany moduł nie ma raportu, sekcja jest pusta. Raporty są technicznymi
+dokumentami źródłowymi w języku angielskim; tłumaczenia są ignorowane.
+
+Użyj `$audit-modules` ze skilem repozytorium w
+`.agents/skills/audit-modules/SKILL.md`, aby przeprowadzić audyt wszystkich modułów
+w `addons/` i zapisać raport w każdym module. Obejmuje to moduły niezainstalowane
+w bieżącej bazie; ich raporty pojawią się po instalacji. Skil zapisuje dowody,
+wagę problemów, zakres i pominięte kontrole. Nie naprawia automatycznie problemów
+ani nie zmienia usług. Raporty opisują stan z chwili audytu, a nie bieżący stan usług.
+
+Przeglądarka obsługuje wyszukiwanie tytułów, odnośniki do sekcji oraz pojedynczy
+i łączony eksport PDF. Wybór sekcji audytu jest zapisywany oddzielnie od wyboru
+w podręcznikach. Odśwież widok po aktualizacji raportów. Zaktualizuj `odubook`
+po wdrożeniu tej funkcji, aby zarejestrować menu i załadować zasoby interfejsu.

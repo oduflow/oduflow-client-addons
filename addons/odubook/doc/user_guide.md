@@ -225,3 +225,9 @@ changed and when”.
 ## Odoo 17 compatibility
 
 Use branch `17.0` for a fresh installation on Odoo 17. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.
+
+## Module audits
+
+Administrators can open **Book → Audit** to read module audit reports. This
+section is hidden from regular users. Reports describe the reviewed revision,
+findings and validation limits; opening the section does not run an audit.

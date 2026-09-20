@@ -12,6 +12,8 @@ and add an index row. Record unknown or inapplicable details explicitly.
 
 | Date (UTC) | Environment | Scope | Result / provenance |
 | --- | --- | --- | --- |
+| 2026-09-19 | terrific-squid-qa | [Odoo 19 PR verification](2026-09-19-terrific-squid-qa-odoo.md) | Fresh installation and 76 module tests passed; environment retained for user testing. |
+| 2026-09-18 | odulogin-test | [Odoo 19 test environment](2026-09-18-odulogin-test-odoo.md) | Fresh installation and 8 module tests passed; retrospective entry imported on 2026-09-19. |
 | 2026-09-15 | hr-headscale | [Environment removal](2026-09-15-hr-headscale-environment.md) | Teardown succeeded and absence verified; separate VPN services retained. |
 | 2026-09-15 | hr-headscale | [OduMCP installation](2026-09-15-hr-headscale-odumcp.md) | Installed and verified; 327 tests passed; predecessor absent before rename. |
 | 2026-09-14 | hr-headscale | [Oduscale, Headscale and VPN gateway](2026-09-14-hr-headscale-oduscale.md) | Historical installation reported successful; imported from the deployment README on 2026-09-15. |

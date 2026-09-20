@@ -1509,6 +1509,7 @@ class OduMcpService(models.AbstractModel):
     ):
         values = {
             "request_id": request_id,
+            "source": self.env.context.get("odumcp_source", "mcp"),
             "profile_id": access.mcp_profile_id.id,
             "user_id": access.id,
             "approval_id": approval.id if approval else False,

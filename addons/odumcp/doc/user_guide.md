@@ -150,3 +150,11 @@ Choose an expiration date permitted by your Odoo groups when creating a key. Exp
 ## Odoo 17 compatibility
 
 Use branch `17.0` for a fresh installation on Odoo 17. Install the module from `addons` together with its declared dependencies. This branch does not downgrade an existing Odoo database.
+
+## Requests through Oduflow
+
+Administrators can connect through Oduflow without a separate MCP server.
+Review the same approval plans in Odoo; existing model policies and approval
+requirements still apply. Audit entries using the managed integration credential
+show `source = oduflow` and the administrator as the Odoo user. A shared credential
+does not identify the individual person who initiated the request.

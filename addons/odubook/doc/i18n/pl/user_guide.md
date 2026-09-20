@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=037440db9df1 lang=pl -->
+<!-- i18n source=user_guide.md sha=ca52072db7cb lang=pl -->
 # Księga dokumentacji
 
 Aplikacja **Odubook** gromadzi w jednym miejscu dokumentację zainstalowanych
@@ -231,3 +231,9 @@ zmian odpowiada na pytanie „co i kiedy się zmieniło”.
 ## Zgodność z Odoo 17
 
 Do nowej instalacji na Odoo 17 użyj gałęzi `17.0`. Zainstaluj moduł z `addons` wraz z zadeklarowanymi zależnościami. Ta gałąź nie służy do obniżania wersji istniejącej bazy Odoo.
+
+## Audyty modułów
+
+Administratorzy mogą otworzyć **Księga → Audyt**, aby przeczytać raporty z audytu
+modułów. Sekcja jest ukryta przed zwykłymi użytkownikami. Raporty opisują badaną
+rewizję, ustalenia i ograniczenia weryfikacji; otwarcie sekcji nie uruchamia audytu.
