@@ -50,7 +50,10 @@ class TestOduLogin(TransactionCase):
         data.update(extra or {})
         session = Session(data, sid="odulogin-test-session")
         session.session_token = user._compute_session_token(session.sid)
-        fake_request = SimpleNamespace(session=session, env=user_env)
+        fake_request = SimpleNamespace(
+            session=session, env=user_env, cookies={},
+            httprequest=SimpleNamespace(cookies={}),
+        )
 
         def update_env(*, user=None, context=None, su=None):
             fake_request.env = fake_request.env(user=user, context=context, su=su)
