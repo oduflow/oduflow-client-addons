@@ -10,7 +10,6 @@ import json
 import re
 
 from markupsafe import Markup
-
 from odoo.tools import html_escape
 
 REDACTED = "[REDACTED]"
@@ -89,7 +88,7 @@ def _render(value, depth):
             block = _render(item, depth + 1)
             # Первую строку вложенного блока подтягиваем к дефису, иначе
             # список словарей растягивается вдвое.
-            lines.append(pad + _span("-", "punct") + " " + block[0][len(_INDENT * (depth + 1)):])
+            lines.append(pad + _span("-", "punct") + " " + block[0][len(_INDENT * (depth + 1)) :])
             lines.extend(block[1:])
         return lines
     return [pad + _scalar(value)]

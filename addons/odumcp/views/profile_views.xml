@@ -25,7 +25,9 @@
                     <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active == True"/>
                     <div class="oe_title">
                         <label for="name"/>
-                        <h1><field name="name" placeholder="Read-only analyst"/></h1>
+                        <h1>
+                            <field name="name" placeholder="Read-only analyst"/>
+                        </h1>
                     </div>
                     <group>
                         <group string="Profile">
@@ -91,12 +93,16 @@
                                         <field name="forced_domain_json"/>
                                         <field name="max_records"/>
                                     </group>
-                                    <group string="Operations" col="5">
-                                        <field name="allow_read"/>
-                                        <field name="allow_aggregate"/>
-                                        <field name="allow_create"/>
-                                        <field name="allow_write"/>
-                                        <field name="allow_unlink"/>
+                                    <group string="Operations">
+                                        <group>
+                                            <field name="allow_read"/>
+                                            <field name="allow_aggregate"/>
+                                        </group>
+                                        <group>
+                                            <field name="allow_create"/>
+                                            <field name="allow_write"/>
+                                            <field name="allow_unlink"/>
+                                        </group>
                                     </group>
                                     <group string="Field Policies">
                                         <field name="read_field_ids" widget="many2many_tags"/>

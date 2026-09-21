@@ -4,8 +4,10 @@ import re
 import time
 import uuid
 from datetime import timedelta
+from unittest.mock import patch
+
 from lxml import etree
-from odoo import Command, fields
+from odoo import Command, api, fields
 from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.http import _request_stack
 from odoo.tests import tagged
@@ -19,9 +21,7 @@ class TestOduMcp(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.country = cls.env.ref("base.us")
-        cls.category = cls.env["res.partner.category"].create(
-            {"name": "MCP Test"}
-        )
+        cls.category = cls.env["res.partner.category"].create({"name": "MCP Test"})
         cls.allowed_partner = cls.env["res.partner"].create(
             {
                 "name": "Allowed Partner",
@@ -82,25 +82,27 @@ class TestOduMcp(TransactionCase):
                 "allow_create": True,
                 "allow_write": True,
                 "allow_unlink": False,
-                "forced_domain_json": json.dumps(
-                    [["id", "=", cls.allowed_partner.id]]
-                ),
+                "forced_domain_json": json.dumps([["id", "=", cls.allowed_partner.id]]),
                 "read_field_ids": [Command.set(cls.name_field.ids)],
                 "write_field_ids": [
                     Command.set(
                         partner_fields.filtered(
-                            lambda field: field.name
-                            in {"name", "country_id", "category_id"}
+                            lambda field: field.name in {"name", "country_id", "category_id"}
                         ).ids
                     )
                 ],
             }
         )
         cls.access = cls.mcp_user.sudo()
-        cls.token = cls.env["res.users.apikeys"].with_user(cls.mcp_user)._generate(
-            "mcp",
-            "MCP test key",
-        expiration_date=fields.Datetime.now() + timedelta(hours=1),)
+        cls.token = (
+            cls.env["res.users.apikeys"]
+            .with_user(cls.mcp_user)
+            ._generate(
+                "mcp",
+                "MCP test key",
+                expiration_date=fields.Datetime.now() + timedelta(hours=1),
+            )
+        )
         cls.service = cls.env["odumcp.service"]
 
     def _request(self, operation, params=None, request_id="00000000-0000-4000-8000-000000000001"):
@@ -114,11 +116,94 @@ class TestOduMcp(TransactionCase):
         )
 
     def _approve(self, approval_id):
-        approval = self.env["odumcp.approval"].search(
-            [("request_uid", "=", approval_id)]
-        )
+        approval = self.env["odumcp.approval"].search([("request_uid", "=", approval_id)])
         approval.action_approve()
         return approval
+
+    def test_managed_oduflow_key_authenticates_and_opens_read_only_access(self):
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+
+        keys = self.env["res.users.apikeys"]
+        admin = self.env.ref("base.user_admin")
+        # A database that Oduflow already synchronized carries a managed key, so
+        # this asserts the first installation rather than whatever ran before it.
+        keys.search([("name", "=", ODUFLOW_KEY_NAME)]).unlink()
+        admin.write({"mcp_active": False, "mcp_profile_id": False})
+        personal = keys.with_user(admin).sudo()._generate("rpc", "Personal", False)
+        token = "oduflow-managed-" + uuid.uuid4().hex
+
+        result = keys._set_oduflow_key(token)
+
+        self.assertEqual(keys._check_mcp_credentials(token), admin.id)
+        self.assertEqual(result["user"], admin.login)
+        self.assertEqual(result["profile"], admin.mcp_profile_id.code)
+        self.assertTrue(result["mcp_active"])
+        self.assertEqual(result["replaced_keys"], 0)
+        self.assertNotIn(token, json.dumps(result))
+        # An unconfigured administrator is opened read-only, never wider.
+        self.assertEqual(admin.mcp_profile_id.default_model_access, "read")
+        self.assertFalse(admin.mcp_profile_id.allow_global_create)
+        # A key issued for the person keeps working and is not an MCP credential.
+        self.assertTrue(keys.search([("user_id", "=", admin.id), ("name", "=", "Personal")]))
+        self.assertFalse(keys._check_mcp_credentials(personal))
+
+    def test_rotating_the_managed_key_replaces_only_its_own_row(self):
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+
+        keys = self.env["res.users.apikeys"]
+        admin = self.env.ref("base.user_admin")
+        keys.search([("name", "=", ODUFLOW_KEY_NAME)]).unlink()
+        first, second = "oduflow-a-" + uuid.uuid4().hex, "oduflow-b-" + uuid.uuid4().hex
+        keys._set_oduflow_key(first)
+        chosen = self.env.ref("odumcp.profile_administrator")
+        admin.write({"mcp_profile_id": chosen.id, "mcp_active": False})
+
+        result = keys._set_oduflow_key(second)
+
+        self.assertEqual(result["replaced_keys"], 1)
+        self.assertEqual(
+            keys.search_count([("user_id", "=", admin.id), ("name", "=", ODUFLOW_KEY_NAME)]),
+            1,
+        )
+        self.assertEqual(keys._check_mcp_credentials(second), admin.id)
+        self.assertFalse(keys._check_mcp_credentials(first))
+        # A profile an administrator chose, and a deliberately suspended access,
+        # survive the rotation.
+        self.assertEqual(admin.mcp_profile_id, chosen)
+        self.assertFalse(admin.mcp_active)
+        self.assertFalse(result["mcp_active"])
+
+    def test_managed_key_refuses_an_unusable_token(self):
+        from odoo.exceptions import ValidationError
+
+        for token in ("", "short", 12345, " " + "x" * 40, "x" * 513):
+            with self.assertRaises(ValidationError), self.cr.savepoint():
+                self.env["res.users.apikeys"]._set_oduflow_key(token)
+
+    def test_seeded_administrator_profile_opens_everything_but_deletion(self):
+        profile = self.env.ref("odumcp.profile_administrator")
+        self.assertEqual(profile.code, "admin")
+        self.assertEqual(profile.default_model_access, "write")
+        self.assertTrue(profile.allow_global_create)
+        for capability in (
+            "allow_schema",
+            "allow_aggregate",
+            "allow_attachments",
+            "allow_chatter",
+            "allow_activities",
+        ):
+            self.assertTrue(profile[capability], capability)
+        # A connector that may delete records, render reports, approve its own
+        # low-risk changes or silently read a trimmed record is a separate decision.
+        for closed in (
+            "allow_global_unlink",
+            "allow_reports",
+            "auto_approve_low_risk",
+            "allow_partial_field_reads",
+        ):
+            self.assertFalse(profile[closed], closed)
+        self.assertFalse(profile.policy_ids)
+        self.assertFalse(profile.user_ids)
 
     def test_profile_policy_lists_open_detailed_forms(self):
         view = self.env.ref("odumcp.view_odumcp_profile_form")
@@ -172,10 +257,15 @@ class TestOduMcp(TransactionCase):
         )
 
     def test_mcp_api_key_and_access_resolution(self):
-        global_token = self.env["res.users.apikeys"].with_user(self.mcp_user)._generate(
-            None,
-            "Global test key",
-        expiration_date=fields.Datetime.now() + timedelta(hours=1),)
+        global_token = (
+            self.env["res.users.apikeys"]
+            .with_user(self.mcp_user)
+            ._generate(
+                None,
+                "Global test key",
+                expiration_date=fields.Datetime.now() + timedelta(hours=1),
+            )
+        )
         user_id = self.env["res.users.apikeys"]._check_mcp_credentials(self.token)
         global_user_id = self.env["res.users.apikeys"]._check_mcp_credentials(global_token)
         rpc_user_id = self.env["res.users.apikeys"]._check_credentials(
@@ -191,25 +281,32 @@ class TestOduMcp(TransactionCase):
         self.assertEqual(access, self.access)
 
     def test_key_wizard_can_create_mcp_key(self):
-        fake_request = DotDict({
-            "httprequest": DotDict({
-                "environ": {"REMOTE_ADDR": "localhost"},
-                "cookies": {},
-            }),
-            "session": {"identity-check-last": time.time()},
-        })
+        fake_request = DotDict(
+            {
+                "httprequest": DotDict(
+                    {
+                        "environ": {"REMOTE_ADDR": "localhost"},
+                        "cookies": {},
+                    }
+                ),
+                "session": {"identity-check-last": time.time()},
+            }
+        )
         _request_stack.push(fake_request)
         self.addCleanup(_request_stack.pop)
-        action = self.env["res.users.apikeys.description"].with_user(
-            self.mcp_user
-        ).create({
-            "name": "External MCP client",
-            "scope_mode": "mcp",
-        }).make_key()
-        token = action["context"]["default_key"]
-        key = self.env["res.users.apikeys"]._find_for_token(
-            self.mcp_user, token
+        action = (
+            self.env["res.users.apikeys.description"]
+            .with_user(self.mcp_user)
+            .create(
+                {
+                    "name": "External MCP client",
+                    "scope_mode": "mcp",
+                }
+            )
+            .make_key()
         )
+        token = action["context"]["default_key"]
+        key = self.env["res.users.apikeys"]._find_for_token(self.mcp_user, token)
 
         self.assertEqual(key.scope, "mcp")
 
@@ -237,14 +334,27 @@ class TestOduMcp(TransactionCase):
             "mcp_profile_id": self.profile.id,
         })
 
-        self.assertFalse(self.env["res.users.apikeys"].sudo().search([
-            ("user_id", "=", user.id),
-        ]))
+        self.assertFalse(
+            self.env["res.users.apikeys"]
+            .sudo()
+            .search(
+                [
+                    ("user_id", "=", user.id),
+                ]
+            )
+        )
 
     def test_disabling_mcp_access_keeps_personal_key(self):
         user = self._new_user("mcp-key-manual@example.com")
-        token = self.env["res.users.apikeys"].with_user(user)._generate(
-            "mcp", "External MCP client", expiration_date=fields.Datetime.now() + timedelta(hours=1),)
+        token = (
+            self.env["res.users.apikeys"]
+            .with_user(user)
+            ._generate(
+                "mcp",
+                "External MCP client",
+                expiration_date=fields.Datetime.now() + timedelta(hours=1),
+            )
+        )
         manual = self.env["res.users.apikeys"]._find_for_token(user, token)
 
         user.write({"mcp_active": True, "mcp_profile_id": self.profile.id})
@@ -339,6 +449,120 @@ class TestOduMcp(TransactionCase):
         field = arch.xpath("//page[@name='users']/field")[0]
         self.assertEqual(field.get("name"), "assigned_user_ids")
         self.assertIn("'no_create': True", field.get("options"))
+
+    def test_empty_read_fields_allow_schema_search_and_preserve_write_allowlist(self):
+        self.policy.read_field_ids = [Command.clear()]
+        body, status = self._request("models.describe", {"model": "res.partner"})
+        self.assertEqual(status, 200, body)
+        self.assertIn("email", body["data"]["fields"])
+        self.assertNotIn("image_1920", body["data"]["fields"])
+        body, status = self._request(
+            "records.search",
+            {
+                "model": "res.partner",
+                "domain": [["email", "!=", False]],
+                "fields": ["name", "email"],
+                "order": "email desc",
+            },
+        )
+        self.assertEqual(status, 200, body)
+        self.assertEqual([row["id"] for row in body["data"]["records"]], [self.allowed_partner.id])
+        self.assertEqual(body["data"]["records"][0]["email"], "allowed@example.com")
+        body, status = self._request(
+            "changes.preview",
+            {
+                "action": "record.update",
+                "idempotency_key": "restricted-write",
+                "payload": {
+                    "model": "res.partner",
+                    "ids": self.allowed_partner.ids,
+                    "values": {"email": "new@example.com"},
+                },
+            },
+        )
+        self.assertEqual(status, 403, body)
+        self.assertEqual(body["error"]["code"], "field_denied")
+
+    def test_empty_write_fields_allow_create_update_but_keep_read_allowlist(self):
+        self.policy.write_field_ids = [Command.clear()]
+        self.policy.forced_domain_json = "[]"
+        for action in ("record.create", "record.update"):
+            payload = {
+                "model": "res.partner",
+                "values": {"name": "Field policy test", "email": "new@example.com"},
+            }
+            if action == "record.update":
+                payload["ids"] = self.allowed_partner.ids
+            body, status = self._request(
+                "changes.preview",
+                {
+                    "action": action,
+                    "idempotency_key": action,
+                    "payload": payload,
+                },
+            )
+            self.assertEqual(status, 200, body)
+            approval_id = body["data"]["approval_id"]
+            self._approve(approval_id)
+            body, status = self._request("changes.execute", {"approval_id": approval_id})
+            self.assertEqual(status, 200, body)
+        self.assertEqual(self.allowed_partner.email, "new@example.com")
+        body, status = self._request(
+            "records.read",
+            {
+                "model": "res.partner",
+                "ids": self.allowed_partner.ids,
+                "fields": ["email"],
+            },
+        )
+        self.assertEqual(status, 403, body)
+        self.assertEqual(body["error"]["code"], "field_denied")
+
+    def test_empty_lists_keep_operation_binary_and_readonly_restrictions(self):
+        self.policy.write(
+            {"read_field_ids": [Command.clear()], "write_field_ids": [Command.clear()]}
+        )
+        for field in ("image_1920", "create_date"):
+            body, status = self._request(
+                "changes.preview",
+                {
+                    "action": "record.update",
+                    "idempotency_key": "blocked-" + field,
+                    "payload": {
+                        "model": "res.partner",
+                        "ids": self.allowed_partner.ids,
+                        "values": {field: False},
+                    },
+                },
+            )
+            self.assertEqual(status, 403, body)
+            self.assertEqual(body["error"]["code"], "field_denied")
+        self.policy.allow_write = False
+        body, status = self._request(
+            "changes.preview",
+            {
+                "action": "record.update",
+                "idempotency_key": "blocked-operation",
+                "payload": {
+                    "model": "res.partner",
+                    "ids": self.allowed_partner.ids,
+                    "values": {"email": "new@example.com"},
+                },
+            },
+        )
+        self.assertEqual(status, 403, body)
+        self.assertEqual(body["error"]["code"], "policy_denied")
+        self.policy.allow_read = False
+        body, status = self._request(
+            "records.read",
+            {
+                "model": "res.partner",
+                "ids": self.allowed_partner.ids,
+                "fields": ["email"],
+            },
+        )
+        self.assertEqual(status, 403, body)
+        self.assertEqual(body["error"]["code"], "policy_denied")
 
     def test_forced_domain_and_field_policy(self):
         body, status = self._request(
@@ -699,7 +923,12 @@ class TestOduMcp(TransactionCase):
         )
         order_body, order_status = self._request(
             "records.search",
-            {"model": "res.partner", "domain": [], "fields": ["name"], "order": "email desc"},
+            {
+                "model": "res.partner",
+                "domain": [],
+                "fields": ["name"],
+                "order": "email desc",
+            },
         )
         write_body, write_status = self._request(
             "changes.preview",
@@ -770,9 +999,7 @@ class TestOduMcp(TransactionCase):
         body, status = self._request("models.list")
 
         self.assertEqual(status, 200)
-        companies = [
-            item for item in body["data"]["models"] if item["model"] == "res.company"
-        ]
+        companies = [item for item in body["data"]["models"] if item["model"] == "res.company"]
         self.assertEqual(len(companies), 1)
         self.assertIn("read", companies[0]["operations"])
 
@@ -856,19 +1083,84 @@ class TestOduMcp(TransactionCase):
 
     def test_global_access_keeps_security_models_blocked(self):
         self.profile.default_model_access = "read"
+        for model_name in (
+            "res.users.apikeys",
+            "odumcp.profile",
+            "odumcp.model.policy",
+            "odumcp.method.policy",
+            "odumcp.approval",
+            "odumcp.audit.log",
+            "odumcp.event.ticket",
+        ):
+            with self.subTest(model=model_name):
+                body, status = self._request(
+                    "records.search",
+                    {"model": model_name, "fields": ["id"], "limit": 1},
+                )
+                self.assertEqual(status, 403)
+                self.assertEqual(body["error"]["code"], "policy_denied")
+                with self.assertRaises(ValidationError), self.cr.savepoint():
+                    self.env["odumcp.model.policy"].create(
+                        {
+                            "profile_id": self.profile.id,
+                            "model_id": self.env["ir.model"]._get(model_name).id,
+                        }
+                    )
 
+    def test_config_parameter_policy_enforces_prefix_and_read_only(self):
+        self.profile.default_model_access = "write"
+        self.mcp_user.groups_id = [Command.link(self.env.ref("base.group_system").id)]
+        parameters = self.env["ir.config_parameter"].sudo()
+        allowed = parameters.create({"key": "oduflow.mcp_test", "value": "allowed"})
+        denied = parameters.create({"key": "other.oduflow.mcp_test", "value": "denied"})
+        self.env["odumcp.model.policy"].create(
+            {
+                "profile_id": self.profile.id,
+                "model_id": self.env["ir.model"]._get("ir.config_parameter").id,
+                "allow_read": True,
+                "forced_domain_json": '[["key", "=like", "oduflow.%"]]',
+            }
+        )
         body, status = self._request(
             "records.search",
             {
                 "model": "ir.config_parameter",
-                "domain": [],
-                "fields": ["key"],
-                "limit": 1,
+                "domain": [["id", "in", [allowed.id, denied.id]]],
+                "fields": ["key", "value"],
             },
         )
-
+        self.assertEqual(status, 200)
+        self.assertEqual([row["id"] for row in body["data"]["records"]], [allowed.id])
+        self.assertEqual(body["data"]["records"][0]["value"], "allowed")
+        body, status = self._request(
+            "records.read",
+            {"model": "ir.config_parameter", "ids": [denied.id], "fields": ["value"]},
+        )
+        self.assertEqual(status, 403)
+        body, status = self._request(
+            "changes.preview",
+            {
+                "action": "record.update",
+                "payload": {
+                    "model": "ir.config_parameter",
+                    "ids": [allowed.id],
+                    "values": {"value": "changed"},
+                },
+                "idempotency_key": "config-read-only",
+            },
+        )
         self.assertEqual(status, 403)
         self.assertEqual(body["error"]["code"], "policy_denied")
+
+    def test_config_parameter_global_read_respects_odoo_access(self):
+        self.profile.default_model_access = "read"
+        params = {"model": "ir.config_parameter", "fields": ["key"], "limit": 1}
+        body, status = self._request("records.search", params)
+        self.assertEqual(status, 403)
+        self.mcp_user.groups_id = [Command.link(self.env.ref("base.group_system").id)]
+        body, status = self._request("records.search", params)
+        self.assertEqual(status, 200)
+        self.assertTrue(body["data"]["records"])
 
     def test_global_access_reads_security_models(self):
         self.profile.default_model_access = "write"
@@ -1007,9 +1299,7 @@ class TestOduMcp(TransactionCase):
         self.assertNotEqual(first["request"], third["request"])
 
     def test_zero_window_puts_every_plan_in_its_own_request(self):
-        self.env["ir.config_parameter"].sudo().set_param(
-            "odumcp.request_window_minutes", "0"
-        )
+        self.env["ir.config_parameter"].sudo().set_param("odumcp.request_window_minutes", "0")
         first = self._preview_update("solo-plan-0001")
         second = self._preview_update("solo-plan-0002")
 
@@ -1058,9 +1348,7 @@ class TestOduMcp(TransactionCase):
         self.assertEqual(body["data"]["state"], "pending")
         self.assertEqual(self.allowed_partner.name, "Allowed Partner")
 
-        approval = self.env["odumcp.approval"].search(
-            [("request_uid", "=", approval_id)]
-        )
+        approval = self.env["odumcp.approval"].search([("request_uid", "=", approval_id)])
         approval.action_approve()
         body, status = self._request(
             "changes.execute",
@@ -1078,6 +1366,79 @@ class TestOduMcp(TransactionCase):
         self.assertEqual(status, 200)
         self.assertEqual(body["data"]["result"], first_result)
         self.assertEqual(approval.state, "executed")
+
+    def test_approval_url_uses_configured_base_and_exact_plan(self):
+        self.env["ir.config_parameter"].sudo().set_param(
+            "web.base.url", "https://odoo.example.test/"
+        )
+        params = {
+            "action": "record.update",
+            "payload": {
+                "model": "res.partner",
+                "ids": [self.allowed_partner.id],
+                "values": {"name": "Changed through approved URL"},
+            },
+            "idempotency_key": "approval-url-0001",
+        }
+        body, status = self._request("changes.preview", params)
+        self.assertEqual(status, 200)
+        approval_id = body["data"]["approval_id"]
+        approval = self.env["odumcp.approval"].search([("request_uid", "=", approval_id)])
+        action = self.env.ref("odumcp.action_odumcp_approvals")
+        self.assertEqual(action.res_model, approval._name)
+        self.assertIn("form", action.view_mode.split(","))
+        expected_url = (f"https://odoo.example.test/web#id={approval.id}"
+                        f"&model=odumcp.approval&view_type=form&action={action.id}")
+        self.assertEqual(body["data"]["approval_url"], expected_url)
+        self.assertIn("approval_url", body["data"]["next_step"])
+        self.assertEqual(approval.state, "pending")
+        self.assertEqual(self.allowed_partner.name, "Allowed Partner")
+
+        repeated, status = self._request("changes.preview", params)
+        self.assertEqual(status, 200)
+        self.assertEqual(repeated["data"]["approval_url"], expected_url)
+        for operation in ("changes.status", "changes.execute"):
+            body, status = self._request(operation, {"approval_id": approval_id})
+            self.assertEqual(status, 200)
+            self.assertEqual(body["data"]["approval_url"], expected_url)
+            self.assertEqual(body["data"]["state"], "pending")
+        self.assertEqual(self.allowed_partner.name, "Allowed Partner")
+
+        self._approve(approval_id)
+        body, status = self._request("changes.execute", {"approval_id": approval_id})
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["approval_url"], expected_url)
+        self.assertEqual(body["data"]["state"], "executed")
+        self.assertIsNone(body["data"]["next_step"])
+
+    def test_approval_url_preserves_configured_path_prefix(self):
+        approval = self._new_approval_for_url()
+        for base in ("https://example.test/erp", "https://example.test/erp/"):
+            with self.subTest(base=base):
+                self.env["ir.config_parameter"].sudo().set_param("web.base.url", base)
+                self.assertTrue(
+                    approval._public_dict()["approval_url"].startswith(
+                        "https://example.test/erp/web#"
+                    )
+                )
+
+    def _new_approval_for_url(self):
+        body, status = self._request(
+            "changes.preview",
+            {
+                "action": "record.update",
+                "payload": {
+                    "model": "res.partner",
+                    "ids": [self.allowed_partner.id],
+                    "values": {"name": "URL prefix test"},
+                },
+                "idempotency_key": "approval-url-prefix-0001",
+            },
+        )
+        self.assertEqual(status, 200)
+        return self.env["odumcp.approval"].search(
+            [("request_uid", "=", body["data"]["approval_id"])]
+        )
 
     def test_idempotency_conflict(self):
         common = {
@@ -1150,10 +1511,15 @@ class TestOduMcp(TransactionCase):
         self.mcp_user.mcp_active = True
 
     def test_mcp_api_key_is_rejected_for_inactive_user(self):
-        token = self.env["res.users.apikeys"].with_user(self.mcp_user)._generate(
-            "mcp",
-            "Inactive user MCP test key",
-        expiration_date=fields.Datetime.now() + timedelta(hours=1),)
+        token = (
+            self.env["res.users.apikeys"]
+            .with_user(self.mcp_user)
+            ._generate(
+                "mcp",
+                "Inactive user MCP test key",
+                expiration_date=fields.Datetime.now() + timedelta(hours=1),
+            )
+        )
         self.mcp_user.active = False
         try:
             user_id = self.env["res.users.apikeys"]._check_mcp_credentials(token)
@@ -1197,9 +1563,7 @@ class TestOduMcp(TransactionCase):
 
         self.assertEqual(status, 403)
         self.assertEqual(body["error"]["code"], "policy_postcondition_failed")
-        self.assertFalse(
-            self.env["res.partner"].search([("name", "=", "Outside MCP scope")])
-        )
+        self.assertFalse(self.env["res.partner"].search([("name", "=", "Outside MCP scope")]))
         self.assertEqual(approval.state, "failed")
         self.assertTrue(approval.error_message)
 
@@ -1311,20 +1675,211 @@ class TestOduMcp(TransactionCase):
         self.assertTrue(approval)
         self.assertFalse(approval.approved_by)
 
+    def _wildcard_method_policy(self, **values):
+        return self.env["odumcp.method.policy"].create(
+            {
+                "profile_id": self.profile.id,
+                "model_id": self.policy.model_id.id,
+                "method_name": "*",
+                **values,
+            }
+        )
+
+    def _preview_method(self, method="toggle_active", **payload):
+        return self._request(
+            "changes.preview",
+            {
+                "action": "method.call",
+                "payload": {
+                    "model": "res.partner",
+                    "ids": self.allowed_partner.ids,
+                    "method": method,
+                    **payload,
+                },
+                "idempotency_key": str(uuid.uuid4()),
+            },
+        )
+
+    def test_wildcard_method_requires_approval_and_executes_once(self):
+        self._wildcard_method_policy()
+        body, status = self._preview_method()
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "pending")
+        approval_id = body["data"]["approval_id"]
+        body, status = self._request("changes.execute", {"approval_id": approval_id})
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "pending")
+        self.assertTrue(self.allowed_partner.active)
+        self._approve(approval_id)
+        for _attempt in range(2):
+            body, status = self._request("changes.execute", {"approval_id": approval_id})
+            self.assertEqual(status, 200)
+            self.assertEqual(body["data"]["state"], "executed")
+            self.assertFalse(self.allowed_partner.active)
+
+    def test_exact_method_policy_overrides_wildcard_without_merging(self):
+        wildcard = self._wildcard_method_policy(
+            requires_approval=False, risk_level="low", allow_positional_arguments=True
+        )
+        exact = self._wildcard_method_policy(method_name="toggle_active", risk_level="critical")
+        body, status = self._preview_method()
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "pending")
+        approval = self.env["odumcp.approval"].search(
+            [("request_uid", "=", body["data"]["approval_id"])]
+        )
+        self.assertEqual(approval.risk_level, "critical")
+        _, status = self._preview_method(args=[True])
+        self.assertEqual(status, 403)
+        exact.write({"requires_approval": False})
+        wildcard.write({"requires_approval": True})
+        body, status = self._preview_method()
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "approved")
+        exact.active = False
+        body, status = self._preview_method(args=[True])
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "pending")
+
+    def test_wildcard_auto_approval_keeps_plan_and_execution(self):
+        self._wildcard_method_policy(requires_approval=False)
+        body, status = self._preview_method()
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "approved")
+        self.assertTrue(self.allowed_partner.active)
+        body, status = self._request(
+            "changes.execute", {"approval_id": body["data"]["approval_id"]}
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(body["data"]["state"], "executed")
+        self.assertFalse(self.allowed_partner.active)
+
+    def test_wildcard_rechecks_revoked_policy_before_execution(self):
+        wildcard = self._wildcard_method_policy(requires_approval=False)
+        body, status = self._preview_method()
+        self.assertEqual(status, 200)
+        wildcard.active = False
+        body, status = self._request(
+            "changes.execute", {"approval_id": body["data"]["approval_id"]}
+        )
+        self.assertEqual(status, 403)
+        self.assertEqual(body["error"]["code"], "policy_denied")
+        self.assertTrue(self.allowed_partner.active)
+
+    def test_wildcard_preserves_argument_and_record_limits(self):
+        wildcard = self._wildcard_method_policy(max_argument_bytes=256)
+        for payload in (
+            {"ids": []},
+            {"ids": self.allowed_partner.ids + self.denied_partner.ids},
+            {"args": [True]},
+            {"kwargs": {"unexpected": True}},
+        ):
+            with self.subTest(payload=payload):
+                _, status = self._preview_method(**payload)
+                self.assertNotEqual(status, 200)
+        wildcard.write({"allow_positional_arguments": True})
+        _, status = self._preview_method(args=["x" * 300])
+        self.assertEqual(status, 413)
+        wildcard.write({"allow_model_method": True, "allowed_keyword_arguments": "example"})
+        _, status = self._preview_method(ids=[], kwargs={"example": True})
+        self.assertEqual(status, 200)
+
+    def test_wildcard_preserves_model_scope_and_forced_domain(self):
+        self._wildcard_method_policy()
+        for payload in (
+            {"ids": self.denied_partner.ids},
+            {"model": "res.partner.category", "ids": self.category.ids},
+        ):
+            with self.subTest(payload=payload):
+                _, status = self._preview_method(**payload)
+                self.assertEqual(status, 403)
+        self.policy.allow_read = False
+        _, status = self._preview_method()
+        self.assertEqual(status, 403)
+        self.policy.allow_read = True
+        other = self.env["odumcp.profile"].create({"name": "Other", "code": "other_methods"})
+        self.mcp_user.mcp_profile_id = other
+        _, status = self._preview_method()
+        self.assertEqual(status, 403)
+
+    def test_wildcard_rejects_framework_private_and_invalid_methods(self):
+        self._wildcard_method_policy(allow_model_method=True, allow_positional_arguments=True)
+        for method in (
+            "_compute_display_name",
+            "__class__",
+            "*",
+            "action_*",
+            "",
+            None,
+            "sudo",
+            "with_user",
+            "with_context",
+            "browse",
+            "mapped",
+            "filtered",
+            "create",
+            "write",
+            "unlink",
+            "copy",
+            "load",
+            "export_data",
+            "search_read",
+            "read",
+            "read_group",
+            "name_search",
+            "web_read",
+            "web_save",
+            "formatted_read_group",
+            "search_panel_select_range",
+        ):
+            with self.subTest(method=method):
+                body, status = self._preview_method(method)
+                self.assertEqual(status, 403)
+                self.assertEqual(body["error"]["code"], "policy_denied")
+        for method in ("name", "nonexistent_business_method"):
+            with self.subTest(method=method):
+                _, status = self._preview_method(method)
+                self.assertEqual(status, 404)
+
+    def test_wildcard_rejects_api_private_business_methods(self):
+        self._wildcard_method_policy()
+
+        def private_action(records):
+            raise AssertionError("An API-private method must never execute")
+
+        private_action._api_private = True
+
+        with patch.object(
+            type(self.allowed_partner), "private_action", private_action, create=True
+        ):
+            _, status = self._preview_method("private_action")
+            self.assertEqual(status, 403)
+
+    def test_method_policy_accepts_only_exact_business_name_or_star(self):
+        self._wildcard_method_policy()
+        self._wildcard_method_policy(method_name="toggle_active")
+        for name in ("action_*", "_private", "sudo", "write", "web_read", "a.b", " * "):
+            with (
+                self.subTest(name=name),
+                self.assertRaises(ValidationError),
+                self.cr.savepoint(),
+            ):
+                self._wildcard_method_policy(method_name=name)
+
     def test_expired_key_is_rejected_by_both_mcp_lookups(self):
-        keys = self.env['res.users.apikeys']
+        keys = self.env["res.users.apikeys"]
         key = keys._find_for_token(self.mcp_user, self.token)
         self.assertTrue(key)
         self.assertEqual(keys._check_mcp_credentials(self.token), self.mcp_user.id)
         self.env.cr.execute(
-            "UPDATE res_users_apikeys SET expiration_date = %s WHERE id = %s",
-            [fields.Datetime.now() - timedelta(seconds=1), key.id],
+            "UPDATE res_users_apikeys "
+            "SET expiration_date = (now() at time zone 'utc') - interval '1 second' "
+            "WHERE id = %s",
+            [key.id],
         )
-        key.invalidate_recordset(['expiration_date'])
+        key.invalidate_recordset(["expiration_date"])
         self.assertFalse(keys._check_mcp_credentials(self.token))
         self.assertFalse(keys._find_for_token(self.mcp_user, self.token))
-
-
 
 
 def _yaml_text(rendered):
@@ -1415,9 +1970,7 @@ class TestOduMcpActivities(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.country = cls.env.ref("base.us")
-        cls.category = cls.env["res.partner.category"].create(
-            {"name": "MCP Activity Test"}
-        )
+        cls.category = cls.env["res.partner.category"].create({"name": "MCP Activity Test"})
         partner_model = cls.env["ir.model"]._get("res.partner")
         partner_fields = cls.env["ir.model.fields"].search(
             [("model_id", "=", partner_model.id), ("name", "in", ["name"])]
@@ -1472,17 +2025,13 @@ class TestOduMcpActivities(TransactionCase):
                 "write_field_ids": [Command.set(partner_fields.ids)],
             }
         )
-        cls.mcp_user.write(
-            {"mcp_active": True, "mcp_profile_id": cls.profile.id}
-        )
+        cls.mcp_user.write({"mcp_active": True, "mcp_profile_id": cls.profile.id})
         cls.access = cls.mcp_user.sudo()
         cls.service = cls.env["odumcp.service"]
         cls.todo_type = cls.env.ref("mail.mail_activity_data_todo")
 
     def _request(self, operation, params=None, request_id="00000000-0000-4000-8000-0000000000a1"):
-        return self.service.execute_request(
-            self.access, operation, params or {}, request_id
-        )
+        return self.service.execute_request(self.access, operation, params or {}, request_id)
 
     def _change(self, action, payload, key):
         body, status = self._request(
@@ -1492,9 +2041,7 @@ class TestOduMcpActivities(TransactionCase):
         self.assertEqual(status, 200, body)
         approval_id = body["data"]["approval_id"]
         if body["data"]["state"] == "pending":
-            self.env["odumcp.approval"].search(
-                [("request_uid", "=", approval_id)]
-            ).action_approve()
+            self.env["odumcp.approval"].search([("request_uid", "=", approval_id)]).action_approve()
         return self._request("changes.execute", {"approval_id": approval_id})
 
     def _own_activity(self, user=None):
@@ -1749,8 +2296,7 @@ class TestOduMcpMassApproval(TransactionCase):
                 "idempotency_key": str(uuid.uuid4()),
                 "risk_level": "low",
                 "summary": "Mass test plan",
-                "expires_at": fields.Datetime.now()
-                + timedelta(hours=-1 if expired else 1),
+                "expires_at": fields.Datetime.now() + timedelta(hours=-1 if expired else 1),
             }
         )
         if state != "pending":
@@ -1813,9 +2359,7 @@ class TestOduMcpMassApproval(TransactionCase):
         pending = self._make_approval()
         action = pending.with_user(self.manager).action_mass_approve()
         # план истёк между открытием визарда и подтверждением
-        pending._system_write(
-            {"expires_at": fields.Datetime.now() - timedelta(minutes=1)}
-        )
+        pending._system_write({"expires_at": fields.Datetime.now() - timedelta(minutes=1)})
         self._run_wizard(action)
         self.assertEqual(pending.state, "expired")
 
@@ -1895,7 +2439,9 @@ class TestOduflowManagedKey(TransactionCase):
 
     def test_existing_profile_and_suspension_are_preserved(self):
         admin = self.env.ref("base.user_admin")
-        profile = self.env["odumcp.profile"].create({"name": "Restricted", "code": "restricted_oduflow"})
+        profile = self.env["odumcp.profile"].create(
+            {"name": "Restricted", "code": "restricted_oduflow"}
+        )
         admin.write({"mcp_profile_id": profile.id, "mcp_active": False})
         self.env["res.users.apikeys"].sudo()._set_oduflow_key("a" * 40)
         self.assertEqual(admin.mcp_profile_id, profile)
@@ -1911,7 +2457,8 @@ class TestOduflowManagedKey(TransactionCase):
         self.assertFalse(admin.mcp_profile_id.allow_global_unlink)
         request_id = str(uuid.uuid4())
         self.env["odumcp.service"].with_context(odumcp_source="oduflow").execute_request(
-            admin, "identity.whoami", {}, request_id)
+            admin, "identity.whoami", {}, request_id
+        )
         audit = self.env["odumcp.audit.log"].search([("request_id", "=", request_id)])
         self.assertEqual(audit.source, "oduflow")
 
@@ -1924,3 +2471,37 @@ class TestOduflowManagedKey(TransactionCase):
         keys._set_oduflow_key("a" * 40)
         self.assertNotEqual(admin.mcp_profile_id, previous)
         self.assertEqual(admin.mcp_profile_id.default_model_access, "read")
+
+    def test_legacy_platform_key_is_replaced_without_touching_personal_keys(self):
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        legacy = keys.with_user(admin).sudo()._generate("mcp", "Oduflow production", False)
+        personal = keys.with_user(admin).sudo()._generate("rpc", "Oduflow production", False)
+        token = "unified-" + uuid.uuid4().hex
+        result = keys._set_oduflow_key(token)
+        self.assertTrue(result["changed"])
+        self.assertTrue(result["key_set"])
+        self.assertEqual(result["user_id"], admin.id)
+        self.assertEqual(result["user"], admin.login)
+        self.assertEqual(result["scope"], "mcp")
+        self.assertFalse(keys._check_mcp_credentials(legacy))
+        self.assertEqual(keys._check_mcp_credentials(token), admin.id)
+        self.assertTrue(keys._find_for_token(admin, personal))
+        self.assertEqual(keys._find_for_token(admin, token).name, ODUFLOW_KEY_NAME)
+        self.assertFalse(keys._set_oduflow_key(token)["changed"])
+        self.assertNotIn(token, json.dumps(result))
+
+    def test_expiring_managed_key_is_replaced_even_when_token_matches(self):
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        token = "expiry-" + uuid.uuid4().hex
+        keys._set_oduflow_key(token)
+        row = keys._find_for_token(admin, token)
+        self.env.cr.execute(
+            "UPDATE res_users_apikeys SET expiration_date = %s WHERE id = %s",
+            [fields.Datetime.now() + timedelta(days=1), row.id],
+        )
+        self.assertTrue(keys._set_oduflow_key(token)["changed"])
+        self.assertFalse(keys._find_for_token(admin, token).expiration_date)

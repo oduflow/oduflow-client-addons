@@ -14,7 +14,9 @@ class OduMcpApproval(models.Model):
     _order = "create_date desc"
     _rec_name = "request_uid"
 
-    request_uid = fields.Char(required=True, default=lambda self: str(uuid.uuid4()), readonly=True, index=True)
+    request_uid = fields.Char(
+        required=True, default=lambda self: str(uuid.uuid4()), readonly=True, index=True
+    )
     user_id = fields.Many2one(
         "res.users",
         required=True,
@@ -54,7 +56,7 @@ class OduMcpApproval(models.Model):
         readonly=True,
         index=True,
         help="Identifier of the MCP request that produced this plan. "
-             "Plans created by one request share it, so they can be approved together.",
+        "Plans created by one request share it, so they can be approved together.",
     )
     request_key = fields.Char(
         string="Request Key",
@@ -63,7 +65,12 @@ class OduMcpApproval(models.Model):
         help="Internal grouping key: the batch key sent by the client, or an automatic one.",
     )
     risk_level = fields.Selection(
-        [("low", "Low"), ("medium", "Medium"), ("high", "High"), ("critical", "Critical")],
+        [
+            ("low", "Low"),
+            ("medium", "Medium"),
+            ("high", "High"),
+            ("critical", "Critical"),
+        ],
         required=True,
         readonly=True,
         index=True,
@@ -127,8 +134,8 @@ class OduMcpApproval(models.Model):
     @api.model
     def _request_window_minutes(self):
         # Окно склейки планов, пришедших без явного ключа запроса.
-        value = self.env["ir.config_parameter"].sudo().get_param(
-            "odumcp.request_window_minutes", "10"
+        value = (
+            self.env["ir.config_parameter"].sudo().get_param("odumcp.request_window_minutes", "10")
         )
         try:
             minutes = int(value)
@@ -239,9 +246,7 @@ class OduMcpApproval(models.Model):
                 lambda approval: approval.state == "pending" and approval.expires_at > now
             )
         elif mode == "reject":
-            eligible = self.filtered(
-                lambda approval: approval.state in ("pending", "approved")
-            )
+            eligible = self.filtered(lambda approval: approval.state in ("pending", "approved"))
         else:
             eligible = self.filtered(lambda approval: approval.state == "expired")
         if not eligible:
@@ -345,6 +350,11 @@ class OduMcpApproval(models.Model):
         diff = json.loads(self.diff_json) if self.diff_json else []
         return {
             "approval_id": self.request_uid,
+            "approval_url": (
+                f"{self.get_base_url().rstrip('/')}/web#id={self.id}"
+                f"&model=odumcp.approval&view_type=form"
+                f"&action={self.env.ref('odumcp.action_odumcp_approvals').id}"
+            ),
             "request": self.request_ref or None,
             "state": self.state,
             "action": self.action,
@@ -357,7 +367,8 @@ class OduMcpApproval(models.Model):
             "result": result,
             "error": self.error_message or None,
             "next_step": (
-                "Approve this plan in Odoo, then call odoo_execute_approved_change."
+                "Open approval_url to review and approve this plan in Odoo, "
+                "then call odoo_execute_approved_change."
                 if self.state == "pending"
                 else None
             ),
@@ -372,9 +383,7 @@ class OduMcpApproval(models.Model):
         )
         expired._system_write({"state": "expired"})
         retention_days = int(
-            self.env["ir.config_parameter"].sudo().get_param(
-                "odumcp.approval_retention_days", "30"
-            )
+            self.env["ir.config_parameter"].sudo().get_param("odumcp.approval_retention_days", "30")
         )
         cutoff = fields.Datetime.subtract(now, days=max(1, retention_days))
         old = self.sudo().search(

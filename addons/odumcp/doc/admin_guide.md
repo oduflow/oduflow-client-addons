@@ -38,8 +38,17 @@ The opposite combination is refused: enabling the flag without a profile raises
 
 ## Configure a Security Profile
 
-Open **OduMCP > Security Profiles**. A profile is default-deny: without an
+Open **MCP > Security Profiles**. A profile is default-deny: without an
 explicit Model Policy and without a broader default access, nothing is exposed.
+
+Installing the module seeds two profiles. **Administrator** (code `admin`)
+reads, updates and creates on any model its connector user may already use,
+through the default model access rather than through Model Policies. Deletion,
+reports, auto-approval and partial field reads stay off. **Read Only** (code
+`readonly`) only reads and aggregates. Neither is assigned to anyone: a profile
+alone opens nothing until a user gets **MCP Active** and that profile. Upgrades
+never overwrite them, so tightening one is safe; copy it instead when a client
+needs a different scope.
 
 ### Profile and Limits
 
@@ -73,10 +82,19 @@ Under the fallback, fields whose names look like secrets (`password`, `pass`,
 binary fields are hidden, and write is additionally limited to non-readonly,
 non-technical fields.
 
+System parameters (`ir.config_parameter`) follow normal model policies and
+profile-wide access, subject to the connector user's Odoo permissions. For
+restricted read access, add an explicit Model Policy with only Read enabled,
+select `key` and `value` as readable fields, and set a forced domain such as
+`[["key", "=like", "oduflow.%"]]`. This matches keys beginning with
+`oduflow.`; use `oduflow%` to include every key beginning with `oduflow`.
+Parameter values can contain credentials; field-name filtering does not identify
+secrets stored in the generic `value` field.
+
 The fallback never covers:
 
 - transient (wizard) models;
-- `ir.config_parameter`, `res.users.apikeys`, and the OduMCP models
+- `res.users.apikeys` and the OduMCP models
   themselves — these can never be exposed, not even by an explicit policy.
 
 On the security models the fallback is read-only, whatever the mode:
@@ -121,7 +139,7 @@ Three of these are narrower than their names suggest:
   is a chatter message or a scheduled activity. Risk levels are fixed in code:
   create and update and attachment upload are medium, delete is high, chatter
   and activity are low, and a method call takes the risk level of its Method
-  Policy. A low-risk method call is therefore never auto-approved.
+  Policy. Method auto-approval is controlled separately by **Require Human Approval**.
 
 - **Partial Field Reads** trims only a plain field list. A withheld field used
   in a search domain or in the sort order still fails, because skipping it would
@@ -170,11 +188,10 @@ Use the **Model Policies** tab for model-specific rules or exceptions. Per
 model you can set:
 
 - the allowed operations: read, aggregate, create, write, delete;
-- **Readable Fields** and **Writable Fields** allowlists — anything not listed
-  is invisible and unwritable, including in search domains and group-by;
-  `id` and `display_name` are always readable. Both lists offer only the fields
-  of the policy model; to allow every one of them, open **Search More...**, tick
-  the checkbox in the header row and confirm **Select all N**;
+- **Readable Fields** and **Writable Fields** are independent allowlists. An empty
+  list allows all fields for that operation; a populated list allows only selected
+  fields. `id` and `display_name` remain readable. Odoo access rights, readonly
+  fields and the separate binary permissions still apply;
 - **Allow Binary Read/Write** to opt binary fields into those allowlists;
 - a **Forced Domain**, a JSON Odoo domain AND-ed into every search and checked
   again after a change, so a change cannot move a record out of scope;
@@ -191,6 +208,24 @@ records it may receive, whether it may be called without record ids, whether
 positional arguments are allowed, the exact permitted keyword argument names,
 and the maximum argument size.
 
+Enter an exact name in **Method Name**, or `*` to allow all public business
+methods on that model. An active exact-name policy takes precedence over `*`;
+its settings replace the wildcard settings completely. Inactive entries are
+ignored. Patterns such as `action_*` are not supported.
+
+**Require Human Approval** defaults to enabled. Disable it on the selected
+policy to approve valid plans automatically, regardless of the risk level.
+Preview, execution and audit still apply. Wildcard policies keep the same
+record and argument limits; an empty keyword list still forbids keyword
+arguments, and calls without record ids still need **Allow Model Method**.
+
+Private methods (including methods marked private for RPC) and generic ORM/web
+framework methods are unavailable, even with an exact policy. Use dedicated
+MCP operations for CRUD, search and aggregation so their operation, field and
+domain checks apply. Archive/unarchive actions remain available. Business
+methods can change data internally; a read-only Model Policy does not make a
+permitted business method read-only. No wildcard policy is enabled by default.
+
 ### Users
 
 The **Users** tab assigns the profile to users directly and mirrors the field
@@ -198,7 +233,12 @@ on the user form.
 
 ## Review Changes
 
-Open **OduMCP > Approval Inbox**. The list is grouped by **Request**: all
+Preview and status responses include `approval_url` so an agent can send the
+approver directly to the plan. The link uses the configured `web.base.url`; keep
+that parameter set to your public HTTPS address. It contains no access token
+and requires the usual Odoo login and MCP manager permissions to approve.
+
+Open **MCP > Approval Inbox**. The list is grouped by **Request**: all
 plans a client produced for one task carry the same request reference, so a
 task that touches a hundred records is reviewed and decided as one group. Tick
 the plans — or the header checkbox after opening a group — and use **Approve
@@ -222,7 +262,7 @@ time, the plan fails instead of running.
 
 ## Audit and Quotas
 
-Open **OduMCP > Audit Log** to inspect request outcomes. Every request is
+Open **MCP > Audit Log** to inspect request outcomes. Every request is
 logged — success, denial, and error alike — with the operation, model, target
 ids, status code, error code, duration, remote address, and user agent. The
 request body itself is not stored; only a hash and a short summary are. A
@@ -235,7 +275,7 @@ JSON kept in developer mode.
 
 ## Global Settings
 
-Use **Settings > OduMCP** to enable or disable the control API and set
+Use **Settings > MCP** to enable or disable the control API and set
 payload, binary, retention, request-grouping, and event-ticket limits. Disabling the API keeps
 all user MCP settings unchanged and makes every authenticated operation return
 `service_disabled`.
@@ -315,3 +355,11 @@ Requests authenticated with the managed key record `source = oduflow` in the
 audit log. This identifies the credential, not a particular human or a verified
 network origin, and grants no policy bypass. Business approval remains in Odoo;
 production infrastructure operations are authorized separately by Oduflow.
+
+## Unified module upgrade
+
+Version `17.0.1.4.0` combines the platform and client modules. Upgrade `odumcp` in place; keep existing records, profiles, approvals and audit logs. The bundled `deploy/odumcp_server` remains available. The application is now labelled **MCP**.
+
+Review existing Model Policies before upgrading: an empty readable or writable field list now permits all otherwise eligible fields for that operation. Populate those lists to retain a narrow field scope. Operation permissions, Odoo ACLs, forced domains and binary restrictions still apply.
+
+Managed-key provisioning requires a superuser environment. It accepts both `Oduflow production` and `Oduflow production (managed)` as managed MCP key names on the administrator. On the next provisioning call it replaces those rows with one canonical `Oduflow production (managed)` key. Personal keys and keys with another scope remain untouched. Reapplying the same non-expiring canonical key preserves its row. Existing profiles and suspended access remain unchanged. Audit identifies either managed name as `source = oduflow` even before reprovisioning.

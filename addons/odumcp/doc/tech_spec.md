@@ -79,6 +79,13 @@ Read paths validate field paths through `_allowed_field_names` before touching
 the ORM: search domains, `order`, `fields`, and `groupby` all reject a field the
 policy does not expose, including across relational hops.
 
+An empty read or write field list on an explicit model policy allows every field
+visible to the connector user for that operation. The lists are independent;
+populated lists remain restrictive. Binary permission flags, readonly and magic
+write-field checks, operation permissions, Odoo ACLs and record rules still apply.
+Existing empty policies acquire this behavior on upgrade; no field selections
+are rewritten. Fallback policies for models without an explicit policy are unchanged.
+
 `odumcp.model.policy.read_field_ids` and `write_field_ids` carry
 `domain="[('model_id', '=', model_id)]"` on the field definition itself, not only
 in the form view. A policy is edited in a dialog above the `policy_ids` list, where
@@ -146,6 +153,15 @@ on the stored payload, so a policy tightened between preview and execution
 applies. Idempotency is `UNIQUE(user_id, idempotency_key)`; the same key with a
 different payload hash is a 409.
 
+All three change operations serialize the plan through `_public_dict`, including
+idempotent preview and execution retries. The additive `approval_url` field is
+an absolute Odoo 17 form URL: `get_base_url()` (from `web.base.url`, with trailing
+slashes removed) plus `/web#id=<approval record id>&model=odumcp.approval&view_type=form&action=<approval action id>`.
+It identifies the exact immutable plan, including when several plans share a
+request reference. No request host header or access token is used. Normal web
+session authentication, record access and approval permissions still apply.
+Pending plans also mention `approval_url` in `next_step`.
+
 `changes.preview` also accepts an optional `batch_key` (string, 1..128 chars; a
 wrong type or length is `invalid_batch_key`, 400). `_assign_request` turns it
 into the grouping pair stored on the plan:
@@ -182,8 +198,31 @@ Audit chain data is initialized on installation; Odoo 15 migration scripts are n
 Auto-approval is `auto_approve_low_risk and risk == "low" and action in
 AUTO_APPROVED_ACTIONS` (`message.post` plus the three activity actions). It only
 sets the initial state to `approved`; the preview/execute round trip and the
-audit rows are unchanged, and a `method.call` with a low-risk method policy is
-never auto-approved.
+audit rows are unchanged. For `method.call`, auto-approval instead follows the
+selected method policy: it is enabled when `requires_approval` is false,
+regardless of risk level.
+
+### Method policy resolution
+
+`Method Name` accepts either a public business method identifier or the literal
+`*`. `_for_method` selects an active exact match for the model first, then an
+active wildcard for that same model and profile. Settings are never merged.
+Preview and execution resolve the policy again; removing or disabling the only
+matching policy prevents execution of an already approved plan.
+
+Method names must be valid public identifiers. Generic methods exposed by the
+registry's `base` model are refused even when overridden by a concrete model;
+`action_archive`, `action_unarchive` and `toggle_active` are the business-action
+exceptions. This blocks direct ORM and web CRUD/search APIs, environment and
+recordset manipulation, imports and exports. Use dedicated MCP operations for
+those supported operations. Non-callable attributes and nonexistent methods
+return not-found; methods decorated with `@api.private` are refused.
+
+The selected policy supplies risk, approval, record and argument limits. Empty
+keyword lists forbid kwargs; positional arguments and calls without ids require
+their existing opt-ins. Odoo user rights and model read/domain checks still
+apply. Business methods may perform writes internally, so granting a method is
+not a read-only guarantee. No wildcard is seeded during installation or upgrade.
 
 ## Activity Access
 
@@ -236,16 +275,6 @@ classifies unmatched ids as missing or denied, and lists them in `error.data`
 before calling `check_access_rights` and `check_access_rule`.
 `_enforce_forced_domain_postcondition` re-checks the forced domain after a write
 or create so a change cannot move a record out of scope.
-
-## Sidecar Publishing
-
-`deploy/publish.sh` reads the immutable image version from
-`deploy/odumcp_server/pyproject.toml`, runs the complete sidecar tests and
-Ruff, then pushes the versioned tag and `latest`. Release checks are fail-closed:
-an unavailable `uv` executable aborts unless `SKIP_TESTS=1` was explicitly set,
-and any registry inspection failure other than a confirmed missing manifest
-aborts instead of assuming that the version tag is free. `ODUMCP_OVERWRITE=1`
-is the only path that deliberately replaces an existing versioned tag.
 
 ## Immutability and Retention
 
@@ -322,7 +351,26 @@ the two fields. No separate MCP page is introduced.
 
 ## Installation identity
 
-The technical addon name is `odumcp`, the model namespace is `odumcp.*`, and HTTP routes begin with `/odumcp/v1/`. The standalone server package is `odumcp_server`, its CLI is `odumcp-server`, and its environment variables use `ODUMCP_*`. This is a fresh installation with no compatibility aliases or migration scripts. OduPilot depends on `odumcp`. Upstream contributor attribution is retained.
+The technical addon name is `odumcp`, the model namespace is `odumcp.*`, and HTTP routes begin with `/odumcp/v1/`. The MCP protocol can be served by Oduflow or by the bundled `deploy/odumcp_server` package. Existing Odoo 17 `odumcp` installations upgrade in place; installations under an earlier addon identity are outside this upgrade contract. OduPilot depends on `odumcp`. Upstream contributor attribution is retained.
+
+## System Parameter Policies
+
+`ir.config_parameter` uses the standard explicit policy and global fallback paths.
+Odoo ACLs remain enforced in the connector user environment with `su=False`.
+Explicit forced domains restrict searches and reads by ID; a Read-only policy
+denies mutation operations even when the profile fallback allows writes.
+
+
+## Sidecar Publishing
+
+`deploy/publish.sh` reads the immutable image version from
+`deploy/odumcp_server/pyproject.toml`, runs the complete sidecar tests and
+Ruff, then pushes the versioned tag and `latest`. Release checks are fail-closed:
+an unavailable `uv` executable aborts unless `SKIP_TESTS=1` was explicitly set,
+and any registry inspection failure other than a confirmed missing manifest
+aborts instead of assuming that the version tag is free. `ODUMCP_OVERWRITE=1`
+is the only path that deliberately replaces an existing versioned tag.
+
 
 ## Oduflow managed keys
 
@@ -339,3 +387,8 @@ Authentication annotates the request context from the matched API-key record.
 This metadata labels the credential and is not an additional authorization grant
 or proof of network origin. Rotation and revocation remain explicit across
 independent databases. Infrastructure authorization belongs to Oduflow.
+
+
+## Unified provisioning compatibility
+
+The superuser-only `_set_oduflow_key` locks the administrator row before provisioning. Both managed MCP key names are reconciled on the next call, preserving personal keys, other scopes, user policies and suspension. The result preserves both callers: `user_id`, `changed`, `key_set`, `user`, `scope`, `profile`, `mcp_active`, and `replaced_keys`. It never returns credentials. Idempotence requires one canonical non-expiring key with the supplied hash match.

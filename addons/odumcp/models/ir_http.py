@@ -1,10 +1,9 @@
 import re
 
-from werkzeug.datastructures import WWWAuthenticate
-from werkzeug.exceptions import Unauthorized
-
 from odoo import models
 from odoo.http import request
+from werkzeug.datastructures import WWWAuthenticate
+from werkzeug.exceptions import Unauthorized
 
 
 class IrHttp(models.AbstractModel):
@@ -33,12 +32,12 @@ class IrHttp(models.AbstractModel):
             )
 
         request.update_env(user=user_id)
-        from .res_users_apikeys import ODUFLOW_KEY_NAME
+        from .res_users_apikeys import ODUFLOW_KEY_NAMES
 
         api_key = request.env["res.users.apikeys"]._find_for_token(request.env.user, match.group(1))
         request.update_context(
             **request.env["res.users"].context_get(),
-            odumcp_source="oduflow" if api_key.name == ODUFLOW_KEY_NAME else "mcp",
+            odumcp_source="oduflow" if api_key.name in ODUFLOW_KEY_NAMES else "mcp",
         )
 
     @classmethod
