@@ -24,3 +24,6 @@ current state. Secret values must never be included.
 - [Odoo 16 installation](2026-09-19-client-addons-16-install.md) — installed; 265 tests passed; temporary environment removed.
 
 - [2026-09-20 — client addon branch regression](2026-09-20-client-addons-regression-odoo.md)
+
+- [2026-09-21 — unified MCP verification](2026-09-21-odumcp-merge-odoo.md)
+- [2026-09-21 — unified MCP clean installation](2026-09-21-odumcp-merge-fresh-odoo.md)

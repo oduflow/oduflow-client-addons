@@ -313,10 +313,14 @@ msgstr "Настройки"
 
 #. module: odumcp
 #: model:ir.module.category,name:odumcp.module_category_odumcp
-#: model:ir.ui.menu,name:odumcp.menu_mcp_root
-#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
 msgid "OduMCP"
 msgstr "OduMCP"
+
+#. module: odumcp
+#: model:ir.ui.menu,name:odumcp.menu_mcp_root
+#: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
+msgid "MCP"
+msgstr "MCP"
 
 #. module: odumcp
 #: model_terms:ir.ui.view,arch_db:odumcp.view_res_config_settings_mcp_control
@@ -1297,8 +1301,3 @@ msgstr "Эти записи %(model)s не существуют: %(ids)s."
 #: code:addons/odumcp/models/service.py:0
 msgid "These fields on %(model)s are readonly and cannot be written: %(fields)s."
 msgstr "Эти поля модели %(model)s доступны только для чтения и не могут быть записаны: %(fields)s."
-
-#. module: odumcp
-#: model:ir.model.fields,field_description:odumcp.field_odumcp_audit_log__source
-msgid "Source"
-msgstr "Источник"

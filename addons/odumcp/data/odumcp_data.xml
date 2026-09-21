@@ -7,5 +7,37 @@
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
         </record>
+        <record id="profile_administrator" model="odumcp.profile">
+            <field name="name">Administrator</field>
+            <field name="code">admin</field>
+            <field name="description">Read, update and create on any model the assigned Odoo user may already use. Deletion stays closed; changes still require approval.</field>
+            <field name="default_model_access">write</field>
+            <field name="allow_global_create" eval="True"/>
+            <field name="allow_global_unlink" eval="False"/>
+            <field name="allow_schema" eval="True"/>
+            <field name="allow_aggregate" eval="True"/>
+            <field name="allow_attachments" eval="True"/>
+            <field name="allow_chatter" eval="True"/>
+            <field name="allow_activities" eval="True"/>
+            <field name="allow_reports" eval="False"/>
+            <field name="auto_approve_low_risk" eval="False"/>
+            <field name="allow_partial_field_reads" eval="False"/>
+        </record>
+        <record id="profile_reader" model="odumcp.profile">
+            <field name="name">Read Only</field>
+            <field name="code">readonly</field>
+            <field name="description">Reads and aggregates any model the assigned Odoo user may already read. Nothing is created, updated or deleted.</field>
+            <field name="default_model_access">read</field>
+            <field name="allow_global_create" eval="False"/>
+            <field name="allow_global_unlink" eval="False"/>
+            <field name="allow_schema" eval="True"/>
+            <field name="allow_aggregate" eval="True"/>
+            <field name="allow_attachments" eval="False"/>
+            <field name="allow_chatter" eval="False"/>
+            <field name="allow_activities" eval="False"/>
+            <field name="allow_reports" eval="False"/>
+            <field name="auto_approve_low_risk" eval="False"/>
+            <field name="allow_partial_field_reads" eval="False"/>
+        </record>
     </data>
 </odoo>

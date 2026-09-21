@@ -22,9 +22,13 @@ class OduMcpEventTicket(models.Model):
 
     @api.model
     def _ttl_seconds(self):
-        value = self.env["ir.config_parameter"].sudo().get_param(
-            "odumcp.event_ticket_ttl_seconds",
-            "600",
+        value = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param(
+                "odumcp.event_ticket_ttl_seconds",
+                "600",
+            )
         )
         return min(max(int(value), 60), 3600)
 
@@ -54,12 +58,7 @@ class OduMcpEventTicket(models.Model):
             limit=1,
         )
         user = ticket.user_id
-        if (
-            not ticket
-            or not user.active
-            or not user.mcp_active
-            or not user.mcp_profile_id.active
-        ):
+        if not ticket or not user.active or not user.mcp_active or not user.mcp_profile_id.active:
             return self.browse()
         return ticket
 

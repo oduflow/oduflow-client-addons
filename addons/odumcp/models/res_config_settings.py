@@ -34,6 +34,6 @@ class ResConfigSettings(models.TransientModel):
         config_parameter="odumcp.request_window_minutes",
         default=10,
         help="Plans of the same connector user and profile that arrive without an "
-             "explicit batch key are grouped into one request while less than this "
-             "many minutes pass between them. Zero puts every plan in its own request.",
+        "explicit batch key are grouped into one request while less than this "
+        "many minutes pass between them. Zero puts every plan in its own request.",
     )

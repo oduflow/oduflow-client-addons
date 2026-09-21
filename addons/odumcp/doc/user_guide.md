@@ -41,8 +41,8 @@ administrator which of these are enabled for you.
   aggregation.
 - **Download** an attachment of a record, or render a PDF report.
 - **Propose changes**: create, update, or delete records; post a chatter
-  message; upload an attachment; call a method that the administrator allowed
-  explicitly.
+  message; upload an attachment; call a business method allowed by an exact-name policy or a model-wide `*`
+  policy. Its approval and argument limits still apply.
 - **Manage your activities**: schedule one on a record, reassign it, move its
   due date, reword it, and close it with a feedback note.
 
@@ -68,13 +68,17 @@ of silently returning less data.
 
 ## Changes and Approvals
 
+The agent receives `approval_url`, a direct link to the exact plan, and can share
+it with you. Open the link, sign in to Odoo if needed, and review the plan.
+Opening the link does not approve it; an MCP manager must choose the approval action.
+
 Read operations run immediately when permitted. Nothing is written to Odoo in a
 single step: every change is first previewed, then executed.
 
 1. The client sends a **preview** together with an idempotency key. Odoo
    validates the plan against the profile, computes the affected records, and
    stores a redacted diff.
-2. An MCP manager reviews the exact plan in **OduMCP > Approval Inbox**
+2. An MCP manager reviews the exact plan in **MCP > Approval Inbox**
    and approves or rejects it.
 3. The client executes the approved plan. Only an approved and unexpired plan
    can be executed, and only once.
@@ -85,7 +89,7 @@ all of them under one request reference such as `MCP/2026/00042`. Without a
 batch key Odoo groups the plans of one user and profile that arrive close
 together, so a single task still lands in a single request.
 
-**OduMCP > Approval Inbox** is grouped by request by default. Open a
+**MCP > Approval Inbox** is grouped by request by default. Open a
 request, tick the records you want — or the header checkbox to take the whole
 group — and use **Approve Selected**. **Reject Selected** and **Delete Selected
 Expired** work the same way. So a hundred plans of one task are decided in one
@@ -122,7 +126,7 @@ client can refresh without re-reading everything.
   enable MCP in your user's **Account Security** tab.
 - `inactive_mcp_access`: check that the user, MCP flag, and profile are active.
 - `service_disabled`: an administrator turned off the connector API in
-  **Settings > OduMCP**.
+  **Settings > MCP**.
 - `policy_denied`: the selected profile does not permit the requested model,
   field, operation, method, or feature.
 - `access_denied`: Odoo access rights or record rules refuse it, or an existing

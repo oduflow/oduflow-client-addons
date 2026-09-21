@@ -6,7 +6,7 @@
         <field name="priority" eval="90"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <div string="OduMCP" groups="base.group_system" name="odumcp" class="app_settings_block" data-string="OduMCP" data-key="odumcp">
+                <div string="MCP" groups="base.group_system" name="odumcp" class="app_settings_block" data-string="MCP" data-key="odumcp">
                     <h2>Connector API</h2>
                     <div class="row mt16 o_settings_container">
                         <div class="col-12 col-lg-6 o_setting_box">
