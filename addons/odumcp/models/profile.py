@@ -4,9 +4,11 @@ import re
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
-
 MODEL_NAME_RE = re.compile(r"^[a-zA-Z0-9_.]+$")
 METHOD_NAME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
+# These record actions are business operations despite living on BaseModel.
+BASE_BUSINESS_METHODS = {"action_archive", "action_unarchive", "toggle_active"}
+
 SENSITIVE_FIELD_NAME_RE = re.compile(
     r"(password|passwd|(?:^|_)pass(?:$|_)|secret|token|api.?key|private|credential"
     r"|authorization)",
@@ -16,7 +18,6 @@ SENSITIVE_FIELD_NAME_RE = re.compile(
 # or the audit trail that records what it did. Neither an explicit Model Policy
 # nor the profile-wide fallback can name them.
 BLOCKED_POLICY_MODELS = {
-    "ir.config_parameter",
     "res.users.apikeys",
     "odumcp.profile",
     "odumcp.model.policy",
@@ -81,6 +82,15 @@ WRITE_MAGIC_FIELDS = {
 }
 
 
+def is_business_method_name(name, base_model):
+    """Keep generic ORM and web CRUD APIs behind their dedicated MCP operations."""
+    return (
+        isinstance(name, str)
+        and bool(METHOD_NAME_RE.fullmatch(name))
+        and (name in BASE_BUSINESS_METHODS or not hasattr(base_model, name))
+    )
+
+
 class GlobalModelPolicy:
     """Policy adapter for models covered by a profile-wide access mode."""
 
@@ -136,8 +146,7 @@ class GlobalModelPolicy:
         names = {
             name
             for name, description in descriptions.items()
-            if not SENSITIVE_FIELD_NAME_RE.search(name)
-            and description.get("type") != "binary"
+            if not SENSITIVE_FIELD_NAME_RE.search(name) and description.get("type") != "binary"
         }
         if operation in {"create", "write"}:
             names = {
@@ -202,11 +211,7 @@ class ActivityModelPolicy:
         )
 
     def _allowed_field_names(self, operation, model):
-        names = (
-            ACTIVITY_WRITE_FIELDS
-            if operation in {"create", "write"}
-            else ACTIVITY_READ_FIELDS
-        )
+        names = ACTIVITY_WRITE_FIELDS if operation in {"create", "write"} else ACTIVITY_READ_FIELDS
         return {name for name in names if name in model._fields}
 
 
@@ -303,8 +308,15 @@ class OduMcpProfile(models.Model):
         inverse="_inverse_assigned_user_ids",
     )
 
-    _code_unique = models.Constraint('UNIQUE(code)', 'The MCP profile code must be unique.')
-    _positive_limits = models.Constraint('CHECK(max_records_per_call > 0 AND max_records_per_call <= 1000 AND max_batch_size > 0 AND max_batch_size <= 100 AND rate_limit_per_minute > 0 AND rate_limit_per_minute <= 10000 AND daily_quota >= 0 AND approval_ttl_minutes > 0 AND approval_ttl_minutes <= 10080)', 'MCP limits are outside their allowed range.')
+    _code_unique = models.Constraint("UNIQUE(code)", "The MCP profile code must be unique.")
+    _positive_limits = models.Constraint(
+        "CHECK(max_records_per_call > 0 AND max_records_per_call <= 1000"
+        " AND max_batch_size > 0 AND max_batch_size <= 100"
+        " AND rate_limit_per_minute > 0 AND rate_limit_per_minute <= 10000"
+        " AND daily_quota >= 0"
+        " AND approval_ttl_minutes > 0 AND approval_ttl_minutes <= 10080)",
+        "MCP limits are outside their allowed range.",
+    )
 
     @api.constrains("code")
     def _check_code(self):
@@ -325,10 +337,12 @@ class OduMcpProfile(models.Model):
             selected_users = profile.assigned_user_ids
             # Профиль и галочка снимаются вместе: доступ без профиля запрещён
             # констрейнтом, а ключ пользователя живёт ровно до отзыва доступа.
-            (current_users - selected_users).write({
-                "mcp_profile_id": False,
-                "mcp_active": False,
-            })
+            (current_users - selected_users).write(
+                {
+                    "mcp_profile_id": False,
+                    "mcp_active": False,
+                }
+            )
             (selected_users - current_users).write({"mcp_profile_id": profile.id})
 
     def _get_policy(self, model_name, operation, *, required=True, user=None):
@@ -353,7 +367,11 @@ class OduMcpProfile(models.Model):
             allowed = bool(policy and policy._allows(operation))
         if required and not allowed:
             raise ValidationError(
-                _("Operation %(operation)s is not allowed on %(model)s.", operation=operation, model=model_name)
+                _(
+                    "Operation %(operation)s is not allowed on %(model)s.",
+                    operation=operation,
+                    model=model_name,
+                )
             )
         return policy if allowed else self.env["odumcp.model.policy"]
 
@@ -375,7 +393,9 @@ class OduMcpProfile(models.Model):
         user_companies = user.company_ids
         companies = user_companies & self.company_ids if self.company_ids else user_companies
         if not companies:
-            raise ValidationError(_("The MCP profile and connector user have no company in common."))
+            raise ValidationError(
+                _("The MCP profile and connector user have no company in common.")
+            )
         return companies.ids
 
     def _capabilities(self):
@@ -483,8 +503,13 @@ class OduMcpModelPolicy(models.Model):
         domain=_FIELD_POLICY_DOMAIN,
     )
 
-    _profile_model_unique = models.Constraint('UNIQUE(profile_id, model_id)', 'A model can occur only once in an MCP profile.')
-    _max_records_range = models.Constraint('CHECK(max_records >= 0 AND max_records <= 1000)', 'The per-model record limit must be between 0 and 1000.')
+    _profile_model_unique = models.Constraint(
+        "UNIQUE(profile_id, model_id)", "A model can occur only once in an MCP profile."
+    )
+    _max_records_range = models.Constraint(
+        "CHECK(max_records >= 0 AND max_records <= 1000)",
+        "The per-model record limit must be between 0 and 1000.",
+    )
 
     @api.constrains("model_id")
     def _check_model_kind(self):
@@ -492,7 +517,9 @@ class OduMcpModelPolicy(models.Model):
             if policy.model_id.transient:
                 raise ValidationError(_("Transient models cannot be exposed through MCP."))
             if policy.model_id.model in BLOCKED_POLICY_MODELS:
-                raise ValidationError(_("This security-sensitive model cannot be exposed through MCP."))
+                raise ValidationError(
+                    _("This security-sensitive model cannot be exposed through MCP.")
+                )
 
     @api.constrains("read_field_ids", "write_field_ids", "model_id")
     def _check_field_models(self):
@@ -551,25 +578,31 @@ class OduMcpModelPolicy(models.Model):
             if operation in {"create", "write"}
             else self.read_field_ids.mapped("name")
         )
-        names = set(configured)
+        # An empty list removes only the field allowlist restriction.
+        # fields_get still applies Odoo field access for the connector user.
+        names = set(configured) if configured else set(model.fields_get())
         if operation == "read":
             names.update({"id", "display_name"})
         fields_description = model.fields_get(
             allfields=list(names),
-            attributes=["type", "readonly", "required", "string", "relation", "selection", "help"],
+            attributes=[
+                "type",
+                "readonly",
+                "required",
+                "string",
+                "relation",
+                "selection",
+                "help",
+            ],
         )
         names &= set(fields_description)
         if not self.allow_binary_read and operation == "read":
             names = {
-                name
-                for name in names
-                if fields_description.get(name, {}).get("type") != "binary"
+                name for name in names if fields_description.get(name, {}).get("type") != "binary"
             }
         if not self.allow_binary_write and operation in {"create", "write"}:
             names = {
-                name
-                for name in names
-                if fields_description.get(name, {}).get("type") != "binary"
+                name for name in names if fields_description.get(name, {}).get("type") != "binary"
             }
         return names
 
@@ -587,7 +620,15 @@ class OduMcpMethodPolicy(models.Model):
         index=True,
     )
     model_id = fields.Many2one("ir.model", required=True, ondelete="cascade")
-    method_name = fields.Char(required=True)
+    method_name = fields.Char(
+        required=True,
+        help=(
+            "Enter an exact public business method name or * to allow all public business "
+            "methods on this model. An active exact method policy takes precedence over *. "
+            "Private and framework methods are unavailable; use dedicated MCP operations "
+            "for CRUD. Approval and argument limits still apply."
+        ),
+    )
     risk_level = fields.Selection(
         [
             ("low", "Low"),
@@ -624,17 +665,33 @@ class OduMcpMethodPolicy(models.Model):
         help="Maximum canonical JSON size of args and kwargs.",
     )
 
-    _profile_model_method_unique = models.Constraint('UNIQUE(profile_id, model_id, method_name)', 'A method can occur only once per model and MCP profile.')
-    _positive_max_record_count = models.Constraint('CHECK(max_record_count > 0 AND max_record_count <= 100 AND max_argument_bytes >= 256 AND max_argument_bytes <= 65536)', 'Method record or argument limits are outside their allowed range.')
+    _profile_model_method_unique = models.Constraint(
+        "UNIQUE(profile_id, model_id, method_name)",
+        "A method can occur only once per model and MCP profile.",
+    )
+    _positive_max_record_count = models.Constraint(
+        "CHECK(max_record_count > 0 AND max_record_count <= 100"
+        " AND max_argument_bytes >= 256 AND max_argument_bytes <= 65536)",
+        "Method record or argument limits are outside their allowed range.",
+    )
 
     @api.constrains("method_name")
     def _check_method_name(self):
         for policy in self:
-            if (
-                not METHOD_NAME_RE.fullmatch(policy.method_name or "")
-                or policy.method_name.startswith("_")
+            if policy.method_name != "*" and not is_business_method_name(
+                policy.method_name, type(self.env["base"])
             ):
-                raise ValidationError(_("Only explicit public method names may be allowed."))
+                raise ValidationError(_("Use a public business method name or * for all methods."))
+
+    def _for_method(self, model_name, method_name):
+        """Select one complete policy; never merge wildcard and exact permissions."""
+        policies = self.filtered(
+            lambda policy: policy.active and policy.model_id.model == model_name
+        )
+        return (
+            policies.filtered(lambda policy: policy.method_name == method_name)[:1]
+            or policies.filtered(lambda policy: policy.method_name == "*")[:1]
+        )
 
     @api.constrains("allowed_keyword_arguments")
     def _check_allowed_keyword_arguments(self):

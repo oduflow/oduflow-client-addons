@@ -8,13 +8,11 @@ import time
 from datetime import date, datetime
 
 from markupsafe import Markup, escape
-
 from odoo import _, api, fields, models, release
 from odoo.exceptions import AccessError, MissingError, UserError, ValidationError
 from odoo.modules.module import get_manifest
 
-from .profile import ACTIVITY_MODEL
-
+from .profile import ACTIVITY_MODEL, is_business_method_name
 
 _logger = logging.getLogger(__name__)
 
@@ -127,9 +125,7 @@ class OduMcpService(models.AbstractModel):
             error_code = exc.code
             error_class = type(exc).__name__
             outcome = "denied" if status in {401, 403, 429} else "error"
-            body = self._error_body(
-                request_id, exc.code, exc.message, exc.retryable, exc.data
-            )
+            body = self._error_body(request_id, exc.code, exc.message, exc.retryable, exc.data)
         except MissingError as exc:
             # Отсутствие записи — не отказ в доступе: клиенту нужен другой
             # следующий шаг, поэтому и код ответа другой.
@@ -217,7 +213,9 @@ class OduMcpService(models.AbstractModel):
         }
         handler = handlers.get(operation)
         if not handler:
-            raise McpServiceError("unknown_operation", _("Unknown connector operation."), status=404)
+            raise McpServiceError(
+                "unknown_operation", _("Unknown connector operation."), status=404
+            )
         return handler(access, params)
 
     @api.model
@@ -230,14 +228,14 @@ class OduMcpService(models.AbstractModel):
         user = user_env.user
         return {
             "odoo_version": release.version,
-            "module_version": get_manifest("odumcp")[
-                "version"
-            ],
+            "module_version": get_manifest("odumcp")["version"],
             "profile": access.mcp_profile_id.code,
             "user": {"id": user.id, "name": user.name, "login": user.login},
             "companies": [
                 {"id": company.id, "name": company.name}
-                for company in user_env["res.company"].browse(user_env.context["allowed_company_ids"])
+                for company in user_env["res.company"].browse(
+                    user_env.context["allowed_company_ids"]
+                )
             ],
             "capabilities": access.mcp_profile_id._capabilities()["features"],
         }
@@ -255,7 +253,9 @@ class OduMcpService(models.AbstractModel):
             "company": {"id": user_env.company.id, "name": user_env.company.name},
             "allowed_companies": [
                 {"id": company.id, "name": company.name}
-                for company in user_env["res.company"].browse(user_env.context["allowed_company_ids"])
+                for company in user_env["res.company"].browse(
+                    user_env.context["allowed_company_ids"]
+                )
             ],
             "profile": access.mcp_profile_id.code,
         }
@@ -412,7 +412,9 @@ class OduMcpService(models.AbstractModel):
         fields_list = params.get("fields") or []
         groupby = params.get("groupby") or []
         if not isinstance(fields_list, list) or not isinstance(groupby, list):
-            raise McpServiceError("invalid_aggregate", _("Aggregate fields and groupby must be lists."))
+            raise McpServiceError(
+                "invalid_aggregate", _("Aggregate fields and groupby must be lists.")
+            )
         readable = policy._allowed_field_names("read", Model)
         for item in fields_list:
             if not isinstance(item, str):
@@ -421,14 +423,18 @@ class OduMcpService(models.AbstractModel):
             name = parts[0]
             aggregator = parts[1] if len(parts) == 2 else None
             if name not in readable or (aggregator and aggregator not in AGGREGATORS):
-                raise McpServiceError("policy_denied", _("Aggregate field is not allowed."), status=403)
+                raise McpServiceError(
+                    "policy_denied", _("Aggregate field is not allowed."), status=403
+                )
             field = Model._fields.get(name)
             if not field or not field.store:
                 raise McpServiceError("invalid_aggregate", _("Aggregate fields must be stored."))
         for item in groupby:
             name = item.split(":", 1)[0] if isinstance(item, str) else ""
             if name not in readable or name not in Model._fields:
-                raise McpServiceError("policy_denied", _("Group-by field is not allowed."), status=403)
+                raise McpServiceError(
+                    "policy_denied", _("Group-by field is not allowed."), status=403
+                )
         limit = self._limit(policy, params.get("limit"))
         domain = self._combined_domain(access, Model, policy, params.get("domain", []))
         rows = Model.read_group(
@@ -462,7 +468,11 @@ class OduMcpService(models.AbstractModel):
             encoded = data
         size = self._decoded_size(encoded)
         if size > self._max_binary_bytes():
-            raise McpServiceError("response_too_large", _("Attachment exceeds the configured limit."), status=413)
+            raise McpServiceError(
+                "response_too_large",
+                _("Attachment exceeds the configured limit."),
+                status=413,
+            )
         return {
             "attachment_id": attachment.id,
             "name": attachment.name,
@@ -487,7 +497,11 @@ class OduMcpService(models.AbstractModel):
         records = self._records_in_policy(Model, policy, ids, "read")
         content, content_type = report._render_qweb_pdf(res_ids=records.ids)
         if len(content) > self._max_binary_bytes():
-            raise McpServiceError("response_too_large", _("Rendered report exceeds the configured limit."), status=413)
+            raise McpServiceError(
+                "response_too_large",
+                _("Rendered report exceeds the configured limit."),
+                status=413,
+            )
         return {
             "report": report_ref,
             "content_type": content_type,
@@ -542,15 +556,10 @@ class OduMcpService(models.AbstractModel):
             and action in AUTO_APPROVED_ACTIONS
         )
         if action == "method.call":
-            method_policy = access.mcp_profile_id.method_policy_ids.filtered(
-                lambda policy: (
-                    policy.active
-                    and policy.model_id.model == normalized["model"]
-                    and policy.method_name == normalized["method"]
-                )
-            )[:1]
-            auto_approved = bool(
-                method_policy and not method_policy.requires_approval)
+            method_policy = access.mcp_profile_id.method_policy_ids._for_method(
+                normalized["model"], normalized["method"]
+            )
+            auto_approved = bool(method_policy and not method_policy.requires_approval)
         now = fields.Datetime.now()
         request_key, request_ref = Approval._assign_request(
             access, access.mcp_profile_id, batch_key
@@ -583,7 +592,10 @@ class OduMcpService(models.AbstractModel):
     @api.model
     def _op_change_status(self, access, params):
         approval = self._approval_for_access(access, params.get("approval_id"))
-        if approval.state in {"pending", "approved"} and approval.expires_at <= fields.Datetime.now():
+        if (
+            approval.state in {"pending", "approved"}
+            and approval.expires_at <= fields.Datetime.now()
+        ):
             approval._system_write({"state": "expired"})
         return approval._public_dict()
 
@@ -601,9 +613,14 @@ class OduMcpService(models.AbstractModel):
         payload_json = approval.payload_json
         if approval.payload_hash != approval._payload_digest(payload_json):
             approval._system_write(
-                {"state": "failed", "error_message": _("Stored change plan integrity check failed.")}
+                {
+                    "state": "failed",
+                    "error_message": _("Stored change plan integrity check failed."),
+                }
             )
-            raise McpServiceError("integrity_error", _("Change plan integrity check failed."), status=409)
+            raise McpServiceError(
+                "integrity_error", _("Change plan integrity check failed."), status=409
+            )
         approval._system_write({"state": "executing"})
         try:
             with self.env.cr.savepoint():
@@ -644,9 +661,7 @@ class OduMcpService(models.AbstractModel):
             record_ids = [record_id] if isinstance(record_id, int) else []
         for record_id in record_ids:
             if isinstance(record_id, int) and record_id > 0:
-                access._publish_mcp_resource_update(
-                    f"odoo://record/{model_name}/{record_id}"
-                )
+                access._publish_mcp_resource_update(f"odoo://record/{model_name}/{record_id}")
 
     @api.model
     def _prepare_action(self, access, action, payload):
@@ -673,18 +688,28 @@ class OduMcpService(models.AbstractModel):
         values_list = payload.get("values")
         values_list = values_list if isinstance(values_list, list) else [values_list]
         if not values_list or not all(isinstance(values, dict) for values in values_list):
-            raise McpServiceError("invalid_values", _("Create values must be an object or list of objects."))
+            raise McpServiceError(
+                "invalid_values",
+                _("Create values must be an object or list of objects."),
+            )
         if len(values_list) > access.mcp_profile_id.max_batch_size:
-            raise McpServiceError("batch_too_large", _("Create batch exceeds the profile limit."), status=413)
+            raise McpServiceError(
+                "batch_too_large",
+                _("Create batch exceeds the profile limit."),
+                status=413,
+            )
         Model.check_access("create")
         normalized_values = [
-            self._write_values(policy, Model, values, "create")
-            for values in values_list
+            self._write_values(policy, Model, values, "create") for values in values_list
         ]
         normalized = {"model": model_name, "values": normalized_values}
         return normalized, {
             "risk_level": "medium",
-            "summary": _("Create %(count)s record(s) in %(model)s", count=len(values_list), model=model_name),
+            "summary": _(
+                "Create %(count)s record(s) in %(model)s",
+                count=len(values_list),
+                model=model_name,
+            ),
             "target_count": len(values_list),
             "diff": [
                 {"record": index + 1, "fields": sorted(values)}
@@ -696,9 +721,7 @@ class OduMcpService(models.AbstractModel):
     def _prepare_update(self, access, payload):
         model_name = self._model_name(payload)
         Model, policy = self._model_policy(access, model_name, "write")
-        ids = self._parse_ids(
-            payload.get("ids"), max_count=access.mcp_profile_id.max_batch_size
-        )
+        ids = self._parse_ids(payload.get("ids"), max_count=access.mcp_profile_id.max_batch_size)
         values = self._write_values(policy, Model, payload.get("values"), "write")
         records = self._records_in_policy(Model, policy, ids, "write")
         old_rows = {row["id"]: row for row in records.read(list(values))}
@@ -710,11 +733,21 @@ class OduMcpService(models.AbstractModel):
                     "old": self._redact_value(name, old_rows[record.id].get(name)),
                     "new": self._redact_value(name, new_value),
                 }
-            diff.append({"id": record.id, "display_name": record.display_name, "changes": changes})
+            diff.append(
+                {
+                    "id": record.id,
+                    "display_name": record.display_name,
+                    "changes": changes,
+                }
+            )
         normalized = {"model": model_name, "ids": records.ids, "values": values}
         return normalized, {
             "risk_level": "medium",
-            "summary": _("Update %(count)s record(s) in %(model)s", count=len(records), model=model_name),
+            "summary": _(
+                "Update %(count)s record(s) in %(model)s",
+                count=len(records),
+                model=model_name,
+            ),
             "target_count": len(records),
             "diff": diff,
         }
@@ -723,14 +756,16 @@ class OduMcpService(models.AbstractModel):
     def _prepare_delete(self, access, payload):
         model_name = self._model_name(payload)
         Model, policy = self._model_policy(access, model_name, "unlink")
-        ids = self._parse_ids(
-            payload.get("ids"), max_count=access.mcp_profile_id.max_batch_size
-        )
+        ids = self._parse_ids(payload.get("ids"), max_count=access.mcp_profile_id.max_batch_size)
         records = self._records_in_policy(Model, policy, ids, "unlink")
         normalized = {"model": model_name, "ids": records.ids}
         return normalized, {
             "risk_level": "high",
-            "summary": _("Delete %(count)s record(s) from %(model)s", count=len(records), model=model_name),
+            "summary": _(
+                "Delete %(count)s record(s) from %(model)s",
+                count=len(records),
+                model=model_name,
+            ),
             "target_count": len(records),
             "diff": [{"id": record.id, "display_name": record.display_name} for record in records],
         }
@@ -772,7 +807,9 @@ class OduMcpService(models.AbstractModel):
         if not isinstance(activity_type, str) or "." not in activity_type:
             raise McpServiceError("invalid_activity", _("Activity type must be an XML ID."))
         if not isinstance(summary, str) or not isinstance(note, str):
-            raise McpServiceError("invalid_activity", _("Activity summary and note must be strings."))
+            raise McpServiceError(
+                "invalid_activity", _("Activity summary and note must be strings.")
+            )
         normalized = {
             "model": model_name,
             "id": record.id,
@@ -784,9 +821,19 @@ class OduMcpService(models.AbstractModel):
         }
         return normalized, {
             "risk_level": "low",
-            "summary": _("Schedule an activity on %(model)s #%(id)s", model=model_name, id=record.id),
+            "summary": _(
+                "Schedule an activity on %(model)s #%(id)s",
+                model=model_name,
+                id=record.id,
+            ),
             "target_count": 1,
-            "diff": [{"id": record.id, "summary": summary[:200], "activity_type": activity_type}],
+            "diff": [
+                {
+                    "id": record.id,
+                    "summary": summary[:200],
+                    "activity_type": activity_type,
+                }
+            ],
         }
 
     @api.model
@@ -821,7 +868,13 @@ class OduMcpService(models.AbstractModel):
                 res_id=activity.res_id,
             ),
             "target_count": 1,
-            "diff": [{"id": activity.id, "display_name": activity.display_name, "changes": changes}],
+            "diff": [
+                {
+                    "id": activity.id,
+                    "display_name": activity.display_name,
+                    "changes": changes,
+                }
+            ],
         }
 
     @api.model
@@ -857,7 +910,9 @@ class OduMcpService(models.AbstractModel):
     @api.model
     def _prepare_attachment(self, access, payload):
         if not access.mcp_profile_id.allow_attachments:
-            raise McpServiceError("policy_denied", _("Attachment actions are disabled."), status=403)
+            raise McpServiceError(
+                "policy_denied", _("Attachment actions are disabled."), status=403
+            )
         model_name = self._model_name(payload)
         Model, policy = self._model_policy(access, model_name, "write")
         record_id = self._positive_int(payload.get("id"), "id")
@@ -870,7 +925,11 @@ class OduMcpService(models.AbstractModel):
             raise McpServiceError("invalid_attachment", _("Attachment content must be base64."))
         size = self._decoded_size(content)
         if size > self._max_binary_bytes():
-            raise McpServiceError("payload_too_large", _("Attachment exceeds the configured limit."), status=413)
+            raise McpServiceError(
+                "payload_too_large",
+                _("Attachment exceeds the configured limit."),
+                status=413,
+            )
         normalized = {
             "model": model_name,
             "id": record.id,
@@ -880,7 +939,12 @@ class OduMcpService(models.AbstractModel):
         }
         return normalized, {
             "risk_level": "medium",
-            "summary": _("Attach %(name)s to %(model)s #%(id)s", name=name, model=model_name, id=record.id),
+            "summary": _(
+                "Attach %(name)s to %(model)s #%(id)s",
+                name=name,
+                model=model_name,
+                id=record.id,
+            ),
             "target_count": 1,
             "diff": [{"id": record.id, "name": name, "size": size}],
         }
@@ -889,17 +953,22 @@ class OduMcpService(models.AbstractModel):
     def _prepare_method(self, access, payload):
         model_name = self._model_name(payload)
         method_name = payload.get("method")
-        if not isinstance(method_name, str) or method_name.startswith("_"):
-            raise McpServiceError("policy_denied", _("Private or invalid methods are forbidden."), status=403)
-        method_policy = access.mcp_profile_id.method_policy_ids.filtered(
-            lambda policy: (
-                policy.active
-                and policy.model_id.model == model_name
-                and policy.method_name == method_name
+        if not is_business_method_name(method_name, type(self.env["base"])):
+            raise McpServiceError(
+                "policy_denied",
+                _(
+                    "Private, framework or invalid methods are forbidden. "
+                    "Use MCP operations for CRUD."
+                ),
+                status=403,
             )
-        )[:1]
+        method_policy = access.mcp_profile_id.method_policy_ids._for_method(model_name, method_name)
         if not method_policy:
-            raise McpServiceError("policy_denied", _("Method is not explicitly allowed."), status=403)
+            raise McpServiceError(
+                "policy_denied",
+                _("No active method policy allows this method."),
+                status=403,
+            )
         Model, model_policy = self._model_policy(access, model_name, "read")
         ids = self._parse_ids(
             payload.get("ids", []),
@@ -907,12 +976,18 @@ class OduMcpService(models.AbstractModel):
             allow_empty=True,
         )
         records = self._records_in_policy(Model, model_policy, ids, "read") if ids else Model
-        if not hasattr(records, method_name):
+        method = getattr(records, method_name, None)
+        if not callable(method):
             raise McpServiceError("not_found", _("Allowed method does not exist."), status=404)
+        if getattr(method, "_api_private", False):
+            raise McpServiceError("policy_denied", _("Private methods are forbidden."), status=403)
         args = payload.get("args", [])
         kwargs = payload.get("kwargs", {})
         if not isinstance(args, list) or not isinstance(kwargs, dict):
-            raise McpServiceError("invalid_arguments", _("Method args must be a list and kwargs an object."))
+            raise McpServiceError(
+                "invalid_arguments",
+                _("Method args must be a list and kwargs an object."),
+            )
         if not ids and not method_policy.allow_model_method:
             raise McpServiceError(
                 "policy_denied",
@@ -932,9 +1007,7 @@ class OduMcpService(models.AbstractModel):
                 _("One or more keyword arguments are not allowed by the method policy."),
                 status=403,
             )
-        argument_size = len(
-            self._canonical_json({"args": args, "kwargs": kwargs}).encode()
-        )
+        argument_size = len(self._canonical_json({"args": args, "kwargs": kwargs}).encode())
         if argument_size > method_policy.max_argument_bytes:
             raise McpServiceError(
                 "payload_too_large",
@@ -950,7 +1023,12 @@ class OduMcpService(models.AbstractModel):
         }
         return normalized, {
             "risk_level": method_policy.risk_level,
-            "summary": _("Call %(model)s.%(method)s on %(count)s record(s)", model=model_name, method=method_name, count=len(ids)),
+            "summary": _(
+                "Call %(model)s.%(method)s on %(count)s record(s)",
+                model=model_name,
+                method=method_name,
+                count=len(ids),
+            ),
             "target_count": len(ids),
             "diff": [{"method": method_name, "ids": ids, "argument_keys": sorted(kwargs)}],
         }
@@ -1034,7 +1112,11 @@ class OduMcpService(models.AbstractModel):
                     "res_id": record.id,
                 }
             )
-            return {"model": model_name, "id": record.id, "attachment_id": attachment.id}
+            return {
+                "model": model_name,
+                "id": record.id,
+                "attachment_id": attachment.id,
+            }
         if action == "method.call":
             Model, policy = self._model_policy(access, model_name, "read")
             records = (
@@ -1114,7 +1196,7 @@ class OduMcpService(models.AbstractModel):
         allowed_cache = {}
         for leaf in domain:
             if isinstance(leaf, str):
-                if leaf not in ('!', '&', '|'):
+                if leaf not in ("!", "&", "|"):
                     raise McpServiceError("invalid_domain", _("Domain is malformed."))
                 continue
             if not isinstance(leaf, (list, tuple)) or len(leaf) != 3:
@@ -1169,7 +1251,7 @@ class OduMcpService(models.AbstractModel):
     @api.model
     def _records_in_policy(self, Model, policy, ids, operation):
         records = Model.search(
-            fields.Domain.AND([[('id', 'in', ids)], policy._forced_domain()]),
+            fields.Domain.AND([[("id", "in", ids)], policy._forced_domain()]),
             limit=len(ids),
         )
         found = set(records.ids)
@@ -1277,7 +1359,11 @@ class OduMcpService(models.AbstractModel):
                     fields=", ".join(unknown),
                 ),
                 status=422,
-                data={"model": Model._name, "unknown_fields": unknown, "denied_fields": denied},
+                data={
+                    "model": Model._name,
+                    "unknown_fields": unknown,
+                    "denied_fields": denied,
+                },
             )
         raise McpServiceError(
             "field_denied",
@@ -1355,7 +1441,11 @@ class OduMcpService(models.AbstractModel):
         if not value and not allow_empty:
             raise McpServiceError("invalid_ids", _("At least one record ID is required."))
         if len(value) > max_count:
-            raise McpServiceError("batch_too_large", _("Record batch exceeds the allowed limit."), status=413)
+            raise McpServiceError(
+                "batch_too_large",
+                _("Record batch exceeds the allowed limit."),
+                status=413,
+            )
         if any(not isinstance(item, int) or isinstance(item, bool) or item <= 0 for item in value):
             raise McpServiceError("invalid_ids", _("Record IDs must be positive integers."))
         if len(set(value)) != len(value):
@@ -1392,12 +1482,16 @@ class OduMcpService(models.AbstractModel):
         try:
             return len(base64.b64decode(value, validate=True))
         except (binascii.Error, ValueError, TypeError) as exc:
-            raise McpServiceError("invalid_base64", _("Binary content is not valid base64.")) from exc
+            raise McpServiceError(
+                "invalid_base64", _("Binary content is not valid base64.")
+            ) from exc
 
     @api.model
     def _max_binary_bytes(self):
         return int(
-            self.env["ir.config_parameter"].sudo().get_param(
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param(
                 "odumcp.max_binary_bytes",
                 str(5 * 1024 * 1024),
             )
@@ -1417,7 +1511,11 @@ class OduMcpService(models.AbstractModel):
         if value is None or isinstance(value, (bool, int, float, str)):
             return value
         if isinstance(value, (date, datetime)):
-            return fields.Datetime.to_string(value) if isinstance(value, datetime) else fields.Date.to_string(value)
+            return (
+                fields.Datetime.to_string(value)
+                if isinstance(value, datetime)
+                else fields.Date.to_string(value)
+            )
         if isinstance(value, bytes):
             return base64.b64encode(value).decode()
         if isinstance(value, dict):
@@ -1523,6 +1621,6 @@ class OduMcpService(models.AbstractModel):
             "remote_ip": (remote_ip or "")[:64],
             "user_agent": (user_agent or "")[:512],
         }
-        self.env["odumcp.audit.log"].sudo().with_context(
-            mcp_audit_system_create=True
-        ).create(values)
+        self.env["odumcp.audit.log"].sudo().with_context(mcp_audit_system_create=True).create(
+            values
+        )

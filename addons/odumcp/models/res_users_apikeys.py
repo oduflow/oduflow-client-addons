@@ -1,10 +1,11 @@
 import uuid
 
-from odoo import models, api, fields
+from odoo import api, fields, models
+from odoo.addons.base.models.res_users import INDEX_SIZE, KEY_CRYPT_CONTEXT
 from odoo.exceptions import AccessError, ValidationError
 
 ODUFLOW_KEY_NAME = "Oduflow production (managed)"
-from odoo.addons.base.models.res_users import INDEX_SIZE, KEY_CRYPT_CONTEXT
+ODUFLOW_KEY_NAMES = (ODUFLOW_KEY_NAME, "Oduflow production")
 
 
 class ResUsersApikeysDescription(models.TransientModel):
@@ -64,7 +65,8 @@ class ResUsersApikeys(models.Model):
               JOIN res_users AS users ON users.id = api_key.user_id
              WHERE users.active
                AND api_key.scope = 'mcp'
-               AND (api_key.expiration_date IS NULL OR api_key.expiration_date >= now() at time zone 'utc')
+               AND (api_key.expiration_date IS NULL
+                    OR api_key.expiration_date >= now() at time zone 'utc')
                AND api_key.index = %s
             """,
             [key[:INDEX_SIZE]],
@@ -87,32 +89,56 @@ class ResUsersApikeys(models.Model):
         """
         if not self.env.su:
             raise AccessError("Oduflow key provisioning requires a superuser environment.")
-        if (not isinstance(key, str) or not 32 <= len(key) <= 512
-                or not key.isascii() or any(char.isspace() for char in key)):
-            raise ValidationError("The production key must be 32..512 ASCII characters without whitespace.")
+        if (
+            not isinstance(key, str)
+            or not 32 <= len(key) <= 512
+            or not key.isascii()
+            or any(char.isspace() for char in key)
+        ):
+            raise ValidationError(
+                "The production key must be 32..512 ASCII characters without whitespace."
+            )
         admin = self.env.ref("base.user_admin")
         self.env.cr.execute("SELECT id FROM res_users WHERE id = %s FOR UPDATE", [admin.id])
         admin.invalidate_recordset()
         if not admin.mcp_profile_id:
-            profile = self.env["odumcp.profile"].create({
-                "name": "Oduflow administrators",
-                "code": "oduflow_admin_" + uuid.uuid4().hex,
-                "default_model_access": "read",
-                "allow_global_create": False,
-                "allow_global_unlink": False,
-                "auto_approve_low_risk": False,
-            })
+            profile = self.env["odumcp.profile"].create(
+                {
+                    "name": "Oduflow administrators",
+                    "code": "oduflow_admin_" + uuid.uuid4().hex,
+                    "default_model_access": "read",
+                    "allow_global_create": False,
+                    "allow_global_unlink": False,
+                    "auto_approve_low_risk": False,
+                }
+            )
             admin.write({"mcp_profile_id": profile.id, "mcp_active": True})
         self.env.cr.execute(
-            "SELECT id, key FROM res_users_apikeys WHERE user_id = %s AND name = %s AND scope = 'mcp'",
-            [admin.id, ODUFLOW_KEY_NAME],
+            "SELECT id, key, name, expiration_date FROM res_users_apikeys "
+            "WHERE user_id = %s AND name IN %s AND scope = 'mcp'",
+            [admin.id, ODUFLOW_KEY_NAMES],
         )
         existing = self.env.cr.fetchall()
-        if len(existing) == 1 and KEY_CRYPT_CONTEXT.verify(key, existing[0][1]):
-            return {"user_id": admin.id, "changed": False}
+        result = {
+            "key_set": True,
+            "user_id": admin.id,
+            "user": admin.login,
+            "scope": "mcp",
+            "profile": admin.mcp_profile_id.code,
+            "mcp_active": admin.mcp_active,
+            "replaced_keys": 0,
+            "changed": False,
+        }
+        if (
+            len(existing) == 1
+            and existing[0][2] == ODUFLOW_KEY_NAME
+            and existing[0][3] is None
+            and KEY_CRYPT_CONTEXT.verify(key, existing[0][1])
+        ):
+            return result
         self.env.cr.execute(
-            "DELETE FROM res_users_apikeys WHERE user_id = %s AND name = %s AND scope = 'mcp'",
-            [admin.id, ODUFLOW_KEY_NAME],
+            "DELETE FROM res_users_apikeys WHERE user_id = %s AND name IN %s AND scope = 'mcp'",
+            [admin.id, ODUFLOW_KEY_NAMES],
         )
         self.env.cr.execute(
             """INSERT INTO res_users_apikeys (name, user_id, scope, expiration_date, key, index)
@@ -121,4 +147,4 @@ class ResUsersApikeys(models.Model):
         )
         self.invalidate_model()
         self.env.registry.clear_cache()
-        return {"user_id": admin.id, "changed": True}
+        return dict(result, changed=True, replaced_keys=len(existing))
