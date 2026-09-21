@@ -4,7 +4,7 @@
 
 Executed now through the odusfera Oduflow MCP, team 1. Scope: merge platform
 `odumcp` from platform commit `979f5b0` into client-addons Odoo 19 base `8a01240`.
-Status: in progress. Production environments are outside this deployment.
+Status: succeeded. Production environments are outside this deployment.
 
 ## Source and Images
 
@@ -26,11 +26,21 @@ fresh disposable environment. Module data is retained during upgrade checks.
 
 ## Operations
 
-- 17:17 UTC: `create_environment(env_name="odumcp-merge", branch="merge/odumcp-platform", repo_url="https://github.com/oduflow/oduflow-client-addons.git", odoo_image="odoo:19.0", template_name="none", auto_install_modules="odumcp")`. Fresh installation of client base `8a01240` succeeded.
+- Before 17:23 UTC (exact start not recorded): `create_environment(env_name="odumcp-merge", branch="merge/odumcp-platform", repo_url="https://github.com/oduflow/oduflow-client-addons.git", odoo_image="odoo:19.0", template_name="none", auto_install_modules="odumcp")`. Fresh installation of client base `8a01240` succeeded.
 - 17:23 UTC: `pull_and_apply(env_name="odumcp-merge", upgrade="odumcp", summary_only=True)` upgraded to `9d2767c`; exit 0, output `afcbd9fc`.
 - 17:23 UTC: `run_odoo_tests(env_name="odumcp-merge", modules="odumcp", summary_only=True)` ran 107 tests: 1 failure, 0 errors, output `813dfec6`. The inherited expiry fixture used wall-clock time while SQL validates against transaction time; adjusted the fixture relative to PostgreSQL transaction time.
 - Local standalone server tests: `pytest --cov=odumcp_server --cov-report=term-missing`: 102 passed, 95.19% coverage. Server source and deployment resources unchanged.
 
 ## Final State and Follow-up
 
-Verification continues; final result and environment cleanup will be appended.
+- 17:24 UTC: applied `249a01c` with `pull_and_apply(restart=True)`; final module
+  tests passed: 0 failed, 0 errors of 107 tests, output `3d73e2c0`.
+- 17:25 UTC: read-only `run_odoo_shell` verified `get_views` for the profile,
+  approval and audit forms and module version `19.0.1.4.0`.
+- Documentation checker passed normally and against `8a01240` for Polish and
+  Russian. XML parsing, diff whitespace, and module Ruff lint/format checks
+  using the platform rules passed. No browser visual inspection was performed.
+- 17:26 UTC: `delete_environment(env_name="odumcp-merge")` succeeded; temporary
+  runtime and test data removed. Source remains in Git.
+- Scope remains the Odoo 19 module in client-addons. Production was not changed;
+  switching platform delivery to this repository is a separate operation.
