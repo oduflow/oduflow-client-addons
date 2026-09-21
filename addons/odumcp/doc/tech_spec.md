@@ -392,3 +392,5 @@ independent databases. Infrastructure authorization belongs to Oduflow.
 ## Unified provisioning compatibility
 
 The superuser-only `_set_oduflow_key` locks the administrator row before provisioning. Both managed MCP key names are reconciled on the next call, preserving personal keys, other scopes, user policies and suspension. The result preserves both callers: `user_id`, `changed`, `key_set`, `user`, `scope`, `profile`, `mcp_active`, and `replaced_keys`. It never returns credentials. Idempotence requires one canonical non-expiring key with the supplied hash match.
+
+The framework method names `web_read`, `web_save` and `formatted_read_group` remain reserved even when the installed Odoo major does not implement them. Exact and wildcard policies reject these names consistently.
