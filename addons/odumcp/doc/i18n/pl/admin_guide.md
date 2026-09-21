@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=09540a33ef1a lang=pl -->
+<!-- i18n source=admin_guide.md sha=fa6ce90f73e7 lang=pl -->
 # Podręcznik administratora OduMCP
 
 ## Role bezpieczeństwa
@@ -41,9 +41,18 @@ MCP access**.
 
 ## Konfiguracja profilu bezpieczeństwa
 
-Otwórz **OduMCP > Security Profiles**. Profil działa w trybie default-deny:
+Otwórz **MCP > Security Profiles**. Profil działa w trybie default-deny:
 bez jawnej Model Policy i bez szerszego dostępu domyślnego nie jest udostępnione
 nic.
+
+Instalacja modułu zakłada dwa profile. **Administrator** (kod `admin`) czyta,
+aktualizuje i tworzy w każdym modelu, z którego jego użytkownik konektora i tak
+już korzysta, przez dostęp domyślny, a nie przez Model Policies. Usuwanie,
+raporty, automatyczne zatwierdzanie i częściowe odczyty pól pozostają wyłączone.
+**Read Only** (kod `readonly`) tylko czyta i agreguje. Żaden nie jest nikomu
+przypisany: sam profil niczego nie otwiera, dopóki użytkownik nie otrzyma
+**MCP Active** i tego profilu. Aktualizacje nigdy ich nie nadpisują, więc
+zaostrzenie jest bezpieczne; gdy klient potrzebuje innego zakresu, skopiuj profil.
 
 ### Profil i limity
 
@@ -78,10 +87,19 @@ W trybie zapasowym pola o nazwach przypominających sekrety (`password`, `pass`,
 wszystkie pola binarne są ukryte, a zapis jest dodatkowo ograniczony do pól
 niebędących tylko do odczytu i nietechnicznych.
 
+Parametry systemowe (`ir.config_parameter`) podlegają zwykłym politykom modeli i
+dostępowi ogólnemu profilu, z uwzględnieniem uprawnień użytkownika konektora w Odoo. Aby
+ograniczyć odczyt, dodaj jawną Model Policy z włączonym tylko Read,
+wybierz `key` i `value` jako pola do odczytu i ustaw wymuszoną domenę, na przykład
+`[["key", "=like", "oduflow.%"]]`. Wybiera ona klucze zaczynające się od
+`oduflow.`; użyj `oduflow%` dla wszystkich kluczy zaczynających się od `oduflow`.
+Wartości parametrów mogą zawierać dane uwierzytelniające; filtrowanie nazw pól nie rozpoznaje
+sekretów w ogólnym polu `value`.
+
 Tryb zapasowy nigdy nie obejmuje:
 
 - modeli tymczasowych (kreatorów);
-- `ir.config_parameter`, `res.users.apikeys` oraz samych modeli OduMCP —
+- `res.users.apikeys` oraz samych modeli OduMCP —
   tych nie da się udostępnić w ogóle, nawet jawną polityką.
 
 Na modelach bezpieczeństwa tryb zapasowy działa wyłącznie w trybie odczytu,
@@ -129,8 +147,7 @@ Trzy z nich są węższe, niż sugerują nazwy:
   albo zaplanowane działanie. Poziomy ryzyka są zapisane w kodzie: tworzenie,
   aktualizacja i przesłanie załącznika to średnie, usunięcie to wysokie, chatter
   i działanie to niskie, a wywołanie metody przyjmuje poziom ryzyka swojej
-  Method Policy. Niskiego ryzyka wywołanie metody nigdy więc nie jest
-  zatwierdzane automatycznie.
+  Method Policy. Automatycznym zatwierdzaniem metod osobno steruje **Require Human Approval**.
 
 - **Partial Field Reads** przycina wyłącznie zwykłą listę pól. Nieudostępnione
   pole użyte w domenie wyszukiwania albo w sortowaniu nadal kończy się odmową,
@@ -181,12 +198,10 @@ Zakładka **Model Policies** służy do reguł i wyjątków dla konkretnych mode
 Dla każdego modelu można ustawić:
 
 - dozwolone operacje: odczyt, agregację, tworzenie, zapis, usuwanie;
-- listy **Readable Fields** i **Writable Fields** — wszystko, czego na nich nie
-  ma, jest niewidoczne i niezapisywalne, także w domenach wyszukiwania i w
-  grupowaniu; `id` i `display_name` są czytelne zawsze. Obie listy podpowiadają
-  wyłącznie pola modelu polityki; aby dopuścić je wszystkie, otwórz
-  **Search More...**, zaznacz pole wyboru w wierszu nagłówka i potwierdź
-  **Select all N**;
+- **Readable Fields** i **Writable Fields** to niezależne listy uprawnień. Pusta
+  lista zezwala na wszystkie pola danej operacji; wypełniona — tylko na wybrane
+  pola. `id` i `display_name` pozostają czytelne. Prawa Odoo, pola tylko do odczytu
+  i osobne uprawnienia do pól binarnych nadal obowiązują;
 - **Allow Binary Read/Write**, aby dopuścić na te listy pola binarne;
 - **Forced Domain**, czyli domenę Odoo w JSON dołączaną przez AND do każdego
   wyszukiwania i sprawdzaną ponownie po zmianie, żeby zmiana nie wyprowadziła
@@ -205,6 +220,24 @@ ile rekordów może otrzymać, czy można ją wywołać bez identyfikatorów rek
 czy dozwolone są argumenty pozycyjne, dokładne nazwy dopuszczonych argumentów
 nazwanych oraz maksymalny rozmiar argumentów.
 
+Wpisz dokładną nazwę w **Method Name** lub `*`, aby dopuścić wszystkie publiczne
+metody biznesowe tego modelu. Aktywna polityka z dokładną nazwą ma pierwszeństwo przed `*`;
+jej ustawienia całkowicie zastępują ustawienia wildcard. Nieaktywne wpisy są
+pomijane. Wzorce takie jak `action_*` nie są obsługiwane.
+
+**Require Human Approval** jest domyślnie włączone. Wyłącz je w wybranej
+polityce, aby automatycznie zatwierdzać poprawne plany niezależnie od poziomu ryzyka.
+Podgląd, wykonanie i audyt nadal obowiązują. Polityki wildcard zachowują te same
+limity rekordów i argumentów; pusta lista argumentów nazwanych nadal ich
+zabrania, a wywołanie bez id rekordów wymaga **Allow Model Method**.
+
+Metody prywatne (w tym oznaczone jako prywatne dla RPC) oraz ogólne metody
+ORM i frameworka web są niedostępne nawet przy dokładnej polityce. Używaj osobnych
+operacji MCP do CRUD, wyszukiwania i agregacji, aby obowiązywały kontrole operacji,
+pól i domen. Akcje archiwizacji i przywracania pozostają dostępne. Metody biznesowe
+mogą wewnętrznie zmieniać dane; polityka modelu tylko do odczytu nie sprawia, że
+dozwolona metoda biznesowa staje się tylko do odczytu. Żadna polityka wildcard nie jest domyślnie włączona.
+
 ### Użytkownicy
 
 Zakładka **Users** przypisuje profil użytkownikom bezpośrednio i odzwierciedla
@@ -212,7 +245,12 @@ pole z formularza użytkownika.
 
 ## Przegląd zmian
 
-Otwórz **OduMCP > Approval Inbox**. Lista jest pogrupowana według
+Odpowiedzi podglądu i statusu zawierają `approval_url`, aby agent mógł skierować
+osobę zatwierdzającą bezpośrednio do planu. Odnośnik używa ustawienia `web.base.url`;
+ustaw w nim publiczny adres HTTPS. Nie zawiera tokenu dostępu
+i wymaga zwykłego logowania do Odoo oraz uprawnień menedżera MCP do zatwierdzania.
+
+Otwórz **MCP > Approval Inbox**. Lista jest pogrupowana według
 **Request**: wszystkie plany, które klient utworzył dla jednego zadania, mają to
 samo oznaczenie żądania, więc zadanie obejmujące sto rekordów przeglądasz i
 rozstrzygasz jako jedną grupę. Zaznacz plany — albo pole wyboru w nagłówku po
@@ -237,7 +275,7 @@ swoim hashem, plan kończy się błędem zamiast się wykonać.
 
 ## Audyt i limity
 
-Otwórz **OduMCP > Audit Log**, aby sprawdzić wyniki żądań. Zapisywane jest
+Otwórz **MCP > Audit Log**, aby sprawdzić wyniki żądań. Zapisywane jest
 każde żądanie — udane, odrzucone i błędne — wraz z operacją, modelem,
 identyfikatorami rekordów, kodem statusu, kodem błędu, czasem trwania, adresem
 zdalnym i user agentem. Samo ciało żądania nie jest przechowywane; zapisywany
@@ -251,7 +289,7 @@ trybie dewelopera.
 
 ## Ustawienia globalne
 
-W **Settings > OduMCP** włącza się lub wyłącza control API oraz ustawia
+W **Settings > MCP** włącza się lub wyłącza control API oraz ustawia
 limity payloadu, danych binarnych, retencji, grupowania żądań i biletów zdarzeń. Wyłączenie API
 pozostawia wszystkie ustawienia MCP użytkowników bez zmian i sprawia, że każda
 uwierzytelniona operacja zwraca `service_disabled`.
@@ -332,3 +370,11 @@ z Oduflow nie unieważnia go w Odoo; usuń zarządzany klucz API, wycofując int
 audytu. Oznacza to poświadczenie, a nie konkretną osobę ani zweryfikowane źródło
 sieciowe, i nie pozwala omijać polityk. Zatwierdzanie zmian biznesowych pozostaje
 w Odoo; operacje infrastruktury produkcyjnej autoryzuje osobno Oduflow.
+
+## Aktualizacja połączonego modułu
+
+Wersja `18.0.1.4.0` łączy moduły platformy i klienta. Zaktualizuj `odumcp` w miejscu; zachowaj istniejące rekordy, profile, zatwierdzenia i dzienniki audytu. Dołączony `deploy/odumcp_server` pozostaje dostępny. Aplikacja ma teraz nazwę **MCP**.
+
+Przed aktualizacją sprawdź istniejące polityki modeli: pusta lista pól do odczytu lub zapisu zezwala teraz na wszystkie pozostałe dopuszczalne pola danej operacji. Wypełnij te listy, aby zachować wąski zakres pól. Nadal obowiązują uprawnienia operacji, ACL Odoo, wymuszone domeny i ograniczenia pól binarnych.
+
+Konfiguracja klucza zarządzanego wymaga środowiska superużytkownika. Rozpoznaje zarówno `Oduflow production`, jak i `Oduflow production (managed)` jako nazwy zarządzanych kluczy MCP administratora. Przy następnym wywołaniu zastępuje te rekordy jednym kanonicznym kluczem `Oduflow production (managed)`. Klucze osobiste i klucze o innym zakresie pozostają bez zmian. Ponowne zastosowanie tego samego bezterminowego klucza kanonicznego zachowuje jego rekord. Istniejące profile i zawieszony dostęp pozostają bez zmian. Audyt identyfikuje obie zarządzane nazwy jako `source = oduflow` jeszcze przed ponowną konfiguracją.

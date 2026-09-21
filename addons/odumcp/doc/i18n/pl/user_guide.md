@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=737f11d7d01a lang=pl -->
+<!-- i18n source=user_guide.md sha=542ee3799421 lang=pl -->
 # Podręcznik użytkownika OduMCP
 
 ## Zanim zaczniesz
@@ -42,8 +42,8 @@ które z tych możliwości są u Ciebie włączone.
   agregacja z grupowaniem.
 - **Pobranie** załącznika rekordu lub wygenerowanie raportu PDF.
 - **Proponowanie zmian**: tworzenie, aktualizacja lub usuwanie rekordów;
-  wiadomość w chatterze; przesłanie załącznika; wywołanie metody wyraźnie
-  dopuszczonej przez administratora.
+  wiadomość w chatterze; przesłanie załącznika; wywołanie metody biznesowej dozwolonej przez politykę z dokładną nazwą lub politykę `*`
+  dla całego modelu. Jej wymagania zatwierdzenia i limity argumentów nadal obowiązują.
 - **Zarządzanie swoimi działaniami**: zaplanowanie działania na rekordzie,
   przypisanie go komu innemu, przesunięcie terminu, przeredagowanie i zamknięcie
   z notatką podsumowującą.
@@ -70,12 +70,16 @@ cichym zwróceniem mniejszej ilości danych.
 
 ## Zmiany i zatwierdzenia
 
+Agent otrzymuje `approval_url`, bezpośredni odnośnik do konkretnego planu, i może
+Ci go przekazać. Otwórz odnośnik, zaloguj się do Odoo, jeśli trzeba, i sprawdź plan.
+Samo otwarcie odnośnika go nie zatwierdza; menedżer MCP musi wybrać akcję zatwierdzenia.
+
 Operacje odczytu wykonują się od razu, jeśli są dozwolone. Żadna zmiana nie
 trafia do Odoo w jednym kroku: najpierw podgląd, potem wykonanie.
 
 1. Klient wysyła **podgląd** wraz z kluczem idempotencji. Odoo sprawdza plan
    względem profilu, wyznacza objęte rekordy i zapisuje zanonimizowaną różnicę.
-2. Menedżer MCP ogląda dokładny plan w **OduMCP > Approval Inbox** i
+2. Menedżer MCP ogląda dokładny plan w **MCP > Approval Inbox** i
    zatwierdza go albo odrzuca.
 3. Klient wykonuje zatwierdzony plan. Wykonać można tylko plan zatwierdzony i
    nieprzeterminowany, i tylko raz.
@@ -86,7 +90,7 @@ wszystkie pod jednym oznaczeniem żądania, na przykład `MCP/2026/00042`. Bez
 klucza partii Odoo grupuje plany jednego użytkownika i profilu, które przychodzą
 blisko siebie w czasie, więc pojedyncze zadanie nadal trafia do jednego żądania.
 
-**OduMCP > Approval Inbox** jest domyślnie pogrupowany według żądania.
+**MCP > Approval Inbox** jest domyślnie pogrupowany według żądania.
 Otwórz żądanie, zaznacz interesujące Cię rekordy — albo pole wyboru w nagłówku,
 żeby wziąć całą grupę — i użyj **Approve Selected**. **Reject Selected** oraz
 **Delete Selected Expired** działają tak samo. Sto planów jednego zadania
@@ -122,7 +126,7 @@ rekordu, dzięki czemu klient nie musi czytać wszystkiego od nowa.
   włączenie MCP na zakładce **Account Security** Twojego użytkownika.
 - `inactive_mcp_access`: sprawdź, czy użytkownik, flaga MCP i profil są aktywne.
 - `service_disabled`: administrator wyłączył API konektora w
-  **Settings > OduMCP**.
+  **Settings > MCP**.
 - `policy_denied`: wybrany profil nie zezwala na żądany model, pole, operację,
   metodę lub możliwość.
 - `access_denied`: prawa dostępu Odoo albo reguły rekordów odmawiają, lub

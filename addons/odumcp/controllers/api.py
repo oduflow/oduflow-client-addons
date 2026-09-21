@@ -5,7 +5,6 @@ from odoo import http
 from odoo.http import request
 from odoo.tools.misc import str2bool
 
-
 SECURITY_HEADERS = [
     ("Cache-Control", "no-store"),
     ("Pragma", "no-cache"),
@@ -153,7 +152,9 @@ class OduMcpController(http.Controller):
                 retryable=True,
             )
         max_payload = int(
-            request.env["ir.config_parameter"].sudo().get_param(
+            request.env["ir.config_parameter"]
+            .sudo()
+            .get_param(
                 "odumcp.max_payload_bytes",
                 str(2 * 1024 * 1024),
             )
@@ -172,9 +173,13 @@ class OduMcpController(http.Controller):
         try:
             payload = json.loads(request.httprequest.get_data(as_text=True))
         except Exception:  # noqa: BLE001 - malformed protocol input
-            return self._error(request_id, "invalid_json", "The request body is not valid JSON.", 400)
+            return self._error(
+                request_id, "invalid_json", "The request body is not valid JSON.", 400
+            )
         if not isinstance(payload, dict):
-            return self._error(request_id, "invalid_request", "The JSON body must be an object.", 400)
+            return self._error(
+                request_id, "invalid_request", "The JSON body must be an object.", 400
+            )
         operation = payload.get("operation")
         params = payload.get("params", {})
         if not isinstance(operation, str) or not operation:
@@ -215,9 +220,13 @@ class OduMcpController(http.Controller):
         return access, False
 
     def _enabled(self):
-        value = request.env["ir.config_parameter"].sudo().get_param(
-            "odumcp.enabled",
-            "True",
+        value = (
+            request.env["ir.config_parameter"]
+            .sudo()
+            .get_param(
+                "odumcp.enabled",
+                "True",
+            )
         )
         return str2bool(value, True)
 
@@ -261,7 +270,10 @@ class OduMcpController(http.Controller):
     def _json_response(self, body, status):
         response = request.make_response(
             json.dumps(body, ensure_ascii=False, default=str),
-            headers=[("Content-Type", "application/json; charset=utf-8"), *SECURITY_HEADERS],
+            headers=[
+                ("Content-Type", "application/json; charset=utf-8"),
+                *SECURITY_HEADERS,
+            ],
         )
         response.status_code = status
         return response

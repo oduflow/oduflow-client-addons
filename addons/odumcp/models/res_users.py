@@ -49,12 +49,7 @@ class ResUsers(models.Model):
 
     @api.model
     def _mcp_for_user(self, user):
-        mcp_user = (
-            self.sudo()
-            .with_context(active_test=False)
-            .browse(user.id)
-            .exists()
-        )
+        mcp_user = self.sudo().with_context(active_test=False).browse(user.id).exists()
         if not mcp_user or not mcp_user.mcp_profile_id:
             return self.browse(), "mcp_access_not_configured"
         if not mcp_user.active or not mcp_user.mcp_active or not mcp_user.mcp_profile_id.active:

@@ -27,7 +27,10 @@ class OduMcpAuditLog(models.Model):
     omitted_fields = fields.Char(
         string="Omitted Fields",
         readonly=True,
-        help="Fields trimmed from a partial read, so a successful row still shows the policy at work.",
+        help=(
+            "Fields trimmed from a partial read, so a successful row "
+            "still shows the policy at work."
+        ),
     )
     target_ids_json = fields.Text(readonly=True)
     outcome = fields.Selection(
@@ -70,9 +73,7 @@ class OduMcpAuditLog(models.Model):
     @api.autovacuum
     def _gc_audit_logs(self):
         retention_days = int(
-            self.env["ir.config_parameter"].sudo().get_param(
-                "odumcp.audit_retention_days", "90"
-            )
+            self.env["ir.config_parameter"].sudo().get_param("odumcp.audit_retention_days", "90")
         )
         cutoff = fields.Datetime.subtract(fields.Datetime.now(), days=max(1, retention_days))
         old = self.sudo().search([("create_date", "<", cutoff)], limit=10000)
