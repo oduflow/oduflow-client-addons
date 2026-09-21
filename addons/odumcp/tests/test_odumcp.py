@@ -202,7 +202,13 @@ class TestOduMcp(TransactionCase):
             "allow_partial_field_reads",
         ):
             self.assertFalse(profile[closed], closed)
-        self.assertFalse(profile.policy_ids)
+        # Installed extensions (e.g. OduPilot) may add their own policies.
+        # MCP itself seeds no per-model overrides on the administrator profile.
+        self.assertFalse(self.env["ir.model.data"].search_count([
+            ("module", "=", "odumcp"),
+            ("model", "=", "odumcp.model.policy"),
+            ("res_id", "in", profile.policy_ids.ids),
+        ]))
         self.assertFalse(profile.user_ids)
 
     def test_profile_policy_lists_open_detailed_forms(self):
