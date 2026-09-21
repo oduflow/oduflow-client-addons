@@ -27,3 +27,5 @@ current state. Secret values must never be included.
 
 - [2026-09-21 — unified MCP verification](2026-09-21-odumcp-merge-odoo.md)
 - [2026-09-21 — unified MCP clean installation](2026-09-21-odumcp-merge-fresh-odoo.md)
+
+- [2026-09-21 — MCP major-version ports](2026-09-21-mcp-ports-odoo.md)
