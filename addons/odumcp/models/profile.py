@@ -9,6 +9,8 @@ MODEL_NAME_RE = re.compile(r"^[a-zA-Z0-9_.]+$")
 METHOD_NAME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 # These record actions are business operations despite living on BaseModel.
 BASE_BUSINESS_METHODS = {"action_archive", "action_unarchive", "toggle_active"}
+# Reserve newer web CRUD API names even when absent from this Odoo release.
+FRAMEWORK_METHOD_NAMES = {"web_read", "web_save", "formatted_read_group"}
 
 SENSITIVE_FIELD_NAME_RE = re.compile(
     r"(password|passwd|(?:^|_)pass(?:$|_)|secret|token|api.?key|private|credential"
@@ -88,6 +90,7 @@ def is_business_method_name(name, base_model):
     return (
         isinstance(name, str)
         and bool(METHOD_NAME_RE.fullmatch(name))
+        and name not in FRAMEWORK_METHOD_NAMES
         and (name in BASE_BUSINESS_METHODS or not hasattr(base_model, name))
     )
 
