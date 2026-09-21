@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=44046298ef06 lang=ru -->
+<!-- i18n source=user_guide.md sha=21f58973430a lang=ru -->
 # Руководство пользователя OduMCP
 
 ## Перед началом

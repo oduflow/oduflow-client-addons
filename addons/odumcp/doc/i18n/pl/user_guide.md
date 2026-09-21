@@ -1,4 +1,4 @@
-<!-- i18n source=user_guide.md sha=44046298ef06 lang=pl -->
+<!-- i18n source=user_guide.md sha=21f58973430a lang=pl -->
 # Podręcznik użytkownika OduMCP
 
 ## Zanim zaczniesz

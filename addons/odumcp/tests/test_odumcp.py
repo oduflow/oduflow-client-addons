@@ -1874,8 +1874,10 @@ class TestOduMcp(TransactionCase):
         self.assertTrue(key)
         self.assertEqual(keys._check_mcp_credentials(self.token), self.mcp_user.id)
         self.env.cr.execute(
-            "UPDATE res_users_apikeys SET expiration_date = %s WHERE id = %s",
-            [fields.Datetime.now() - timedelta(seconds=1), key.id],
+            "UPDATE res_users_apikeys "
+            "SET expiration_date = (now() at time zone 'utc') - interval '1 second' "
+            "WHERE id = %s",
+            [key.id],
         )
         key.invalidate_recordset(["expiration_date"])
         self.assertFalse(keys._check_mcp_credentials(self.token))
