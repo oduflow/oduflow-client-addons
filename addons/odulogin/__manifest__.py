@@ -8,7 +8,7 @@ OduLogin
 Administrators can temporarily switch the current browser session to another
 active internal user and return to their original account from the systray.
 """,
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Administration",
     "author": "Oduflow",
     "license": "LGPL-3",

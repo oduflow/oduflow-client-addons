@@ -5,7 +5,7 @@
         "Connect external MCP clients to Odoo through explicit policies, approvals, "
         "and audit logging."
     ),
-    "version": "19.0.1.4.0",
+    "version": "20.0.1.4.0",
     "category": "Technical",
     "website": "https://github.com/oduist/connect_addons_ng",
     "author": "Connect MCP Contributors",
