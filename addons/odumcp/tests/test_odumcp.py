@@ -121,13 +121,13 @@ class TestOduMcp(TransactionCase):
         return approval
 
     def test_managed_oduflow_key_authenticates_and_opens_read_only_access(self):
-        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAMES
 
         keys = self.env["res.users.apikeys"]
         admin = self.env.ref("base.user_admin")
         # A database that Oduflow already synchronized carries a managed key, so
         # this asserts the first installation rather than whatever ran before it.
-        keys.search([("name", "=", ODUFLOW_KEY_NAME)]).unlink()
+        keys.search([("name", "in", ODUFLOW_KEY_NAMES)]).unlink()
         admin.write({"mcp_active": False, "mcp_profile_id": False})
         personal = keys.with_user(admin).sudo()._generate("rpc", "Personal", False)
         token = "oduflow-managed-" + uuid.uuid4().hex
@@ -148,11 +148,14 @@ class TestOduMcp(TransactionCase):
         self.assertFalse(keys._check_mcp_credentials(personal))
 
     def test_rotating_the_managed_key_replaces_only_its_own_row(self):
-        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+        from odoo.addons.odumcp.models.res_users_apikeys import (
+            ODUFLOW_KEY_NAME,
+            ODUFLOW_KEY_NAMES,
+        )
 
         keys = self.env["res.users.apikeys"]
         admin = self.env.ref("base.user_admin")
-        keys.search([("name", "=", ODUFLOW_KEY_NAME)]).unlink()
+        keys.search([("name", "in", ODUFLOW_KEY_NAMES)]).unlink()
         first, second = "oduflow-a-" + uuid.uuid4().hex, "oduflow-b-" + uuid.uuid4().hex
         keys._set_oduflow_key(first)
         chosen = self.env.ref("odumcp.profile_administrator")
@@ -2495,6 +2498,46 @@ class TestOduflowManagedKey(TransactionCase):
         self.assertEqual(keys._find_for_token(admin, token).name, ODUFLOW_KEY_NAME)
         self.assertFalse(keys._set_oduflow_key(token)["changed"])
         self.assertNotIn(token, json.dumps(result))
+
+    def test_managed_key_is_named_mcp_admin(self):
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+
+        self.assertEqual(ODUFLOW_KEY_NAME, "MCP Admin")
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        token = "named-" + uuid.uuid4().hex
+        keys._set_oduflow_key(token)
+        self.assertEqual(keys._find_for_token(admin, token).name, "MCP Admin")
+
+    def test_legacy_managed_key_names_are_renamed_to_mcp_admin(self):
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
+
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        for legacy_name in ("Oduflow production (managed)", "Oduflow production"):
+            with self.subTest(legacy_name=legacy_name):
+                token = "legacy-" + uuid.uuid4().hex
+                keys._set_oduflow_key(token)
+                row = keys._find_for_token(admin, token)
+                # Simulate a database provisioned by an earlier module version.
+                self.env.cr.execute(
+                    "UPDATE res_users_apikeys SET name = %s WHERE id = %s",
+                    [legacy_name, row.id],
+                )
+                self.env.invalidate_all()
+                # The legacy key keeps authenticating before reprovisioning.
+                self.assertEqual(keys._check_mcp_credentials(token), admin.id)
+                result = keys._set_oduflow_key(token)
+                self.assertTrue(result["changed"])
+                self.assertEqual(result["replaced_keys"], 1)
+                self.assertEqual(keys._find_for_token(admin, token).name, ODUFLOW_KEY_NAME)
+                self.env.cr.execute(
+                    "SELECT name FROM res_users_apikeys WHERE user_id = %s AND scope = 'mcp' "
+                    "AND name IN %s",
+                    [admin.id, (ODUFLOW_KEY_NAME, legacy_name)],
+                )
+                self.assertEqual([r[0] for r in self.env.cr.fetchall()], [ODUFLOW_KEY_NAME])
+                self.assertFalse(keys._set_oduflow_key(token)["changed"])
 
     def test_expiring_managed_key_is_replaced_even_when_token_matches(self):
         keys = self.env["res.users.apikeys"].sudo()

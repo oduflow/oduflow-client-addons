@@ -378,7 +378,8 @@ is the only path that deliberately replaces an existing versioned tag.
 `res.users.apikeys._set_oduflow_key(key)` is a private, superuser-only provisioning
 method. It accepts 32..512 ASCII characters without whitespace, serializes on the
 administrator user row and replaces only MCP-scoped keys with the reserved
-managed name. Reapplying the same key returns `changed = false`. Personal keys
+managed name `MCP Admin` or a legacy managed name (`Oduflow production (managed)`,
+`Oduflow production`); the result is always one key named `MCP Admin`. Reapplying the same key returns `changed = false`. Personal keys
 and existing profiles/suspension are preserved. An absent profile receives read
 access without global create/delete or auto-approval. Keys use the native Odoo
 password hash and index; their plaintext is neither persisted nor returned.
@@ -392,4 +393,4 @@ independent databases. Infrastructure authorization belongs to Oduflow.
 
 ## Unified provisioning compatibility
 
-The superuser-only `_set_oduflow_key` locks the administrator row before provisioning. Both managed MCP key names are reconciled on the next call, preserving personal keys, other scopes, user policies and suspension. The result preserves both callers: `user_id`, `changed`, `key_set`, `user`, `scope`, `profile`, `mcp_active`, and `replaced_keys`. It never returns credentials. Idempotence requires one canonical non-expiring key with the supplied hash match.
+The superuser-only `_set_oduflow_key` locks the administrator row before provisioning. All managed MCP key names, current and legacy, are reconciled on the next call, preserving personal keys, other scopes, user policies and suspension. The result preserves both callers: `user_id`, `changed`, `key_set`, `user`, `scope`, `profile`, `mcp_active`, and `replaced_keys`. It never returns credentials. Idempotence requires one canonical non-expiring key with the supplied hash match.
