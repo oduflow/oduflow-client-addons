@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=8a650ba5b283 lang=pl -->
+<!-- i18n source=admin_guide.md sha=04d78f93efe3 lang=pl -->
 # Podręcznik administratora OduMCP
 
 ## Role bezpieczeństwa
@@ -353,8 +353,12 @@ Klucze utworzone przez wcześniejsze wersje jako **Oduflow production (managed)*
 
 Lokalna operacja konfiguracji zastępuje wyłącznie zarządzany klucz. Osobiste klucze
 API pozostają ważne. Istniejące profile MCP, polityki i zawieszony dostęp nie są
-zmieniane. Administrator bez profilu otrzymuje profil tylko do odczytu; przed
-użyciem planów zmian biznesowych jawnie skonfiguruj uprawnienia zapisu.
+zmieniane. Administrator bez profilu otrzymuje profil tylko do odczytu o nazwie
+**MCP Administrators**; przed użyciem planów zmian biznesowych jawnie skonfiguruj
+uprawnienia zapisu. Profil utworzony przez wcześniejsze wersje jako
+**Oduflow administrators** jest używany dalej i przy następnej synchronizacji
+otrzymuje nazwę **MCP Administrators**. Profil, którego nazwę zmieniono, zachowuje
+tę nazwę; kod profilu (`oduflow_admin_` z losowym sufiksem) nie jest zmieniany.
 
 Po zmianie poświadczenia produkcyjnego i ponownym uruchomieniu Oduflow użyj
 `sync_production_mcp`, aby zsynchronizować jedno lub wszystkie środowiska
@@ -375,4 +379,4 @@ Wersja `19.0.1.4.0` łączy moduły platformy i klienta. Zaktualizuj `odumcp` w 
 
 Przed aktualizacją sprawdź istniejące polityki modeli: pusta lista pól do odczytu lub zapisu zezwala teraz na wszystkie pozostałe dopuszczalne pola danej operacji. Wypełnij te listy, aby zachować wąski zakres pól. Nadal obowiązują uprawnienia operacji, ACL Odoo, wymuszone domeny i ograniczenia pól binarnych.
 
-Konfiguracja klucza zarządzanego wymaga środowiska superużytkownika. Rozpoznaje `MCP Admin` oraz wcześniejsze `Oduflow production (managed)` i `Oduflow production` jako nazwy zarządzanych kluczy MCP administratora. Przy następnym wywołaniu zastępuje te rekordy jednym kanonicznym kluczem `MCP Admin`. Klucze osobiste i klucze o innym zakresie pozostają bez zmian. Ponowne zastosowanie tego samego bezterminowego klucza kanonicznego zachowuje jego rekord. Istniejące profile i zawieszony dostęp pozostają bez zmian. Audyt identyfikuje każdą zarządzaną nazwę jako `source = oduflow` jeszcze przed ponowną konfiguracją.
+Konfiguracja klucza zarządzanego wymaga środowiska superużytkownika. Rozpoznaje `MCP Admin` oraz wcześniejsze `Oduflow production (managed)` i `Oduflow production` jako nazwy zarządzanych kluczy MCP administratora. Przy następnym wywołaniu zastępuje te rekordy jednym kanonicznym kluczem `MCP Admin`. Klucze osobiste i klucze o innym zakresie pozostają bez zmian. Ponowne zastosowanie tego samego bezterminowego klucza kanonicznego zachowuje jego rekord. Istniejące profile i zawieszony dostęp pozostają bez zmian. Profil tworzony dla administratora bez profilu ma nazwę `MCP Administrators`; automatycznie utworzony profil, który nadal nazywa się `Oduflow administrators`, zachowuje rekord, kod i ustawienia, a przy następnym wywołaniu otrzymuje nową nazwę. Audyt identyfikuje każdą zarządzaną nazwę jako `source = oduflow` jeszcze przed ponowną konfiguracją.

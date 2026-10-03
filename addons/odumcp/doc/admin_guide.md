@@ -338,8 +338,12 @@ Keys created by earlier versions as **Oduflow production (managed)** or
 
 The local provisioning operation replaces only the managed key. Personal API
 keys remain valid. Existing MCP profiles, policies and suspended access remain
-unchanged. If the administrator has no profile, a read-only profile is created;
-configure write permissions explicitly before using business change plans.
+unchanged. If the administrator has no profile, a read-only profile named
+**MCP Administrators** is created; configure write permissions explicitly before
+using business change plans. A profile created by earlier versions as
+**Oduflow administrators** is reused and renamed to **MCP Administrators** on the
+next synchronization. A profile you renamed keeps your name; the profile code
+(`oduflow_admin_` followed by a random suffix) is not changed.
 
 After changing the production credential and restarting Oduflow, use
 `sync_production_mcp` to synchronize one production or all productions in the
@@ -360,4 +364,4 @@ Version `19.0.1.4.0` combines the platform and client modules. Upgrade `odumcp` 
 
 Review existing Model Policies before upgrading: an empty readable or writable field list now permits all otherwise eligible fields for that operation. Populate those lists to retain a narrow field scope. Operation permissions, Odoo ACLs, forced domains and binary restrictions still apply.
 
-Managed-key provisioning requires a superuser environment. It accepts `MCP Admin` and the earlier `Oduflow production (managed)` and `Oduflow production` as managed MCP key names on the administrator. On the next provisioning call it replaces those rows with one canonical `MCP Admin` key. Personal keys and keys with another scope remain untouched. Reapplying the same non-expiring canonical key preserves its row. Existing profiles and suspended access remain unchanged. Audit identifies every managed name as `source = oduflow` even before reprovisioning.
+Managed-key provisioning requires a superuser environment. It accepts `MCP Admin` and the earlier `Oduflow production (managed)` and `Oduflow production` as managed MCP key names on the administrator. On the next provisioning call it replaces those rows with one canonical `MCP Admin` key. Personal keys and keys with another scope remain untouched. Reapplying the same non-expiring canonical key preserves its row. Existing profiles and suspended access remain unchanged. The profile created for an administrator without one is named `MCP Administrators`; a provisioned profile still named `Oduflow administrators` keeps its record, code and settings and is renamed on the next provisioning call. Audit identifies every managed name as `source = oduflow` even before reprovisioning.

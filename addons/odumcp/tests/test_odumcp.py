@@ -2478,6 +2478,100 @@ class TestOduflowManagedKey(TransactionCase):
         self.assertNotEqual(admin.mcp_profile_id, previous)
         self.assertEqual(admin.mcp_profile_id.default_model_access, "read")
 
+    def _legacy_profile(self, names):
+        """Simulate a profile that an earlier release created for the administrator."""
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_PROFILE_CODE_PREFIX
+
+        admin = self.env.ref("base.user_admin")
+        admin.write({"mcp_active": False, "mcp_profile_id": False})
+        self.env["res.users.apikeys"].sudo()._set_oduflow_key("legacy-" + uuid.uuid4().hex)
+        profile = admin.mcp_profile_id
+        self.assertTrue(profile.code.startswith(ODUFLOW_PROFILE_CODE_PREFIX))
+        self.env.cr.execute(
+            "UPDATE odumcp_profile SET name = %s::jsonb WHERE id = %s",
+            [json.dumps(names), profile.id],
+        )
+        self.env.invalidate_all()
+        return profile
+
+    def _raw_profile_name(self, profile):
+        self.env.cr.execute("SELECT name FROM odumcp_profile WHERE id = %s", [profile.id])
+        return self.env.cr.fetchone()[0]
+
+    def test_new_profile_is_named_mcp_administrators(self):
+        from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_PROFILE_NAME
+
+        self.assertEqual(ODUFLOW_PROFILE_NAME, "MCP Administrators")
+        admin = self.env.ref("base.user_admin")
+        admin.write({"mcp_active": False, "mcp_profile_id": False})
+        result = self.env["res.users.apikeys"].sudo()._set_oduflow_key("a" * 40)
+        self.assertEqual(admin.mcp_profile_id.name, "MCP Administrators")
+        self.assertTrue(admin.mcp_profile_id.code.startswith("oduflow_admin_"))
+        self.assertEqual(result["profile"], admin.mcp_profile_id.code)
+        self.assertNotIn("Oduflow", admin.mcp_profile_id.name)
+
+    def test_legacy_profile_name_is_renamed_and_profile_reused(self):
+        keys = self.env["res.users.apikeys"].sudo()
+        admin = self.env.ref("base.user_admin")
+        legacy = "Oduflow administrators"
+        profile = self._legacy_profile({"en_US": legacy, "pl_PL": legacy})
+        code = profile.code
+        self.assertEqual(profile.name, legacy)
+        profiles_before = (
+            self.env["odumcp.profile"].with_context(active_test=False).search_count([])
+        )
+        token = "renamed-" + uuid.uuid4().hex
+        result = keys._set_oduflow_key(token)
+        self.assertEqual(admin.mcp_profile_id, profile)
+        self.assertEqual(
+            self.env["odumcp.profile"].with_context(active_test=False).search_count([]),
+            profiles_before,
+        )
+        self.assertEqual(
+            self._raw_profile_name(profile),
+            {"en_US": "MCP Administrators", "pl_PL": "MCP Administrators"},
+        )
+        self.assertEqual(profile.name, "MCP Administrators")
+        self.assertEqual(profile.code, code)
+        self.assertEqual(result["profile"], code)
+        self.assertEqual(keys._check_mcp_credentials(token), admin.id)
+        # The rename is applied once; later calls leave the profile alone.
+        self.assertFalse(keys._set_oduflow_key(token)["changed"])
+        self.assertEqual(profile.name, "MCP Administrators")
+
+    def test_profile_name_changed_by_administrator_is_preserved(self):
+        keys = self.env["res.users.apikeys"].sudo()
+        profile = self._legacy_profile({"en_US": "Integration admins"})
+        keys._set_oduflow_key("custom-" + uuid.uuid4().hex)
+        self.assertEqual(self._raw_profile_name(profile), {"en_US": "Integration admins"})
+        # Only a translation still equal to the legacy default name is renamed.
+        profile = self._legacy_profile(
+            {"en_US": "Integration admins", "pl_PL": "Oduflow administrators"}
+        )
+        keys._set_oduflow_key("partial-" + uuid.uuid4().hex)
+        self.assertEqual(
+            self._raw_profile_name(profile),
+            {"en_US": "Integration admins", "pl_PL": "MCP Administrators"},
+        )
+
+    def test_unflushed_legacy_profile_name_is_renamed(self):
+        profile = self._legacy_profile({"en_US": "Pending"})
+        profile.write({"name": "Oduflow administrators"})
+        self.env["res.users.apikeys"].sudo()._set_oduflow_key("pending-" + uuid.uuid4().hex)
+        self.env.flush_all()
+        self.assertEqual(self._raw_profile_name(profile), {"en_US": "MCP Administrators"})
+        self.assertEqual(profile.name, "MCP Administrators")
+
+    def test_profile_with_legacy_name_but_foreign_code_is_not_renamed(self):
+        admin = self.env.ref("base.user_admin")
+        manual = self.env["odumcp.profile"].create(
+            {"name": "Oduflow administrators", "code": "manual_admins"}
+        )
+        admin.write({"mcp_profile_id": manual.id, "mcp_active": False})
+        self.env["res.users.apikeys"].sudo()._set_oduflow_key("a" * 40)
+        self.assertEqual(admin.mcp_profile_id, manual)
+        self.assertEqual(manual.name, "Oduflow administrators")
+
     def test_legacy_platform_key_is_replaced_without_touching_personal_keys(self):
         from odoo.addons.odumcp.models.res_users_apikeys import ODUFLOW_KEY_NAME
 
