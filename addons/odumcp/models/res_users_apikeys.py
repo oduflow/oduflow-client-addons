@@ -4,8 +4,10 @@ from odoo import api, fields, models
 from odoo.addons.base.models.res_users import INDEX_SIZE, KEY_CRYPT_CONTEXT
 from odoo.exceptions import AccessError, ValidationError
 
-ODUFLOW_KEY_NAME = "Oduflow production (managed)"
-ODUFLOW_KEY_NAMES = (ODUFLOW_KEY_NAME, "Oduflow production")
+ODUFLOW_KEY_NAME = "MCP Admin"
+# Names used by earlier releases; the next provisioning call renames them.
+LEGACY_ODUFLOW_KEY_NAMES = ("Oduflow production (managed)", "Oduflow production")
+ODUFLOW_KEY_NAMES = (ODUFLOW_KEY_NAME, *LEGACY_ODUFLOW_KEY_NAMES)
 
 
 class ResUsersApikeysDescription(models.TransientModel):
