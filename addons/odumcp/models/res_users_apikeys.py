@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from odoo import api, fields, models
@@ -8,6 +9,11 @@ ODUFLOW_KEY_NAME = "MCP Admin"
 # Names used by earlier releases; the next provisioning call renames them.
 LEGACY_ODUFLOW_KEY_NAMES = ("Oduflow production (managed)", "Oduflow production")
 ODUFLOW_KEY_NAMES = (ODUFLOW_KEY_NAME, *LEGACY_ODUFLOW_KEY_NAMES)
+ODUFLOW_PROFILE_NAME = "MCP Administrators"
+# Name given by earlier releases to the profile they created for the administrator.
+LEGACY_ODUFLOW_PROFILE_NAME = "Oduflow administrators"
+# Identifies profiles created by provisioning; the code is kept for compatibility.
+ODUFLOW_PROFILE_CODE_PREFIX = "oduflow_admin_"
 
 
 class ResUsersApikeysDescription(models.TransientModel):
@@ -83,6 +89,38 @@ class ResUsersApikeys(models.Model):
         return super()._generate(scope, name, expiration_date)
 
     @api.model
+    def _rename_legacy_oduflow_profiles(self):
+        """Rename provisioned profiles that still carry the legacy default name.
+
+        Only translations equal to the legacy name change, so a name that an
+        administrator edited in any language is preserved. The code is kept.
+        """
+        self.env["odumcp.profile"].flush_model(["code", "name"])
+        self.env.cr.execute(
+            "SELECT id, name FROM odumcp_profile WHERE starts_with(code, %s)",
+            [ODUFLOW_PROFILE_CODE_PREFIX],
+        )
+        renamed_ids = []
+        for profile_id, names in self.env.cr.fetchall():
+            if not isinstance(names, dict) or LEGACY_ODUFLOW_PROFILE_NAME not in names.values():
+                continue
+            names = {
+                lang: ODUFLOW_PROFILE_NAME if value == LEGACY_ODUFLOW_PROFILE_NAME else value
+                for lang, value in names.items()
+            }
+            self.env.cr.execute(
+                "UPDATE odumcp_profile SET name = %s::jsonb, write_uid = %s, "
+                "write_date = now() at time zone 'utc' WHERE id = %s",
+                [json.dumps(names), self.env.uid, profile_id],
+            )
+            renamed_ids.append(profile_id)
+        if renamed_ids:
+            self.env["odumcp.profile"].browse(renamed_ids).invalidate_recordset(
+                ["name", "write_uid", "write_date"]
+            )
+        return renamed_ids
+
+    @api.model
     def _set_oduflow_key(self, key):
         """Provision a supplied key locally; retain personal keys and policy.
 
@@ -106,8 +144,8 @@ class ResUsersApikeys(models.Model):
         if not admin.mcp_profile_id:
             profile = self.env["odumcp.profile"].create(
                 {
-                    "name": "Oduflow administrators",
-                    "code": "oduflow_admin_" + uuid.uuid4().hex,
+                    "name": ODUFLOW_PROFILE_NAME,
+                    "code": ODUFLOW_PROFILE_CODE_PREFIX + uuid.uuid4().hex,
                     "default_model_access": "read",
                     "allow_global_create": False,
                     "allow_global_unlink": False,
@@ -115,6 +153,7 @@ class ResUsersApikeys(models.Model):
                 }
             )
             admin.write({"mcp_profile_id": profile.id, "mcp_active": True})
+        self._rename_legacy_oduflow_profiles()
         self.env.cr.execute(
             "SELECT id, key, name, expiration_date FROM res_users_apikeys "
             "WHERE user_id = %s AND name IN %s AND scope = 'mcp'",

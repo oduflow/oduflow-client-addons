@@ -380,8 +380,13 @@ method. It accepts 32..512 ASCII characters without whitespace, serializes on th
 administrator user row and replaces only MCP-scoped keys with the reserved
 managed name `MCP Admin` or a legacy managed name (`Oduflow production (managed)`,
 `Oduflow production`); the result is always one key named `MCP Admin`. Reapplying the same key returns `changed = false`. Personal keys
-and existing profiles/suspension are preserved. An absent profile receives read
-access without global create/delete or auto-approval. Keys use the native Odoo
+and existing profiles/suspension are preserved. An absent profile is created as
+`MCP Administrators` with code `oduflow_admin_<hex>`, read access and no global
+create/delete or auto-approval. On every call, profiles whose code starts with
+`oduflow_admin_` have each `name` translation equal to the legacy default
+`Oduflow administrators` replaced by `MCP Administrators`; other translations,
+profiles with another code, profile codes and the `profile` result value are
+unchanged. The rename does not affect `changed`. Keys use the native Odoo
 password hash and index; their plaintext is neither persisted nor returned.
 
 Authentication annotates the request context from the matched API-key record.
