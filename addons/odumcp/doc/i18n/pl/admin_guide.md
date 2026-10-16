@@ -1,4 +1,4 @@
-<!-- i18n source=admin_guide.md sha=85f44522b63a lang=pl -->
+<!-- i18n source=admin_guide.md sha=d3a37670ea0c lang=pl -->
 # Podręcznik administratora OduMCP
 
 ## Role bezpieczeństwa
