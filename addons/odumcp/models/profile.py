@@ -33,11 +33,10 @@ BLOCKED_POLICY_MODELS = {
 # open them for writing deliberately.
 GLOBAL_ACCESS_READONLY_MODELS = {
     "base.automation",
+    "ir.access",
     "ir.actions.server",
     "ir.cron",
     "ir.mail_server",
-    "ir.model.access",
-    "ir.rule",
     "ir.ui.view",
     "res.groups",
     "res.users",

@@ -1191,9 +1191,9 @@ class TestOduMcp(TransactionCase):
         body, status = self._request(
             "records.search",
             {
-                "model": "ir.model.access",
+                "model": "ir.access",
                 "domain": [],
-                "fields": ["name", "perm_read"],
+                "fields": ["name", "operation"],
                 "limit": 1,
             },
         )
@@ -1218,9 +1218,9 @@ class TestOduMcp(TransactionCase):
             ),
             (
                 "record.create",
-                {"model": "ir.model.access", "values": {"name": "Escalated"}},
+                {"model": "ir.access", "values": {"name": "Escalated"}},
             ),
-            ("record.delete", {"model": "ir.rule", "ids": [1]}),
+            ("record.delete", {"model": "ir.access", "ids": [1]}),
         ):
             with self.subTest(action=action):
                 body, status = self._request(

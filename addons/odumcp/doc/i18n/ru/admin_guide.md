@@ -108,8 +108,8 @@ default-deny: без явной Model Policy и без более широког
 На моделях безопасности резервный режим работает только на чтение, в любом
 варианте:
 
-- `base.automation`, `ir.actions.server`, `ir.cron`, `ir.mail_server`,
-  `ir.model.access`, `ir.rule`, `ir.ui.view`, `res.groups` — чтение лишь
+- `base.automation`, `ir.access`, `ir.actions.server`, `ir.cron`,
+  `ir.mail_server`, `ir.ui.view`, `res.groups` — чтение лишь
   сообщает правила, под которыми коннектор и так работает, тогда как запись в них
   обошла бы этот слой политик; явная Model Policy всё ещё может открыть их
   осознанно на запись;
@@ -117,8 +117,8 @@ default-deny: без явной Model Policy и без более широког
   удаляется, потому что это меняет членство в группах.
 
 Для чтения по-прежнему нужно соответствующее право доступа Odoo у
-пользователя-коннектора: `ir.model.access` и `ir.rule` доступны только
-менеджерам прав доступа, а `ir.ui.view`, `ir.cron`, `ir.mail_server`,
+пользователя-коннектора: `ir.access` доступна только менеджерам прав
+доступа, а `ir.ui.view`, `ir.cron`, `ir.mail_server`,
 `base.automation` и `ir.actions.server` — пользователям Настроек.
 
 ### Возможности

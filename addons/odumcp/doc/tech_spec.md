@@ -260,8 +260,8 @@ when one is active for the model. Otherwise it builds a `GlobalModelPolicy`
 adapter from `default_model_access`, `allow_global_create`, and
 `allow_global_unlink`, unless the model is transient or listed in
 `BLOCKED_POLICY_MODELS`. Models in `GLOBAL_ACCESS_READONLY_MODELS`
-(`base.automation`, `ir.actions.server`, `ir.cron`, `ir.mail_server`,
-`ir.model.access`, `ir.rule`, `ir.ui.view`, `res.groups`, `res.users`) stay
+(`base.automation`, `ir.access`, `ir.actions.server`, `ir.cron`,
+`ir.mail_server`, `ir.ui.view`, `res.groups`, `res.users`) stay
 readable but never creatable, writable or deletable through that adapter.
 
 `BLOCKED_POLICY_MODELS` cannot be named by an explicit policy at all, and is the

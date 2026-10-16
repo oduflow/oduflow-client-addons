@@ -105,8 +105,8 @@ Tryb zapasowy nigdy nie obejmuje:
 Na modelach bezpieczeństwa tryb zapasowy działa wyłącznie w trybie odczytu,
 niezależnie od wybranego wariantu:
 
-- `base.automation`, `ir.actions.server`, `ir.cron`, `ir.mail_server`,
-  `ir.model.access`, `ir.rule`, `ir.ui.view`, `res.groups` — odczyt jedynie
+- `base.automation`, `ir.access`, `ir.actions.server`, `ir.cron`,
+  `ir.mail_server`, `ir.ui.view`, `res.groups` — odczyt jedynie
   pokazuje reguły, którym konektor i tak podlega, natomiast zapis do nich
   omijałby tę warstwę polityk; jawna Model Policy nadal może udostępnić je
   świadomie do zapisu;
@@ -114,8 +114,7 @@ niezależnie od wybranego wariantu:
   usuwany, bo to zmienia przynależność do grup.
 
 Do odczytu nadal potrzebne jest odpowiednie prawo dostępu Odoo u użytkownika
-konektora: `ir.model.access` i `ir.rule` są zastrzeżone dla menedżerów praw
-dostępu, a `ir.ui.view`, `ir.cron`, `ir.mail_server`, `base.automation`
+konektora: `ir.access` jest zastrzeżony dla menedżerów praw dostępu, a `ir.ui.view`, `ir.cron`, `ir.mail_server`, `base.automation`
 i `ir.actions.server` — dla użytkowników Ustawień.
 
 ### Możliwości
