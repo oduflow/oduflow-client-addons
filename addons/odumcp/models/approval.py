@@ -140,13 +140,9 @@ class OduMcpApproval(models.Model):
     @api.model
     def _request_window_minutes(self):
         # Окно склейки планов, пришедших без явного ключа запроса.
-        value = (
-            self.env["ir.config_parameter"].sudo().get_param("odumcp.request_window_minutes", "10")
+        minutes = (
+            self.env["ir.config_parameter"].sudo().get_int("odumcp.request_window_minutes", 10)
         )
-        try:
-            minutes = int(value)
-        except (TypeError, ValueError):
-            minutes = 10
         return max(0, minutes)
 
     @api.model
@@ -387,8 +383,8 @@ class OduMcpApproval(models.Model):
             limit=5000,
         )
         expired._system_write({"state": "expired"})
-        retention_days = int(
-            self.env["ir.config_parameter"].sudo().get_param("odumcp.approval_retention_days", "30")
+        retention_days = (
+            self.env["ir.config_parameter"].sudo().get_int("odumcp.approval_retention_days", 30)
         )
         cutoff = fields.Datetime.subtract(now, days=max(1, retention_days))
         old = self.sudo().search(

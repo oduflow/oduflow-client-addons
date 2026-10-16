@@ -7,7 +7,7 @@ from odoo.exceptions import ValidationError
 MODEL_NAME_RE = re.compile(r"^[a-zA-Z0-9_.]+$")
 METHOD_NAME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 # These record actions are business operations despite living on BaseModel.
-BASE_BUSINESS_METHODS = {"action_archive", "action_unarchive", "toggle_active"}
+BASE_BUSINESS_METHODS = {"action_archive", "action_unarchive"}
 
 SENSITIVE_FIELD_NAME_RE = re.compile(
     r"(password|passwd|(?:^|_)pass(?:$|_)|secret|token|api.?key|private|credential"

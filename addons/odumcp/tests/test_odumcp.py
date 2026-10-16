@@ -9,9 +9,9 @@ from unittest.mock import patch
 from lxml import etree
 from odoo import Command, api, fields
 from odoo.exceptions import AccessError, UserError, ValidationError
-from odoo.http import _request_stack
+from odoo.http import request_var
 from odoo.tests import tagged
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import HttpCase, TransactionCase
 from odoo.tools import DotDict
 
 
@@ -292,8 +292,8 @@ class TestOduMcp(TransactionCase):
                 "session": {"identity-check-last": time.time()},
             }
         )
-        _request_stack.push(fake_request)
-        self.addCleanup(_request_stack.pop)
+        request_reset = request_var.set(fake_request)
+        self.addCleanup(request_var.reset, request_reset)
         action = (
             self.env["res.users.apikeys.description"]
             .with_user(self.mcp_user)
@@ -1303,7 +1303,7 @@ class TestOduMcp(TransactionCase):
         self.assertNotEqual(first["request"], third["request"])
 
     def test_zero_window_puts_every_plan_in_its_own_request(self):
-        self.env["ir.config_parameter"].sudo().set_param("odumcp.request_window_minutes", "0")
+        self.env["ir.config_parameter"].sudo().set_int("odumcp.request_window_minutes", 0)
         first = self._preview_update("solo-plan-0001")
         second = self._preview_update("solo-plan-0002")
 
@@ -1372,7 +1372,7 @@ class TestOduMcp(TransactionCase):
         self.assertEqual(approval.state, "executed")
 
     def test_approval_url_uses_configured_base_and_exact_plan(self):
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "web.base.url", "https://odoo.example.test/"
         )
         params = {
@@ -1418,7 +1418,7 @@ class TestOduMcp(TransactionCase):
         approval = self._new_approval_for_url()
         for base in ("https://example.test/erp", "https://example.test/erp/"):
             with self.subTest(base=base):
-                self.env["ir.config_parameter"].sudo().set_param("web.base.url", base)
+                self.env["ir.config_parameter"].sudo().set_str("web.base.url", base)
                 self.assertTrue(
                     approval._public_dict()["approval_url"].startswith(
                         "https://example.test/erp/odoo/"
@@ -1611,7 +1611,7 @@ class TestOduMcp(TransactionCase):
             {
                 "profile_id": self.profile.id,
                 "model_id": self.policy.model_id.id,
-                "method_name": "toggle_active",
+                "method_name": "action_archive",
                 "max_record_count": 1,
             }
         )
@@ -1622,7 +1622,7 @@ class TestOduMcp(TransactionCase):
                 "payload": {
                     "model": "res.partner",
                     "ids": [self.allowed_partner.id],
-                    "method": "toggle_active",
+                    "method": "action_archive",
                     "args": ["unexpected"],
                 },
                 "idempotency_key": "method-denied-args",
@@ -1635,7 +1635,7 @@ class TestOduMcp(TransactionCase):
                 "payload": {
                     "model": "res.partner",
                     "ids": [self.allowed_partner.id],
-                    "method": "toggle_active",
+                    "method": "action_archive",
                 },
                 "idempotency_key": "method-allowed-noargs",
             },
@@ -1651,7 +1651,7 @@ class TestOduMcp(TransactionCase):
             {
                 "profile_id": self.profile.id,
                 "model_id": self.policy.model_id.id,
-                "method_name": "toggle_active",
+                "method_name": "action_archive",
                 "max_record_count": 1,
                 "requires_approval": False,
             }
@@ -1664,7 +1664,7 @@ class TestOduMcp(TransactionCase):
                 "payload": {
                     "model": "res.partner",
                     "ids": [self.allowed_partner.id],
-                    "method": "toggle_active",
+                    "method": "action_archive",
                 },
                 "idempotency_key": "method-direct-audited",
             },
@@ -1688,7 +1688,7 @@ class TestOduMcp(TransactionCase):
             }
         )
 
-    def _preview_method(self, method="toggle_active", **payload):
+    def _preview_method(self, method="action_archive", **payload):
         return self._request(
             "changes.preview",
             {
@@ -1724,7 +1724,7 @@ class TestOduMcp(TransactionCase):
         wildcard = self._wildcard_method_policy(
             requires_approval=False, risk_level="low", allow_positional_arguments=True
         )
-        exact = self._wildcard_method_policy(method_name="toggle_active", risk_level="critical")
+        exact = self._wildcard_method_policy(method_name="action_archive", risk_level="critical")
         body, status = self._preview_method()
         self.assertEqual(status, 200)
         self.assertEqual(body["data"]["state"], "pending")
@@ -1859,7 +1859,7 @@ class TestOduMcp(TransactionCase):
 
     def test_method_policy_accepts_only_exact_business_name_or_star(self):
         self._wildcard_method_policy()
-        self._wildcard_method_policy(method_name="toggle_active")
+        self._wildcard_method_policy(method_name="action_archive")
         for name in ("action_*", "_private", "sudo", "write", "web_read", "a.b", " * "):
             with (
                 self.subTest(name=name),
@@ -2508,3 +2508,36 @@ class TestOduflowManagedKey(TransactionCase):
         )
         self.assertTrue(keys._set_oduflow_key(token)["changed"])
         self.assertFalse(keys._find_for_token(admin, token).expiration_date)
+
+
+@tagged("post_install", "-at_install")
+class TestOduMcpHttpAuth(HttpCase):
+    """Go through the real HTTP stack: the in-process helpers skip ir.http auth."""
+
+    def test_identity_route_requires_an_mcp_key(self):
+        key = "c" * 40
+        self.env["res.users.apikeys"].sudo()._set_oduflow_key(key)
+
+        anonymous = self.url_open("/odumcp/v1/identity")
+        wrong = self.url_open(
+            "/odumcp/v1/identity", headers={"Authorization": "Bearer " + "d" * 40}
+        )
+        response = self.url_open(
+            "/odumcp/v1/identity", headers={"Authorization": "Bearer " + key}
+        )
+
+        self.assertEqual(anonymous.status_code, 401)
+        self.assertEqual(wrong.status_code, 401)
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertTrue(body["ok"])
+        self.assertEqual(body["data"]["user_id"], self.env.ref("base.user_admin").id)
+
+    def test_event_route_requires_a_ticket(self):
+        response = self.url_open(
+            "/odumcp/v1/events",
+            json={"last": 0},
+            headers={"Authorization": "Bearer " + "e" * 40},
+        )
+
+        self.assertEqual(response.status_code, 401)

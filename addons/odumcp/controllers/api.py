@@ -3,7 +3,6 @@ import uuid
 
 from odoo import http
 from odoo.http import request
-from odoo.tools.misc import str2bool
 
 SECURITY_HEADERS = [
     ("Cache-Control", "no-store"),
@@ -151,12 +150,12 @@ class OduMcpController(http.Controller):
                 503,
                 retryable=True,
             )
-        max_payload = int(
+        max_payload = (
             request.env["ir.config_parameter"]
             .sudo()
-            .get_param(
+            .get_int(
                 "odumcp.max_payload_bytes",
-                str(2 * 1024 * 1024),
+                2 * 1024 * 1024,
             )
         )
         content_length = request.httprequest.content_length
@@ -220,15 +219,14 @@ class OduMcpController(http.Controller):
         return access, False
 
     def _enabled(self):
-        value = (
+        return (
             request.env["ir.config_parameter"]
             .sudo()
-            .get_param(
+            .get_bool(
                 "odumcp.enabled",
-                "True",
+                True,
             )
         )
-        return str2bool(value, True)
 
     def _request_id(self):
         value = request.httprequest.headers.get("X-Request-ID", "")

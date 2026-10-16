@@ -77,7 +77,7 @@ class ResUsersApikeys(models.Model):
         return False
 
     def _generate(self, scope, name, expiration_date):
-        scope = scope or self.env.context.get("odumcp_api_key_scope")
+        scope = self.env.context.get("odumcp_api_key_scope") or scope
         return super()._generate(scope, name, expiration_date)
 
     @api.model
@@ -146,5 +146,5 @@ class ResUsersApikeys(models.Model):
             [ODUFLOW_KEY_NAME, admin.id, KEY_CRYPT_CONTEXT.hash(key), key[:INDEX_SIZE]],
         )
         self.invalidate_model()
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return dict(result, changed=True, replaced_keys=len(existing))

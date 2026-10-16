@@ -72,8 +72,8 @@ class OduMcpAuditLog(models.Model):
 
     @api.autovacuum
     def _gc_audit_logs(self):
-        retention_days = int(
-            self.env["ir.config_parameter"].sudo().get_param("odumcp.audit_retention_days", "90")
+        retention_days = (
+            self.env["ir.config_parameter"].sudo().get_int("odumcp.audit_retention_days", 90)
         )
         cutoff = fields.Datetime.subtract(fields.Datetime.now(), days=max(1, retention_days))
         old = self.sudo().search([("create_date", "<", cutoff)], limit=10000)

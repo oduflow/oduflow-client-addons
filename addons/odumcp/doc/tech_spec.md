@@ -212,9 +212,9 @@ matching policy prevents execution of an already approved plan.
 
 Method names must be valid public identifiers. Generic methods exposed by the
 registry's `base` model are refused even when overridden by a concrete model;
-`action_archive`, `action_unarchive` and `toggle_active` are the business-action
-exceptions. This blocks direct ORM and web CRUD/search APIs, environment and
-recordset manipulation, imports and exports. Use dedicated MCP operations for
+`action_archive` and `action_unarchive` are the business-action exceptions.
+This blocks direct ORM and web CRUD/search APIs, environment and recordset
+manipulation, imports and exports. Use dedicated MCP operations for
 those supported operations. Non-callable attributes and nonexistent methods
 return not-found; methods decorated with `@api.private` are refused.
 
