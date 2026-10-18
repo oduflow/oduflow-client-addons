@@ -99,8 +99,8 @@ The fallback never covers:
 
 On the security models the fallback is read-only, whatever the mode:
 
-- `base.automation`, `ir.actions.server`, `ir.cron`, `ir.mail_server`,
-  `ir.model.access`, `ir.rule`, `ir.ui.view`, `res.groups` — reading them only
+- `base.automation`, `ir.access`, `ir.actions.server`, `ir.cron`,
+  `ir.mail_server`, `ir.ui.view`, `res.groups` — reading them only
   reports the rules the connector already works under, while writing them would
   bypass this policy layer; an explicit Model Policy can still open them for
   writing deliberately;
@@ -108,7 +108,7 @@ On the security models the fallback is read-only, whatever the mode:
   that changes group membership.
 
 Reading them still requires the matching Odoo access right on the connector
-user: `ir.model.access` and `ir.rule` are limited to Access Rights managers,
+user: `ir.access` is limited to Access Rights managers,
 and `ir.ui.view`, `ir.cron`, `ir.mail_server`, `base.automation` and
 `ir.actions.server` to Settings users.
 

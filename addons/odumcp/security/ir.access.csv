@@ -1,0 +1,13 @@
+id,name,model_id,group_id/id,operation,domain
+access_mcp_profile_auditor,odumcp.profile auditor,odumcp.profile,odumcp.group_mcp_auditor,r,
+access_mcp_profile_manager,odumcp.profile manager,odumcp.profile,odumcp.group_mcp_manager,crud,
+access_mcp_model_policy_auditor,odumcp.model.policy auditor,odumcp.model.policy,odumcp.group_mcp_auditor,r,
+access_mcp_model_policy_manager,odumcp.model.policy manager,odumcp.model.policy,odumcp.group_mcp_manager,crud,
+access_mcp_method_policy_auditor,odumcp.method.policy auditor,odumcp.method.policy,odumcp.group_mcp_auditor,r,
+access_mcp_method_policy_manager,odumcp.method.policy manager,odumcp.method.policy,odumcp.group_mcp_manager,crud,
+access_mcp_approval_auditor,odumcp.approval auditor,odumcp.approval,odumcp.group_mcp_auditor,r,
+access_mcp_approval_manager,odumcp.approval manager,odumcp.approval,odumcp.group_mcp_manager,ru,
+access_mcp_approval_mass_manager,odumcp.approval.mass manager,odumcp.approval.mass,odumcp.group_mcp_manager,crud,
+access_mcp_audit_auditor,odumcp.audit.log auditor,odumcp.audit.log,odumcp.group_mcp_auditor,r,
+access_mcp_audit_manager,odumcp.audit.log manager,odumcp.audit.log,odumcp.group_mcp_manager,r,
+access_mcp_event_ticket_system,odumcp.event.ticket system,odumcp.event.ticket,base.group_system,r,

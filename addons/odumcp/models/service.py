@@ -1384,7 +1384,7 @@ class OduMcpService(models.AbstractModel):
         self._check_field_names(Model, list(values), allowed)
         readonly = []
         for name in values:
-            Model._check_field_access(Model._fields[name], "write")
+            Model.check_field_access(Model._fields[name], "write")
             if Model._fields[name].readonly:
                 readonly.append(name)
         if readonly:
@@ -1488,12 +1488,12 @@ class OduMcpService(models.AbstractModel):
 
     @api.model
     def _max_binary_bytes(self):
-        return int(
+        return (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param(
+            .get_int(
                 "odumcp.max_binary_bytes",
-                str(5 * 1024 * 1024),
+                5 * 1024 * 1024,
             )
         )
 

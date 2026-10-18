@@ -10,7 +10,7 @@ class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
     @classmethod
-    def _auth_method_mcp(cls):
+    def _auth_method_mcp(cls, routing):
         header = request.httprequest.headers.get("Authorization", "")
         match = re.fullmatch(r"Bearer\s+(.+)", header, re.IGNORECASE)
         if not match:
@@ -41,7 +41,7 @@ class IrHttp(models.AbstractModel):
         )
 
     @classmethod
-    def _auth_method_mcp_event(cls):
+    def _auth_method_mcp_event(cls, routing):
         header = request.httprequest.headers.get("Authorization", "")
         match = re.fullmatch(r"Bearer\s+(.+)", header, re.IGNORECASE)
         ticket = (

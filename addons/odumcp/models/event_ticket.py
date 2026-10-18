@@ -27,12 +27,12 @@ class OduMcpEventTicket(models.Model):
         value = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param(
+            .get_int(
                 "odumcp.event_ticket_ttl_seconds",
-                "600",
+                600,
             )
         )
-        return min(max(int(value), 60), 3600)
+        return min(max(value, 60), 3600)
 
     @api.model
     def _issue(self, user):

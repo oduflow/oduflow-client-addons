@@ -30,3 +30,5 @@ current state. Secret values must never be included.
 - [2026-09-21 — MCP major-version ports](2026-09-21-mcp-ports-odoo.md)
 
 - [2026-09-29 — Odoo 20 branch bring-up blocked by PostgreSQL 15](2026-09-29-client-addons-20-odoo.md)
+
+- [2026-10-16 — OduMCP port to Odoo 20](2026-10-16-odumcp-odoo20-port-odoo.md)

@@ -7,7 +7,7 @@ from odoo.exceptions import ValidationError
 MODEL_NAME_RE = re.compile(r"^[a-zA-Z0-9_.]+$")
 METHOD_NAME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*$")
 # These record actions are business operations despite living on BaseModel.
-BASE_BUSINESS_METHODS = {"action_archive", "action_unarchive", "toggle_active"}
+BASE_BUSINESS_METHODS = {"action_archive", "action_unarchive"}
 
 SENSITIVE_FIELD_NAME_RE = re.compile(
     r"(password|passwd|(?:^|_)pass(?:$|_)|secret|token|api.?key|private|credential"
@@ -33,11 +33,10 @@ BLOCKED_POLICY_MODELS = {
 # open them for writing deliberately.
 GLOBAL_ACCESS_READONLY_MODELS = {
     "base.automation",
+    "ir.access",
     "ir.actions.server",
     "ir.cron",
     "ir.mail_server",
-    "ir.model.access",
-    "ir.rule",
     "ir.ui.view",
     "res.groups",
     "res.users",
